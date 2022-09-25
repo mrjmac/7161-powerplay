@@ -9,7 +9,6 @@ public class TestAny extends LinearOpMode {
     private Drivetrain drivetrain;
     private Vision vision;
     private Lift lift;
-    private FourBar fourbar;
     private Intake intake;
 
     private int pos;
@@ -20,7 +19,6 @@ public class TestAny extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
         lift = new Lift(this);
-        fourbar = new FourBar(this);
         intake = new Intake(this);
 
         while(!isStarted()){
@@ -72,6 +70,9 @@ public class TestAny extends LinearOpMode {
             sleep(1000);
 
 //=============================================== LIFT ===============================================//
+            //extend four bar
+            lift.extendFourBar();
+
             //set intake for low junction
             lift.setLift(1, 1);
             sleep(500);
@@ -101,11 +102,6 @@ public class TestAny extends LinearOpMode {
             sleep(300);
             lift.resetLift(1);
 
-//=============================================== FOURBAR ===============================================//
-
-            fourbar.grabCone();
-            sleep(300);
-            fourbar.releaseCone();
         }
     }
 }

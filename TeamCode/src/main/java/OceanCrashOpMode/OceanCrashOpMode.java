@@ -1,7 +1,6 @@
 package OceanCrashOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,8 +14,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor FR;
 
     // Four Bar
-    private CRServo spinL;
-    private CRServo spinR;
+    private Servo spinL;
+    private Servo spinR;
     private Servo grab;
 
     // Intake
@@ -38,33 +37,35 @@ public abstract class OceanCrashOpMode extends OpMode {
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Four Bar
-        spinL = hardwareMap.crservo.get("spinL");
-        spinR = hardwareMap.crservo.get("spinR");
-        grab = hardwareMap.servo.get("grab");
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        spinL.setDirection(DcMotorSimple.Direction.REVERSE);
-        spinR.setDirection(DcMotorSimple.Direction.FORWARD);
+        // Four Bar
+        spinL = hardwareMap.servo.get("spinL");
+        spinR = hardwareMap.servo.get("spinR");
+        grab = hardwareMap.servo.get("grab");
 
         // Intake
         intakeL = hardwareMap.dcMotor.get("intakeL");
         intakeR = hardwareMap.dcMotor.get("intakeR");
 
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeL.setPower(0);
 
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setPower(0);
@@ -76,12 +77,12 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftL.setDirection(DcMotorSimple.Direction.REVERSE);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         liftR.setDirection(DcMotorSimple.Direction.FORWARD);
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("init ", "completed");
         telemetry.update();
@@ -126,5 +127,33 @@ public abstract class OceanCrashOpMode extends OpMode {
         }
 
         startMotors(FLP, FRP, BLP, BRP);
+    }
+
+    public void setIntake(double p)
+    {
+        intakeL.setPower(p);
+        intakeR.setPower(-p);
+    }
+
+    public void extendFourBar()
+    {
+        spinL.setPosition(1);
+        spinR.setPosition(-1);
+    }
+
+    public void retractFourBar()
+    {
+        spinR.setPosition(0);
+        spinL.setPosition(0);
+    }
+
+    public void grab()
+    {
+        grab.setPosition(1);
+    }
+
+    public void release()
+    {
+        grab.setPosition(0);
     }
 }

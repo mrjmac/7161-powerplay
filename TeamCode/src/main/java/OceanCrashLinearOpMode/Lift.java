@@ -3,7 +3,7 @@ package OceanCrashLinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
 
@@ -11,6 +11,11 @@ public class Lift {
     private DcMotor liftR;
 
     private LinearOpMode opMode;
+
+    private Servo spinL;
+    private Servo spinR;
+
+    private Servo grab;
 
     private final double lowTicks = 200;
     private final double medTicks = 400;
@@ -27,12 +32,22 @@ public class Lift {
         liftL.setDirection(DcMotorSimple.Direction.REVERSE);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         liftR.setDirection(DcMotorSimple.Direction.FORWARD);
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        spinL = this.opMode.hardwareMap.servo.get("spinL");
+        spinR = this.opMode.hardwareMap.servo.get("spinR");
+
+        grab = this.opMode.hardwareMap.servo.get("grab");
+
+        grab.setPosition(1);
+        spinR.setPosition(0);
+        spinL.setPosition(0);
+
     }
 
     public void setPower(double power)
@@ -47,10 +62,10 @@ public class Lift {
 
     public void resetEncoder() {
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setLift(int height, double p)
@@ -82,6 +97,8 @@ public class Lift {
                 }
             }
         }
+
+        grab.setPosition(0);
     }
 
     public void setLiftForCone(int cycleNum, double p)
@@ -106,6 +123,8 @@ public class Lift {
             }
         }
 
+        grab.setPosition(1);
+
     }
 
     public void resetLift(double p)
@@ -120,5 +139,12 @@ public class Lift {
         setPower(0);
 
         // TODO: Figure out if we call resetEncoder()
+    }
+
+    public void extendFourBar()
+    {
+        grab.setPosition(1);
+        spinL.setPosition(1);
+        spinR.setPosition(-1);
     }
 }

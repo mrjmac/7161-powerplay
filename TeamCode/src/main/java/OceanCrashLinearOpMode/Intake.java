@@ -19,13 +19,13 @@ public class Intake {
         intakeR = this.opMode.hardwareMap.dcMotor.get("intakeR");
 
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeL.setPower(0);
 
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setPower(0);
@@ -38,9 +38,9 @@ public class Intake {
 
     public void resetIntakeEncoder() {
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
