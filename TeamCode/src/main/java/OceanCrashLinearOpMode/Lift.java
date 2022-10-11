@@ -1,5 +1,7 @@
 package OceanCrashLinearOpMode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -7,15 +9,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
 
-    private DcMotor liftL;
-    private DcMotor liftR;
+    private DcMotor liftL; // [E3]
+    private DcMotor liftR; // [C3]
 
     private LinearOpMode opMode;
 
-    private Servo spinL;
-    private Servo spinR;
-
-    private Servo grab;
+    private Servo spinL; // [C0]
+    private Servo spinR; // [E5]
+    private Servo grab; // [E4]
 
     private final double lowTicks = 200;
     private final double medTicks = 400;
@@ -26,8 +27,8 @@ public class Lift {
 
         this.opMode = opMode;
 
-        liftL = this.opMode.hardwareMap.dcMotor.get("liftL");
-        liftR = this.opMode.hardwareMap.dcMotor.get("liftR");
+        liftL = this.opMode.hardwareMap.dcMotor.get("liftL"); // [E3]
+        liftR = this.opMode.hardwareMap.dcMotor.get("liftR"); // [C3]
 
         liftL.setDirection(DcMotorSimple.Direction.REVERSE);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -39,10 +40,9 @@ public class Lift {
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        spinL = this.opMode.hardwareMap.servo.get("spinL");
-        spinR = this.opMode.hardwareMap.servo.get("spinR");
-
-        grab = this.opMode.hardwareMap.servo.get("grab");
+        spinL = this.opMode.hardwareMap.servo.get("spinL"); // [C0]
+        spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
+        grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
 
         grab.setPosition(1);
         spinR.setPosition(0);

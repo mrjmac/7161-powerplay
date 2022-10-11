@@ -4,35 +4,57 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class OceanCrashOpMode extends OpMode {
 
     // Drivetrain
-    private DcMotor BL;
-    private DcMotor BR;
-    private DcMotor FL;
-    private DcMotor FR;
+    private DcMotor BL; // [E1]
+    private DcMotor BR; // [C0]
+    private DcMotor FL; // [E0]
+    private DcMotor FR; // [C1]
 
     // Four Bar
-    private Servo spinL;
-    private Servo spinR;
-    private Servo grab;
+    private Servo spinL; // [C0]
+    private Servo spinR; // [E5]
+    private Servo grab; // [E4]
 
     // Intake
-    private DcMotor intakeL;
-    private DcMotor intakeR;
+    private DcMotor intakeL; // [E2]
+    private DcMotor intakeR; // [C2]
 
     // Lift
-    private DcMotor liftL;
-    private DcMotor liftR;
+    private DcMotor liftL; // [E3]
+    private DcMotor liftR; // [C3]
+
+    public enum LiftState {
+        IDLE,
+        BEACON,
+        RAISE,
+        PLACE,
+        LOWER,
+    }
+    public int jHeight = 3;
+    public int liftTargetPos = 0;
+
+    public boolean active = false;
+    public boolean grabbed = false;
+
+    public ElapsedTime macroTime = new ElapsedTime();
+    public ElapsedTime grabTime = new ElapsedTime();
+    public ElapsedTime jHeightTime = new ElapsedTime();
+
+
+    LiftState lift = LiftState.IDLE;
 
     public void init() {
 
+
         // Drivetrain
-        FR = hardwareMap.dcMotor.get("FR");
-        FL = hardwareMap.dcMotor.get("FL");
-        BR = hardwareMap.dcMotor.get("BR");
-        BL = hardwareMap.dcMotor.get("BL");
+        FR = hardwareMap.dcMotor.get("FR"); // [C1]
+        FL = hardwareMap.dcMotor.get("FL"); // [E0]
+        BR = hardwareMap.dcMotor.get("BR"); // [C0]
+        BL = hardwareMap.dcMotor.get("BL"); // [E1]
 
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -49,30 +71,32 @@ public abstract class OceanCrashOpMode extends OpMode {
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
         // Four Bar
-        spinL = hardwareMap.servo.get("spinL");
-        spinR = hardwareMap.servo.get("spinR");
-        grab = hardwareMap.servo.get("grab");
+        spinL = hardwareMap.servo.get("spinL"); // [C0]
+        spinR = hardwareMap.servo.get("spinR"); // [E5]
+        grab = hardwareMap.servo.get("grab"); // [E4]
 
         // Intake
-        intakeL = hardwareMap.dcMotor.get("intakeL");
-        intakeR = hardwareMap.dcMotor.get("intakeR");
+        intakeL = hardwareMap.dcMotor.get("intakeL"); // [E2]
+        intakeR = hardwareMap.dcMotor.get("intakeR"); // [C2]
 
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeL.setPower(0);
 
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setPower(0);
 
+
         // Lift
-        liftL = hardwareMap.dcMotor.get("liftL");
-        liftR = hardwareMap.dcMotor.get("liftR");
+        liftL = hardwareMap.dcMotor.get("liftL"); // [E3]
+        liftR = hardwareMap.dcMotor.get("liftR"); // [C3]
 
         liftL.setDirection(DcMotorSimple.Direction.REVERSE);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -83,6 +107,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         telemetry.addData("init ", "completed");
         telemetry.update();
@@ -103,12 +128,19 @@ public abstract class OceanCrashOpMode extends OpMode {
         BR.setPower(0);
     }
 
-    public void drive(double x, double y, double turn) {
+    public void drive(double x, double y, double turn, double trigger) {
 
-        double FLP = y - turn - x;
-        double FRP = y + turn + x ;
-        double BLP = y + turn - x;
-        double BRP = y - turn + x;
+        double FLP = y + turn + x;
+        double FRP = y + turn - x;
+        double BLP = y - turn + x;
+        double BRP = y - turn - x;
+
+        double speedControl;
+        if (trigger > .1) {
+            speedControl = .35;
+        } else {
+            speedControl = 1;
+        }
 
         double max = Math.max(Math.max(Math.abs(FLP), Math.abs(FRP)), Math.max(Math.abs(BLP), Math.abs(BRP)));
 
@@ -119,15 +151,15 @@ public abstract class OceanCrashOpMode extends OpMode {
             BRP /= max;
         }
 
-        if (gamepad1.right_trigger > .1) {
-            FLP *= .35;
-            FRP *= .35;
-            BLP *= .35;
-            BRP *= .35;
-        }
+        startMotors(FLP * speedControl, FRP * speedControl, BLP * speedControl, BRP * speedControl);
 
-        startMotors(FLP, FRP, BLP, BRP);
+        telemetry.addData("FLP: ", FLP * speedControl);
+        telemetry.addData("FRP: ", FRP * speedControl);
+        telemetry.addData("BLP: ", BLP * speedControl);
+        telemetry.addData("BRP: ", BRP * speedControl);
+        telemetry.addData("right trigger: ", gamepad1.right_trigger);
     }
+
 
     public void setIntake(double p)
     {
@@ -156,4 +188,41 @@ public abstract class OceanCrashOpMode extends OpMode {
     {
         grab.setPosition(0);
     }
+
+
+    public double getLiftPos()
+    {
+        return (liftL.getCurrentPosition() + liftR.getCurrentPosition()) / 2.0;
+    }
+
+    public void setLiftPower(double power)
+    {
+        liftL.setPower(power);
+        liftR.setPower(power);
+    }
+
+    public void resetLiftEncoder()
+    {
+        liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void setLift(double liftTargetPos)
+    {
+        if (getLiftPos() <= liftTargetPos - 50)
+        {
+            setLiftPower(1);
+        }
+    }
+
+    public void liftReset(double power)
+    {
+        if (getLiftPos() >= 50)
+        {
+            setLiftPower(power);
+        }
+    }
+
 }

@@ -2,34 +2,122 @@ package OceanCrashOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import OceanCrashLinearOpMode.Lift;
+
 @TeleOp(name = "TeleOp", group = "opMode")
 public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     public void loop() {
 
         // DRIVE
-        if (Math.abs(gamepad1.left_stick_x) > 1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1)
+        if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1)
         {
-            drive(gamepad1.right_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_x);
+            drive(gamepad1.right_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_trigger);
         }
         else
         {
             stopMotors();
         }
 
+
         // INTAKE
-        if (gamepad1.right_trigger > .1)
-        {
-            setIntake(1);
-        }
-        else if (gamepad1.left_trigger > .1)
-        {
+        if (gamepad1.right_bumper && gamepad1.left_bumper)
             setIntake(-1);
-        }
+        else if (gamepad1.right_bumper)
+            setIntake(-.75);
+        else if (gamepad1.left_bumper)
+            setIntake(.5);
         else
-        {
             setIntake(0);
+
+
+        /*
+        // LIFT
+        if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 200) {
+            jHeight++;
+            jHeightTime.reset();
         }
+
+        if (gamepad1.dpad_down && jHeight > 0 && jHeightTime.milliseconds() > 200) {
+            jHeight--;
+            jHeightTime.reset();
+        }
+
+        switch (jHeight) {
+            case 0:
+                liftTargetPos = 100;
+                break;
+            case 1:
+                liftTargetPos = 200;
+                break;
+            case 2:
+                liftTargetPos = 300;
+                break;
+            case 3:
+                liftTargetPos = 400;
+        }
+
+        switch (lift) {
+            case IDLE:
+                if (gamepad2.left_bumper && !active) {
+                    grab();
+                    active = true;
+                    lift = LiftState.RAISE;
+                }
+                if (gamepad2.right_bumper && !active)
+                    lift = LiftState.BEACON;
+                break;
+            case BEACON:
+                extendFourBar();
+                if (gamepad2.a && grabTime.milliseconds() > 200) {
+                    if (!grabbed)
+                        release();
+                    else
+                        grab();
+                    grabTime.reset();
+                }
+                if (gamepad2.left_bumper && macroTime.milliseconds() > 200)
+                {
+                    active = true;
+                    lift = LiftState.RAISE;
+                }
+                break;
+            case RAISE:
+                if (getLiftPos() < liftTargetPos) {
+                    setLift(liftTargetPos);
+                } else {
+                    extendFourBar();
+                    if (macroTime.milliseconds() > 750) {
+                        macroTime.reset();
+                        lift = LiftState.PLACE;
+                    }
+                }
+                break;
+            case PLACE:
+                setLiftPower(.12); //stallpower, calculate using torque and mg
+                if (gamepad2.a && grabTime.milliseconds() > 200 && macroTime.milliseconds() > 200) {
+                    release(); //need to test timing, will prob have to modify delay using macroTime
+                    macroTime.reset();
+                    lift = LiftState.LOWER;
+                }
+                break;
+            case LOWER:
+                retractFourBar();
+                if (getLiftPos() > 50)
+                    liftReset(-1);
+                else
+                {
+                    setLiftPower(0);
+                    resetLiftEncoder();
+                    active = false;
+                    lift = LiftState.IDLE;
+                }
+                break;
+            default:
+                lift = LiftState.IDLE;
+                break;
+        }
+
         // FOUR BAR
         if (gamepad2.left_trigger > .1)
         {
@@ -48,6 +136,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             release();
         }
 
+         */
 
+        telemetry.update();
     }
 }

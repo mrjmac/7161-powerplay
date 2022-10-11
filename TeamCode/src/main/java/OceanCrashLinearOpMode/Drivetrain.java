@@ -10,10 +10,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Drivetrain {
 
-    private DcMotor BL;
-    private DcMotor BR;
-    private DcMotor FL;
-    private DcMotor FR;
+    private DcMotor BL; // [E1]
+    private DcMotor BR; // [C0]
+    private DcMotor FL; // [E0]
+    private DcMotor FR; // [C1]
 
     private LinearOpMode opMode;
     private final String LOG_TAG = "DriveTrain";
@@ -25,10 +25,10 @@ public class Drivetrain {
     public Drivetrain(LinearOpMode opMode) throws InterruptedException {
 
         this.opMode = opMode;
-        FR = this.opMode.hardwareMap.dcMotor.get("FR");
-        FL = this.opMode.hardwareMap.dcMotor.get("FL");
-        BR = this.opMode.hardwareMap.dcMotor.get("BR");
-        BL = this.opMode.hardwareMap.dcMotor.get("BL");
+        FR = this.opMode.hardwareMap.dcMotor.get("FR"); // [C1]
+        FL = this.opMode.hardwareMap.dcMotor.get("FL"); // [E0]
+        BR = this.opMode.hardwareMap.dcMotor.get("BR"); // [C0]
+        BL = this.opMode.hardwareMap.dcMotor.get("BL"); // [E1]
 
         this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
         this.opMode.telemetry.update();
