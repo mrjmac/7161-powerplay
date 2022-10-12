@@ -88,3 +88,7 @@ lint/tmp/
 
 .DS_Store
 .idea
+*.gradle
+build.common.gradle
+build.gradle
+TeamCode/build.gradle

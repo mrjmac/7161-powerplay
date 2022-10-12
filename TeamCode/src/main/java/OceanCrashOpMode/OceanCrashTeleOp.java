@@ -1,11 +1,17 @@
 package OceanCrashOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import OceanCrashLinearOpMode.Lift;
 
 @TeleOp(name = "TeleOp", group = "opMode")
 public class OceanCrashTeleOp extends OceanCrashOpMode{
+
+
+    private ElapsedTime fourbar;
+    private boolean grabbed = false, extend = false;
+    private ElapsedTime grab, extended;
 
     public void loop() {
 
@@ -29,6 +35,41 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             setIntake(.5);
         else
             setIntake(0);
+
+
+        if (Math.abs(gamepad2.left_stick_x) > .05)
+        {
+            setLiftPower(gamepad2.left_stick_y);
+        }
+
+        if (gamepad2.a && grab.milliseconds() > 100 && !grabbed)
+        {
+            grab.reset();
+            grabbed = true;
+            grab();
+        }
+
+        if (gamepad2.b && grab.milliseconds() > 100 && grabbed)
+        {
+            grab.reset();
+            grabbed = false;
+            release();
+        }
+
+        if (gamepad2.y && extended.milliseconds() > 100 && extend)
+        {
+            extended.reset();
+            extend = false;
+            retractFourBar();
+        }
+
+        if (gamepad2.x && extended.milliseconds() > 100 && !extend)
+        {
+            extended.reset();
+            extend = true;
+            extendFourBar();
+        }
+
 
 
         /*

@@ -56,10 +56,10 @@ public abstract class OceanCrashOpMode extends OpMode {
         BR = hardwareMap.dcMotor.get("BR"); // [C0]
         BL = hardwareMap.dcMotor.get("BL"); // [E1]
 
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -169,14 +169,14 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void extendFourBar()
     {
-        spinL.setPosition(1);
-        spinR.setPosition(-1);
+        spinL.setPosition(0.5);
+        spinR.setPosition(0.5);
     }
 
     public void retractFourBar()
     {
         spinR.setPosition(0);
-        spinL.setPosition(0);
+        spinL.setPosition(1);
     }
 
     public void grab()

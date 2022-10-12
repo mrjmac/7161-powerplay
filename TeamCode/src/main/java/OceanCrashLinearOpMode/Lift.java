@@ -46,7 +46,7 @@ public class Lift {
 
         grab.setPosition(1);
         spinR.setPosition(0);
-        spinL.setPosition(0);
+        spinL.setPosition(1);
 
     }
 
@@ -144,7 +144,7 @@ public class Lift {
     public void extendFourBar()
     {
         grab.setPosition(1);
-        spinL.setPosition(1);
-        spinR.setPosition(-1);
+        spinL.setPosition(0.5);
+        spinR.setPosition(0.5);
     }
 }
