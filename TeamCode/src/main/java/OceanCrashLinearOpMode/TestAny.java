@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class TestAny extends LinearOpMode {
 
     private Drivetrain drivetrain;
-    //private Vision vision;
+    private Vision vision;
     private Lift lift;
     private Intake intake;
 
@@ -17,12 +17,12 @@ public class TestAny extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         drivetrain = new Drivetrain(this);
-        //vision = new Vision(this);
+        vision = new Vision(this);
         lift = new Lift(this);
         intake = new Intake(this);
 
         while(!isStarted()){
-            //pos = vision.getPark();
+            pos = vision.getPark();
             //telemetry.addData("park: ", pos);
             //telemetry.update();
         }
@@ -79,11 +79,14 @@ public class TestAny extends LinearOpMode {
             //extend four bar
             //lift.extendFourBar();
 
+            /*
             //set intake for low junction
             lift.setLift(1, 0.5);
             sleep(500);
             lift.resetLift(1);
             sleep(500);
+
+             */
 
             /*
             //set intake for mid junction

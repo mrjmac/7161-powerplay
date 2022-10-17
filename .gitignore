@@ -92,3 +92,6 @@ lint/tmp/
 build.common.gradle
 build.gradle
 TeamCode/build.gradle
+*.gradle
+build.gradle
+TeamCode/build.gradle

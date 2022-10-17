@@ -98,12 +98,12 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftL = hardwareMap.dcMotor.get("liftL"); // [E3]
         liftR = hardwareMap.dcMotor.get("liftR"); // [C3]
 
-        liftL.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftL.setDirection(DcMotorSimple.Direction.FORWARD);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        liftR.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftR.setDirection(DcMotorSimple.Direction.REVERSE);
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -192,7 +192,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public double getLiftPos()
     {
-        return (liftL.getCurrentPosition() + liftR.getCurrentPosition()) / 2.0;
+        return Math.abs((liftL.getCurrentPosition() + liftR.getCurrentPosition()) / 2.0);
     }
 
     public void setLiftPower(double power)

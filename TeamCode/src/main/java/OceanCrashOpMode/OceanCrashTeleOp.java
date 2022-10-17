@@ -28,18 +28,26 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         // INTAKE
         if (gamepad1.right_bumper && gamepad1.left_bumper)
-            setIntake(-1);
+            setIntake(.5);
         else if (gamepad1.right_bumper)
             setIntake(-.75);
         else if (gamepad1.left_bumper)
-            setIntake(.5);
+            setIntake(-.5);
         else
             setIntake(0);
 
 
-        if (Math.abs(gamepad2.left_stick_x) > .05)
+        if (Math.abs(gamepad2.left_stick_y) > .05)
         {
-            setLiftPower(gamepad2.left_stick_y);
+            setLiftPower(gamepad2.left_stick_y * 0.7);
+        }
+        else if (getLiftPos() > 1000)
+        {
+            setLiftPower(-.017);
+        }
+        else
+        {
+            setLiftPower(0);
         }
 
         if (gamepad2.a && grab.milliseconds() > 100 && !grabbed)
@@ -71,6 +79,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         }
 
 
+        telemetry.addData("Lift pos :: ", getLiftPos());
+        telemetry.update();
 
         /*
         // LIFT
