@@ -130,10 +130,10 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void drive(double x, double y, double turn, double trigger) {
 
-        double FLP = y + turn + x;
-        double FRP = y + turn - x;
-        double BLP = y - turn + x;
-        double BRP = y - turn - x;
+        double FLP = y - turn - x;
+        double FRP = y + turn + x;
+        double BLP = y + turn - x;
+        double BRP = y - turn + x;
 
         double speedControl;
         if (trigger > .1) {

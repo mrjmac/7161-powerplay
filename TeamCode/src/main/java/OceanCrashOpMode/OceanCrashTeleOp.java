@@ -43,7 +43,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         }
         else if (getLiftPos() > 1000)
         {
-            setLiftPower(-.017);
+            setLiftPower(-.0005);
         }
         else
         {
@@ -80,6 +80,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
 
         telemetry.addData("Lift pos :: ", getLiftPos());
+        telemetry.addData("Stick :: ", gamepad2.left_stick_y);
         telemetry.update();
 
         /*

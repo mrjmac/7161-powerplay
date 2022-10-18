@@ -21,7 +21,7 @@ public class Lift {
     private final double lowTicks = 200;
     private final double medTicks = 400;
     private final double highTicks = 600;
-    private final double STALL_POWER = .09;
+    private final double STALL_POWER = -.0005;
 
     public Lift(LinearOpMode opMode) throws InterruptedException {
 
@@ -30,12 +30,12 @@ public class Lift {
         liftL = this.opMode.hardwareMap.dcMotor.get("liftL"); // [E3]
         liftR = this.opMode.hardwareMap.dcMotor.get("liftR"); // [C3]
 
-        liftL.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftL.setDirection(DcMotorSimple.Direction.FORWARD);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        liftR.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftR.setDirection(DcMotorSimple.Direction.REVERSE);
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -89,7 +89,7 @@ public class Lift {
                 double error = (ticks - getEncoderAvg());
                 double changeP = error * kP;
 
-                setPower(changeP);
+                setPower(-changeP);
 
                 if (error < 10 || Math.abs(changeP) < 0.2) {
                     setPower(STALL_POWER);
@@ -114,7 +114,7 @@ public class Lift {
                 double error = (ticks - getEncoderAvg());
                 double changeP = error * kP;
 
-                setPower(changeP);
+                setPower(-changeP);
 
                 if (error < 10 || Math.abs(changeP) < 0.2) {
                     setPower(STALL_POWER);
@@ -131,7 +131,7 @@ public class Lift {
     {
         while (getEncoderAvg() > 0){
             double power = getEncoderAvg() * p;
-            setPower(-power);
+            setPower(power);
             if (Math.abs(power) < .05){
                 break;
             }
