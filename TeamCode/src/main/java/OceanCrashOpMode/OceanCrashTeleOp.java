@@ -9,9 +9,9 @@ import OceanCrashLinearOpMode.Lift;
 public class OceanCrashTeleOp extends OceanCrashOpMode{
 
 
-    private ElapsedTime fourbar;
+    private ElapsedTime fourbar = new ElapsedTime();
     private boolean grabbed = false, extend = false;
-    private ElapsedTime grab, extended;
+    private ElapsedTime grab = new ElapsedTime(), extended = new ElapsedTime();
 
     public void loop() {
 
@@ -50,28 +50,28 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             setLiftPower(0);
         }
 
-        if (gamepad2.a && grab.milliseconds() > 100 && !grabbed)
+        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
         {
             grab.reset();
             grabbed = true;
             grab();
         }
 
-        if (gamepad2.b && grab.milliseconds() > 100 && grabbed)
+        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
         {
             grab.reset();
             grabbed = false;
             release();
         }
 
-        if (gamepad2.y && extended.milliseconds() > 100 && extend)
+        if (gamepad2.y && extended.milliseconds() > 250 && extend)
         {
             extended.reset();
             extend = false;
             retractFourBar();
         }
 
-        if (gamepad2.x && extended.milliseconds() > 100 && !extend)
+        if (gamepad2.y && extended.milliseconds() > 250 && !extend)
         {
             extended.reset();
             extend = true;
