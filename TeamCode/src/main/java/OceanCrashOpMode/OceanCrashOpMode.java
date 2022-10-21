@@ -169,14 +169,14 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void extendFourBar()
     {
-        spinL.setPosition(0.3);
+        //spinL.setPosition(0.3);
         spinR.setPosition(0.7);
     }
 
     public void retractFourBar()
     {
         spinR.setPosition(0);
-        spinL.setPosition(1);
+        //spinL.setPosition(1);
     }
 
     public void grab()
@@ -186,7 +186,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void release()
     {
-        grab.setPosition(.92);
+        grab.setPosition(.85);  //tune this
     }
 
 
