@@ -1,6 +1,7 @@
 package OceanCrashOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,6 +23,7 @@ public abstract class OceanCrashOpMode extends OpMode {
     // Intake
     private DcMotor intakeL; // [E2]
     private DcMotor intakeR; // [C2]
+    public ColorSensor colorS; //[]
 
     // Lift
     private DcMotor liftL; // [E3]
@@ -80,6 +82,8 @@ public abstract class OceanCrashOpMode extends OpMode {
         // Intake
         intakeL = hardwareMap.dcMotor.get("intakeL"); // [E2]
         intakeR = hardwareMap.dcMotor.get("intakeR"); // [C2]
+        colorS = hardwareMap.get(ColorSensor.class, "color");
+
 
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -107,6 +111,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
 
         telemetry.addData("init ", "completed");
@@ -189,24 +194,24 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void extendFourBar()
     {
-        //spinL.setPosition(0.3);
+        spinL.setPosition(0.3);
         spinR.setPosition(0.7);
     }
 
     public void retractFourBar()
     {
         spinR.setPosition(0);
-        //spinL.setPosition(1);
+        spinL.setPosition(1);
     }
 
     public void grab()
     {
-        grab.setPosition(1);
+        grab.setPosition(.9);
     }
 
     public void release()
     {
-        grab.setPosition(.85);  //tune this
+        grab.setPosition(.7);  //tune this
     }
 
 
@@ -229,7 +234,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void setLift(double liftTargetPos)
+    public void setLiftPos(double liftTargetPos)
     {
         if (getLiftPos() <= liftTargetPos - 50)
         {
@@ -245,4 +250,14 @@ public abstract class OceanCrashOpMode extends OpMode {
         }
     }
 
+    public boolean grabBlue()
+    {
+        return colorS.red() < 125 && colorS.red() > 75 && colorS.green() < 150 && colorS.green() > 100 && colorS.blue() > 200;
+    }
+
+    public boolean grabRed()
+    {
+        return colorS.red() > 200 && colorS.green() < 125 && colorS.green() > 75 && colorS.blue() < 125 && colorS.blue() > 75;
+
+    }
 }
