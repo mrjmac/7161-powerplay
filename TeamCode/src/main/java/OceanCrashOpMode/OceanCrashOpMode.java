@@ -160,6 +160,26 @@ public abstract class OceanCrashOpMode extends OpMode {
         telemetry.addData("right trigger: ", gamepad1.right_trigger);
     }
 
+    public double getMotorEncoders()
+    {
+        int count = 4;
+        if ((FR.getCurrentPosition()) == 0) {
+            count--;
+        }
+        if ((FL.getCurrentPosition()) == 0) {
+            count--;
+        }
+        if ((BR.getCurrentPosition()) == 0) {
+            count--;
+        }
+        if ((BL.getCurrentPosition()) == 0) {
+            count--;
+        }
+        count = count == 0 ? 1 : count;
+
+        return (Math.abs(FR.getCurrentPosition()) +  Math.abs(FL.getCurrentPosition()) + Math.abs(BR.getCurrentPosition()) + Math.abs(BL.getCurrentPosition())) / count;
+    }
+
 
     public void setIntake(double p)
     {

@@ -81,6 +81,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         telemetry.addData("Lift pos :: ", getLiftPos());
         telemetry.addData("Stick :: ", gamepad2.left_stick_y);
+        telemetry.addData("Encoder :: ", getMotorEncoders());
         telemetry.update();
 
         /*
