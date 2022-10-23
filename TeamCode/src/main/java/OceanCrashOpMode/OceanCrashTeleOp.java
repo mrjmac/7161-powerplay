@@ -66,6 +66,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         if (gamepad2.y && extended.milliseconds() > 250 && extend)
         {
+            if (!grabbed) {
+                grab();
+                grabbed = true;
+            }
             extended.reset();
             extend = false;
             retractFourBar();
@@ -73,14 +77,21 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         if (gamepad2.y && extended.milliseconds() > 250 && !extend)
         {
+            if (!grabbed) {
+                grab();
+                grabbed = true;
+            }
             extended.reset();
             extend = true;
             extendFourBar();
         }
 
 
-        telemetry.addData("Lift pos :: ", getLiftPos());
+        telemetry.addData("Lift Pos :: ", getLiftPos());
         telemetry.addData("Stick :: ", gamepad2.left_stick_y);
+        telemetry.addData("Red :: ", colorS.red());
+        telemetry.addData("Green :: ",colorS.green());
+        telemetry.addData("Blue :: ", colorS.blue());
         telemetry.update();
 
         /*
@@ -111,8 +122,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if (gamepad2.left_bumper && !active) {
+                if (grabRed || grabBlue) {
+                    liftReset();
                     grab();
+                }
+                if (gamepad2.left_bumper && !active) {
                     active = true;
                     lift = LiftState.RAISE;
                 }
@@ -136,7 +150,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 break;
             case RAISE:
                 if (getLiftPos() < liftTargetPos) {
-                    setLift(liftTargetPos);
+                    setLiftPos(liftTargetPos);
                 } else {
                     extendFourBar();
                     if (macroTime.milliseconds() > 750) {
