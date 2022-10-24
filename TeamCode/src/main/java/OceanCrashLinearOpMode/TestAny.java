@@ -23,12 +23,12 @@ public class TestAny extends LinearOpMode {
 
         while(!isStarted()){
             pos = vision.getPark();
-            //telemetry.addData("park: ", pos);
-            //telemetry.update();
+            telemetry.addData("park: ", pos);
+            telemetry.update();
         }
 
-        //telemetry.addData("park: ", pos);
-        //telemetry.update();
+        telemetry.addData("park: ", pos);
+        telemetry.update();
 
         waitForStart();
 
