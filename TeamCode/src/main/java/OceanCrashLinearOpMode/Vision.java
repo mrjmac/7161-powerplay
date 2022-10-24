@@ -24,10 +24,10 @@ public class Vision extends LinearOpMode{
     private VuforiaLocalizer vuforia;
     private LinearOpMode opMode;
     private int park = 3;
-    private final int highY = 0;
-    private final int lowY = 0;
-    private final int highX = 0;
-    private final int lowX = 0;
+    private final int highY = 400;
+    private final int lowY = 200;
+    private final int highX = 350;
+    private final int lowX = 300;
 
     public Vision(LinearOpMode opMode){
         this.opMode = opMode;
