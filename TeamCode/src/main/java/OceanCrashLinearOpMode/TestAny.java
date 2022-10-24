@@ -36,6 +36,11 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested()) {
 
 //=============================================== DT ===============================================//
+            drivetrain.gyroInch(.423, 52, 5, 0);
+            //drivetrain.startMotors(.7, .7, .7, .7);
+            //sleep(10000);
+            //24, 10
+
             /*
             //go forwards
             drivetrain.gyroInch(1, 5, 5, 0);
@@ -113,7 +118,7 @@ public class TestAny extends LinearOpMode {
             lift.resetLift(1);
 
              */
-
+            break;
         }
     }
 }

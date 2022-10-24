@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.checkerframework.checker.units.qual.Angle;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Drivetrain {
@@ -69,7 +71,7 @@ public class Drivetrain {
 
     public void rightGyroStrafe(double speed, double inches, double timeoutS, double heading) {
 
-        double ticks = inches * 32;
+        double ticks = inches * 32.4;
         heading = -heading;
         //runtime isn't used, this is just a backup call which we don't need
         double kP = speed / (3.3);
@@ -99,11 +101,11 @@ public class Drivetrain {
             if(angleDiff > 2) {
                 BL.setPower(ChangeP);
                 BR.setPower(ChangeP);
-                FL.setPower(ChangeP + GyroScalePower);
-                FR.setPower(ChangeP + GyroScalePower);
+                FL.setPower(ChangeP - GyroScalePower);
+                FR.setPower(ChangeP - GyroScalePower);
             } else if (angleDiff < -2) {
-                BL.setPower(ChangeP + GyroScalePower);
-                BR.setPower(ChangeP + GyroScalePower);
+                BL.setPower(ChangeP - GyroScalePower);
+                BR.setPower(ChangeP - GyroScalePower);
                 FL.setPower(ChangeP);
                 FR.setPower(ChangeP);
             } else {
@@ -127,7 +129,7 @@ public class Drivetrain {
 
     public void leftGyroStrafe(double speed, double inches, double timeoutS, double heading) {
 
-        double ticks = inches * 32;
+        double ticks = inches * 32.4;
         heading = -heading;
         //runtime isn't used, this is just a backup call which we don't need
         double kP = speed / 3.3;
@@ -188,7 +190,7 @@ public class Drivetrain {
 
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
 
-            double ticks = inches * 32;
+            double ticks = inches * 32.4;
             double kP = speed / 15;
             heading = -heading;
 
@@ -199,27 +201,33 @@ public class Drivetrain {
             //if the position is less than the number of inches, than it sets the motors to speed
             while (Math.abs(getEncoderAvg()) <= ticks && this.opMode.opModeIsActive()) {
 
-                double error = (ticks - Math.abs(getEncoderAvg())) / 32;
+                double error = (ticks - Math.abs(getEncoderAvg())) / 32.4;
                 double ChangeP = error * kP;
                 double AngleDiff = GimbleCalc(heading, getGyroYaw());
-                double GyroScalePower = AngleDiff * .02;
+                double GyroScalePower = 0;
+                if (Math.abs(AngleDiff) > 0)
+                {
+                    GyroScalePower = AngleDiff * .05;
+                }
+
 
                 if (ChangeP > 1)
                     ChangeP = ChangeP / ChangeP;
 
                 //signs could be flipped
-                BR.setPower(ChangeP + GyroScalePower);
-                FL.setPower(ChangeP - GyroScalePower);
-                FR.setPower(ChangeP + GyroScalePower);
-                BL.setPower(ChangeP - GyroScalePower);
+                BR.setPower(ChangeP - GyroScalePower);
+                FL.setPower(ChangeP + GyroScalePower);
+                FR.setPower(ChangeP - GyroScalePower);
+                BL.setPower(ChangeP + GyroScalePower);
 
                 this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + GyroScalePower);
                 this.opMode.telemetry.addData("MotorPowRight:", ChangeP + GyroScalePower);
                 this.opMode.telemetry.addData("heading:", heading);
                 this.opMode.telemetry.addData("YawAngle:", getGyroYaw());
+                this.opMode.telemetry.addData("angle diff:", AngleDiff);
                 this.opMode.telemetry.update();
 
-                if (Math.abs(ChangeP) < .15 || runtime.seconds() >= timeoutS || error < .25) {
+                if (Math.abs(ChangeP) < .05 || runtime.seconds() >= timeoutS || error < .25) {
                     stopMotors();
                     break;
                 }
