@@ -31,13 +31,14 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public enum LiftState {
         IDLE,
-        BEACON,
+        //BEACON,
         RAISE,
         PLACE,
         LOWER,
     }
     public int jHeight = 3;
     public int liftTargetPos = 0;
+    public String liftState = "IDLE";
 
     public boolean active = false;
     public boolean grabbed = false;
@@ -117,7 +118,12 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+/*
+        spinR.setPosition(.02);
+        spinL.setPosition(.98);
 
+        release();
+        */
 
 
         telemetry.addData("init ", "completed");
@@ -188,7 +194,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         }
         count = count == 0 ? 1 : count;
 
-        return (Math.abs(FR.getCurrentPosition()) +  Math.abs(FL.getCurrentPosition()) + Math.abs(BR.getCurrentPosition()) + Math.abs(BL.getCurrentPosition())) / count;
+        return (Math.abs(FR.getCurrentPosition()) +  Math.abs(FL.getCurrentPosition()) + Math.abs(BR.getCurrentPosition()) + Math.abs(BL.getCurrentPosition())) / (double)count;
     }
 
 
@@ -244,13 +250,13 @@ public abstract class OceanCrashOpMode extends OpMode {
     {
         if (getLiftPos() <= liftTargetPos - 50)
         {
-            setLiftPower(1);
+            setLiftPower(-.6);
         }
     }
 
-    public void liftReset(double power)
+    public void liftReset(double power, double liftTargetPos)
     {
-        if (getLiftPos() >= 50)
+        if (getLiftPos() >= 50 + liftTargetPos)
         {
             setLiftPower(power);
         }
@@ -258,7 +264,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public boolean grabBlue()
     {
-        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 63;
+        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 50;
     }
 
     public boolean grabRed()
