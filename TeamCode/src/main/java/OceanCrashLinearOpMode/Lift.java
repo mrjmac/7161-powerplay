@@ -44,9 +44,9 @@ public class Lift {
         spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
 
-        grab.setPosition(1);
         spinR.setPosition(0);
         spinL.setPosition(1);
+        grab.setPosition(.9);
 
     }
 
@@ -98,7 +98,7 @@ public class Lift {
             }
         }
 
-        grab.setPosition(0);
+        grab.setPosition(.7);
     }
 
     public void setLiftForCone(int cycleNum, double p)
@@ -123,7 +123,7 @@ public class Lift {
             }
         }
 
-        grab.setPosition(1);
+        grab.setPosition(.9);
 
     }
 
@@ -143,8 +143,8 @@ public class Lift {
 
     public void extendFourBar()
     {
-        grab.setPosition(1);
-        spinL.setPosition(0.5);
-        spinR.setPosition(0.5);
+        grab.setPosition(.9);
+        spinL.setPosition(0.3);
+        spinR.setPosition(0.7);
     }
 }
