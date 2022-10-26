@@ -30,7 +30,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         if (gamepad1.right_bumper && gamepad1.left_bumper)
             setIntake(.5);
         else if (gamepad1.right_bumper)
-            setIntake(-.75);
+            setIntake(-.9);
         else if (gamepad1.left_bumper)
             setIntake(-.5);
         else
@@ -123,13 +123,13 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftTargetPos = 100;
                 break;
             case 1:
-                liftTargetPos = 1400;
+                liftTargetPos = 1300;
                 break;
             case 2:
                 liftTargetPos = 2000;
                 break;
             case 3:
-                liftTargetPos = 2550;
+                liftTargetPos = 2700;
         }
 
         switch (lift) {
@@ -184,9 +184,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     if (jHeight == 0)
                         setLiftPower(0);
                     else if (jHeight == 1)
-                        setLiftPower(-.00035);
+                        setLiftPower(-.00045);
                     else
                         setLiftPower(-.0005);
+                    if (!grabbed)
+                        grab();
                     extendFourBar();
                     if (macroTime.milliseconds() > 750) {
                         macroTime.reset();
@@ -210,7 +212,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     retractFourBar();
                 }
                 if (getLiftPos() > 450)
-                    liftReset(.3, 400);
+                    liftReset(.5, 400);
                 else
                 {
                     setLiftPower(0);

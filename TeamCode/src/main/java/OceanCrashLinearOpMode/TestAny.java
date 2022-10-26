@@ -36,7 +36,7 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested()) {
 
 //=============================================== DT ===============================================//
-            drivetrain.gyroInch(.423, 52, 5, 0);
+            drivetrain.gyroInch(.442, 40, 5, 0); //.442 for 48 in, 1 for 4 in, .432 for 20 in, .x for 40 in
             //drivetrain.startMotors(.7, .7, .7, .7);
             //sleep(10000);
             //24, 10
