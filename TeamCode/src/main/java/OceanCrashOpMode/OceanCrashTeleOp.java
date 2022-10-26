@@ -41,10 +41,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         {
             setLiftPower(gamepad2.left_stick_y * 0.7);
         }
-        if (gamepad1.a)
+    /*    if (gamepad1.a)
         {
             setLiftPower(0);
         }
+
+     */
         /*
         else if (getLiftPos() > 1000)
         {
@@ -64,12 +66,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         */
 
 
-        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
+      /*  if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
         {
             grab.reset();
             grabbed = false;
             release();
         }
+
+       */
 
         if (gamepad2.y && extended.milliseconds() > 250 && extend)
         {
@@ -134,7 +138,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if (grabRed() || grabBlue()) {
+                if (gamepad2.a && grabTime.milliseconds() > 200) {
+                    grabbed = true;
+                    grabTime.reset();
+                }
+                if ((grabRed() || grabBlue()) || grabbed) {
                     if (getLiftPos() > 50)
                         liftReset(.1, 0);
                     else {
@@ -149,7 +157,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         release();
                     }
                 }
-                if (gamepad2.left_bumper && !active) {
+                if (gamepad2.right_bumper && !active) {
+                    grabbed = false;
                     active = true;
                     lift = LiftState.RAISE;
                 }
@@ -181,16 +190,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (getLiftPos() < liftTargetPos) {
                     setLiftPos(liftTargetPos);
                 } else {
-                    if (jHeight == 0)
-                        setLiftPower(0);
-                    else if (jHeight == 1)
-                        setLiftPower(-.00045);
-                    else
-                        setLiftPower(-.0005);
-                    if (!grabbed)
-                        grab();
                     extendFourBar();
-                    if (macroTime.milliseconds() > 750) {
+                    if (macroTime.milliseconds() > 400) {
                         macroTime.reset();
                         lift = LiftState.PLACE;
                     }
@@ -199,6 +200,16 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 break;
             case PLACE:
                 //setLiftPower(.12); //stallpower, calculate using torque and mg
+                if (Math.abs(gamepad2.left_stick_y) > .05) {
+                    setLiftPower(gamepad2.left_stick_y * 0.2);
+                } else {
+                    if (jHeight == 0)
+                        setLiftPower(0);
+                    else if (jHeight == 1)
+                        setLiftPower(-.00045);
+                    else
+                        setLiftPower(-.0005);
+                }
                 if (gamepad2.a && grabTime.milliseconds() > 200) {
                     release(); //need to test timing, will prob have to modify delay using macroTime
                     grabTime.reset();
