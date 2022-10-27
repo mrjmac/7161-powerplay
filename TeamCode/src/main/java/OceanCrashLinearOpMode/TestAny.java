@@ -36,7 +36,30 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested()) {
 
 //=============================================== DT ===============================================//
-            drivetrain.gyroInch(.442, 40, 5, 0); //.442 for 48 in, 1 for 4 in, .432 for 20 in, .x for 40 in
+            /*drivetrain.turnPD(45, .45, .03, 2); //45 = .45, .03.  135 = .27, .02
+            sleep(2000);
+            drivetrain.turnPD(0, .45, .03, 2);
+            sleep(2000);
+            */
+            telemetry.addData("liftPos :: ", lift.getLiftPos());
+            /*
+            lift.grab();
+            lift.setLiftPos(1300);
+            sleep(10000);*/
+           /*
+            lift.resetLift(.5);
+            sleep(10000);
+            lift.setLiftPower(2000);
+            lift.extendFourBar();
+            sleep(500);
+            lift.release();
+            sleep(500);
+            lift.grab();
+            sleep(500);
+            lift.retractFourBar();
+            sleep(500);
+            lift.resetLift(.5);/*
+            //drivetrain.gyroInch(.442, 40, 5, 0); //.442 for 48 in, 1 for 4 in, .432 for 20 in, .x for 40 in
             //drivetrain.startMotors(.7, .7, .7, .7);
             //sleep(10000);
             //24, 10
@@ -118,6 +141,11 @@ public class TestAny extends LinearOpMode {
             lift.resetLift(1);
 
              */
+          /*  if (lift.getLiftPos() > 1300)
+                lift.setLiftPower(-.0005);
+                sleep(1000);
+
+           */
             break;
         }
     }

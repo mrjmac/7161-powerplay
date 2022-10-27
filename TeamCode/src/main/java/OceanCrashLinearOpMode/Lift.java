@@ -42,7 +42,7 @@ public class Lift {
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
 
         resetEncoder();
-        grab.setPosition(.9);
+        //grab.setPosition(.9);
 
     }
 
@@ -68,11 +68,12 @@ public class Lift {
     {
         while (this.opMode.opModeIsActive() && this.opMode.isStopRequested())
         {
-            while (getLiftPos() <= liftTargetPos && this.opMode.opModeIsActive())
-            {
-                setLiftPower(-.6);
-                if (getLiftPos() - liftTargetPos <= 10)
-                {
+            while (getLiftPos() <= liftTargetPos && this.opMode.opModeIsActive()) {
+                this.opMode.telemetry.addData("lift :: ", getLiftPos());
+                this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
+                this.opMode.telemetry.update();
+                setLiftPower(-.4);
+                if (getLiftPos() - liftTargetPos <= 10) {
                     setLiftPower(STALL_POWER);
                     break;
                 }
