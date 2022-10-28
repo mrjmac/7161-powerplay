@@ -207,21 +207,21 @@ public class Drivetrain {
                 double GyroScalePower = 0;
                 if (Math.abs(AngleDiff) > 0)
                 {
-                    GyroScalePower = AngleDiff * .05;
+                    GyroScalePower = AngleDiff * .03;
                 }
 
 
                 if (ChangeP > 1)
-                    ChangeP = ChangeP / ChangeP;
+                    ChangeP = 1.0;
 
                 //signs could be flipped
-                BR.setPower(ChangeP - GyroScalePower);
-                FL.setPower(ChangeP + GyroScalePower);
-                FR.setPower(ChangeP - GyroScalePower);
-                BL.setPower(ChangeP + GyroScalePower);
+                BR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
+                FL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
+                FR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
+                BL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
 
-                this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + GyroScalePower);
-                this.opMode.telemetry.addData("MotorPowRight:", ChangeP + GyroScalePower);
+                this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + (GyroScalePower * ChangeP));
+                this.opMode.telemetry.addData("MotorPowRight:", ChangeP - (GyroScalePower * ChangeP));
                 this.opMode.telemetry.addData("heading:", heading);
                 this.opMode.telemetry.addData("YawAngle:", getGyroYaw());
                 this.opMode.telemetry.addData("angle diff:", AngleDiff);
