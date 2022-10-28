@@ -66,6 +66,11 @@ public class Drivetrain {
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
 
@@ -207,7 +212,7 @@ public class Drivetrain {
                 double GyroScalePower = 0;
                 if (Math.abs(AngleDiff) > 0)
                 {
-                    GyroScalePower = AngleDiff * .03;
+                    GyroScalePower = AngleDiff * .02;
                 }
 
 
@@ -215,13 +220,21 @@ public class Drivetrain {
                     ChangeP = 1.0;
 
                 //signs could be flipped
+                if ((ChangeP == ChangeP || (((ticks - error)/ ticks) <= .95 && (ChangeP > -1000))) && ((ticks - error)/ ticks) >= .05)
+                {
+                    GyroScalePower = GyroScalePower;
+                }
+                else
+                {
+                    GyroScalePower = 0;
+                }
                 BR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
                 FL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
                 FR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
                 BL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
 
-                this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + (GyroScalePower * ChangeP));
-                this.opMode.telemetry.addData("MotorPowRight:", ChangeP - (GyroScalePower * ChangeP));
+                this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + (GyroScalePower));
+                this.opMode.telemetry.addData("MotorPowRight:", ChangeP - (GyroScalePower));
                 this.opMode.telemetry.addData("heading:", heading);
                 this.opMode.telemetry.addData("YawAngle:", getGyroYaw());
                 this.opMode.telemetry.addData("angle diff:", AngleDiff);
@@ -265,7 +278,7 @@ public class Drivetrain {
 
             double changePID = 0;
 
-            while (Math.abs(angleDiff) > .95 && runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
+            while (Math.abs(angleDiff) > .5 && runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
 
                 pastTime = currentTime;
                 currentTime = runtime.milliseconds();

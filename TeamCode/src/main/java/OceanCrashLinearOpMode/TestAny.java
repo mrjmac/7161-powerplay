@@ -11,11 +11,11 @@ public class TestAny extends LinearOpMode {
     private Lift lift;
     private Intake intake;
 
-    private final double turnP45 = .45;
-    private final double turnD45 = .05;
+    private final double turnP45 = .43;
+    private final double turnD45 = .40;
 
-    private final double turnP135 = .27;
-    private final double turnD135 = .02;
+    private final double turnP135 = .24;
+    private final double turnD135 = .20;
 
     private final double moveP48 = .442;
     private final double moveP4 = 1;
@@ -47,7 +47,7 @@ public class TestAny extends LinearOpMode {
 
 //=============================================== DT ===============================================//
 
-            drivetrain.gyroInch(moveP48, 49, 2, 0);
+            drivetrain.gyroInch(moveP48, 50.5, 2, 0);
             sleep(500);
             drivetrain.turnPD(45, turnP45, turnD45, 2);
             //sleep(500);
@@ -55,21 +55,21 @@ public class TestAny extends LinearOpMode {
             //sleep(500);
             //drivetrain.gyroInch(-moveP4, 4, 2, 45);
             sleep(500);
-            drivetrain.gyroInch(-moveP4, 1, 1, 45);
+            drivetrain.gyroInch(-moveP4, 2.5, 1, 45);
             sleep(500);
             drivetrain.turnPD(-90, turnP135, turnD135, 2);
             sleep(500);
             drivetrain.gyroInch(moveP20, 20, 2, -90);
             sleep(500);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 2; i++)
             {
-                drivetrain.gyroInch(-moveP48, 41.5, 2, -90);
+                drivetrain.gyroInch(-moveP48, 46, 2, -90);
                 sleep(500);
                 drivetrain.turnPD(-45, turnP45, turnD45, 2);
                 sleep(500);
                 drivetrain.turnPD(-90, turnP45, turnD45, 2);
                 sleep(500);
-                drivetrain.gyroInch(moveP48 , 41.5, 2, -90);
+                drivetrain.gyroInch(moveP48, 41.5, 2, -90);
                 sleep(500);
             }
 
