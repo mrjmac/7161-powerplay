@@ -1,8 +1,10 @@
 package OceanCrashLinearOpMode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+@Config
 @Autonomous(name = "Test", group = "Test")
 public class TestAny extends LinearOpMode {
 
@@ -10,6 +12,8 @@ public class TestAny extends LinearOpMode {
     private Vision vision;
     private Lift lift;
     private Intake intake;
+
+    public static double stall = -.0004;
 
     private final double turnP45 = .43;
     private final double turnD45 = .40;
@@ -47,6 +51,8 @@ public class TestAny extends LinearOpMode {
 
 //=============================================== DT ===============================================//
 
+            lift.setLiftPower(stall);
+            /*
             drivetrain.gyroInch(moveP48, 50.5, 2, 0);
             sleep(500);
             drivetrain.turnPD(45, turnP45, turnD45, 2);
@@ -183,7 +189,7 @@ public class TestAny extends LinearOpMode {
                 sleep(1000);
 
            */
-            break;
+            //break;
         }
     }
 }
