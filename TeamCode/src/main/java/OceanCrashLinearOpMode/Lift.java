@@ -18,7 +18,7 @@ public class Lift {
     private Servo spinR; // [E5]
     private Servo grab; // [E4]
 
-    private final double STALL_POWER = -.0005;
+    private final double STALL_POWER = -0.0005;
 
     public Lift(LinearOpMode opMode) throws InterruptedException {
 
@@ -42,7 +42,6 @@ public class Lift {
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
 
         resetEncoder();
-        //grab.setPosition(.9);
 
     }
 

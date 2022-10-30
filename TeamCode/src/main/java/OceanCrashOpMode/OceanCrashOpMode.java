@@ -29,27 +29,6 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor liftL; // [E3]
     private DcMotor liftR; // [C3]
 
-    public enum LiftState {
-        IDLE,
-        //BEACON,
-        RAISE,
-        PLACE,
-        LOWER,
-    }
-    public int jHeight = 3;
-    public int liftTargetPos = 0;
-    public String liftState = "IDLE";
-
-    public boolean active = false;
-    public boolean grabbed = false;
-
-    public ElapsedTime macroTime = new ElapsedTime();
-    public ElapsedTime grabTime = new ElapsedTime();
-    public ElapsedTime jHeightTime = new ElapsedTime();
-
-
-    LiftState lift = LiftState.IDLE;
-
     public void init() {
 
 
@@ -118,13 +97,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-/*
-        spinR.setPosition(.02);
-        spinL.setPosition(.98);
-
-        release();
-        */
-
 
         telemetry.addData("init ", "completed");
         telemetry.update();

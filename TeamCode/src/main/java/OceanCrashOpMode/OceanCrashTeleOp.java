@@ -1,17 +1,42 @@
 package OceanCrashOpMode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import OceanCrashLinearOpMode.Lift;
+import java.util.Arrays;
+import java.util.List;
 
+
+@Config
 @TeleOp(name = "TeleOp", group = "opMode")
 public class OceanCrashTeleOp extends OceanCrashOpMode{
 
 
     private ElapsedTime fourbar = new ElapsedTime();
-    private boolean grabbed = false, extend = false;
-    private ElapsedTime grab = new ElapsedTime(), extended = new ElapsedTime();
+    private ElapsedTime macroTime = new ElapsedTime();
+    private ElapsedTime grabTime = new ElapsedTime();
+    private ElapsedTime jHeightTime = new ElapsedTime();
+    private ElapsedTime grab = new ElapsedTime();
+    private ElapsedTime extended = new ElapsedTime();
+
+    private boolean grabbed = false;
+    private boolean extend = false;
+    private boolean active = false;
+
+    private enum LiftState {
+        IDLE,
+        RAISE,
+        PLACE,
+        LOWER,
+    }
+
+    private LiftState lift = LiftState.IDLE;
+    private String liftState = "IDLE";
+
+    private int jHeight = 3;
+    private int liftTargetPos = 0;
+    public static int low = 1000, medium = 1570, high = 2320;
 
     public void loop() {
 
@@ -32,33 +57,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             setIntake(-.5);
         else
             setIntake(0);
-
-
-        /*
-        if (Math.abs(gamepad2.left_stick_y) > .05) {
-            setLiftPower(gamepad2.left_stick_y);
-        } else {
-            setLiftPower(0);
-        }
-
-
-        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
-        {
-            grab.reset();
-            grabbed = true;
-            grab();
-        }
-
-
-
-        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
-        {
-            grab.reset();
-            grabbed = false;
-            release();
-        }
-
-        */
 
         telemetry.addData("Lift Pos :: ", getLiftPos());
         telemetry.addData("Stick :: ", gamepad2.left_stick_y);
@@ -93,13 +91,13 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftTargetPos = 100;
                 break;
             case 1:
-                liftTargetPos = 1000;
+                liftTargetPos = low;
                 break;
             case 2:
-                liftTargetPos = 1570;
+                liftTargetPos = medium;
                 break;
             case 3:
-                liftTargetPos = 2320;
+                liftTargetPos = high;
         }
 
 
@@ -198,6 +196,32 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 lift = LiftState.IDLE;
                 break;
         }
+
+        // MANUAL LIFT CODE FOR TESTING
+        /*
+        if (Math.abs(gamepad2.left_stick_y) > .05) {
+            setLiftPower(gamepad2.left_stick_y);
+        } else {
+            setLiftPower(0);
+        }
+
+
+        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
+        {
+            grab.reset();
+            grabbed = true;
+            grab();
+        }
+
+
+
+        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
+        {
+            grab.reset();
+            grabbed = false;
+            release();
+        }
+        */
 
 
     }

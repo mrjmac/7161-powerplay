@@ -48,7 +48,7 @@ public class Drivetrain {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         parameters.loggingEnabled = true;
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
@@ -78,7 +78,7 @@ public class Drivetrain {
 
         double ticks = inches * 32.4;
         heading = -heading;
-        //runtime isn't used, this is just a backup call which we don't need
+
         double kP = speed / (3.3);
         resetEncoders();
         runtime.reset();
@@ -102,7 +102,6 @@ public class Drivetrain {
                 ChangeP /= ChangeP;
             }
 
-            //If this function doesn't work, this is probably why
             if(angleDiff > 2) {
                 BL.setPower(ChangeP);
                 BR.setPower(ChangeP);
@@ -136,7 +135,7 @@ public class Drivetrain {
 
         double ticks = inches * 32.4;
         heading = -heading;
-        //runtime isn't used, this is just a backup call which we don't need
+
         double kP = speed / 3.3;
         resetEncoders();
         runtime.reset();
@@ -160,7 +159,6 @@ public class Drivetrain {
                 ChangeP /= ChangeP;
             }
 
-            //if this function doesn't work, this is is probably why
             if (angleDiff > 2) {
                 BR.setPower(ChangeP + GyroScalePower);
                 BL.setPower(ChangeP + GyroScalePower);
@@ -199,11 +197,9 @@ public class Drivetrain {
             double kP = speed / 15;
             heading = -heading;
 
-            //runtime isn't used, this is just a backup call which we don't need
             resetEncoders();
             runtime.reset();
 
-            //if the position is less than the number of inches, than it sets the motors to speed
             while (Math.abs(getEncoderAvg()) <= ticks && this.opMode.opModeIsActive()) {
 
                 double error = (ticks - Math.abs(getEncoderAvg())) / 32.4;
@@ -219,7 +215,6 @@ public class Drivetrain {
                 if (ChangeP > 1)
                     ChangeP = 1.0;
 
-                //signs could be flipped
                 if ((ChangeP == ChangeP || (((ticks - error)/ ticks) <= .95 && (ChangeP > -1000))) && ((ticks - error)/ ticks) >= .05)
                 {
                     GyroScalePower = GyroScalePower;
@@ -228,10 +223,10 @@ public class Drivetrain {
                 {
                     GyroScalePower = 0;
                 }
-                BR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
-                FL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
-                FR.setPower(ChangeP - (GyroScalePower));//* ChangeP));
-                BL.setPower(ChangeP + (GyroScalePower));//* ChangeP));
+                BR.setPower(ChangeP - (GyroScalePower));
+                FL.setPower(ChangeP + (GyroScalePower));
+                FR.setPower(ChangeP - (GyroScalePower));
+                BL.setPower(ChangeP + (GyroScalePower));
 
                 this.opMode.telemetry.addData("MotorPowLeft:", ChangeP + (GyroScalePower));
                 this.opMode.telemetry.addData("MotorPowRight:", ChangeP - (GyroScalePower));
@@ -287,7 +282,6 @@ public class Drivetrain {
                 angleDiff = getTrueDiff(-angle);
                 changePID = (angleDiff * kP) + ((angleDiff - prevAngleDiff) / dT * kD);
 
-                //signs could be flipped
                 if (changePID <= 0) {
                     startMotors(-changePID + .10, changePID - .10, -changePID + .10, changePID - .10);
                 } else {
