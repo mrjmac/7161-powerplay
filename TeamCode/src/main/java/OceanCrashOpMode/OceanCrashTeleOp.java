@@ -76,6 +76,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
 
         // LIFT
+
         if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 200) {
             jHeight++;
             jHeightTime.reset();
@@ -196,6 +197,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 lift = LiftState.IDLE;
                 break;
         }
+
+
 
         // MANUAL LIFT CODE FOR TESTING
         /*

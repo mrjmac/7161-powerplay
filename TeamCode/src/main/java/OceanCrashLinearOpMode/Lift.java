@@ -65,24 +65,22 @@ public class Lift {
 
     public void setLiftPos(double liftTargetPos)
     {
-        while (this.opMode.opModeIsActive() && this.opMode.isStopRequested())
-        {
-            while (getLiftPos() <= liftTargetPos && this.opMode.opModeIsActive()) {
-                this.opMode.telemetry.addData("lift :: ", getLiftPos());
-                this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
-                this.opMode.telemetry.update();
-                setLiftPower(-.4);
-                if (getLiftPos() - liftTargetPos <= 10) {
-                    setLiftPower(STALL_POWER);
-                    break;
-                }
+        while (getLiftPos() <= liftTargetPos && this.opMode.opModeIsActive()) {
+            this.opMode.telemetry.addData("lift :: ", getLiftPos());
+            this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
+            this.opMode.telemetry.update();
+            setLiftPower(-.7);
+
+            if (liftTargetPos - getLiftPos() <= 10) {
+                setLiftPower(STALL_POWER);
+                break;
             }
         }
     }
 
     public void resetLift(double p)
     {
-        while (getLiftPos() >= 50 && this.opMode.opModeIsActive() && this.opMode.isStopRequested()){
+        while (getLiftPos() >= 50 && this.opMode.opModeIsActive()){
             setLiftPower(p);
             if (getLiftPos() <= 50)
             {

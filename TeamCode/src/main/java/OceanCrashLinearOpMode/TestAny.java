@@ -2,6 +2,7 @@ package OceanCrashLinearOpMode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.google.gson.interceptors.JsonPostDeserializer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -41,17 +42,26 @@ public class TestAny extends LinearOpMode {
         lift = new Lift(this);
         intake = new Intake(this);
 
-        Pose2d startingPose = new Pose2d(0, 0, 0);
+        Pose2d startingPose = new Pose2d(-72, 36, 0);
 
         drive.setPoseEstimate(startingPose);
 
         TrajectorySequence test = drive.trajectorySequenceBuilder(startingPose)
 
-                .lineToLinearHeading(new Pose2d(48, 48, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> lift.setLiftPos(1000))
+                .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(0)))
+                .waitSeconds(2)
+                //.UNSTABLE_addTemporalMarkerOffset(0, () -> lift.setLiftPos(1500))
+                .lineToLinearHeading(new Pose2d(-23, 31.5, Math.toRadians(-45)))
                 .waitSeconds(3)
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> lift.resetLift(-.5))
-                .lineToLinearHeading(new Pose2d(0, 0, Math.toRadians(90)))
+                //drop && put lift down
+                .lineToLinearHeading(new Pose2d(-23, 31.5, Math.toRadians(90)))
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-24, 68, Math.toRadians(90)))
+                .waitSeconds(2)
+                .turn(-45)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-23, 31.5, Math.toRadians(-45)))
+                .waitSeconds(2)
                 .build();
 
         while(!isStarted()){
@@ -64,15 +74,8 @@ public class TestAny extends LinearOpMode {
 
         if (!isStopRequested())
         {
-            lift.setLiftPos(1000);
-            sleep(1000);
-            lift.resetLift(.5);
-
-            /* ROADRUNNER TEST WITH MARKERS IF NORMAL TEST WORKS
-
+            lift.grab();
             drive.followTrajectorySequence(test);
-
-             */
         }
     }
 }
