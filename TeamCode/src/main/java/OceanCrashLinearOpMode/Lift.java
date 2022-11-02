@@ -78,11 +78,11 @@ public class Lift {
         }
     }
 
-    public void resetLift(double p)
+    public void resetLift(double p, int targetPos)
     {
-        while (getLiftPos() >= 50 && this.opMode.opModeIsActive()){
+        while (getLiftPos() >= targetPos && this.opMode.opModeIsActive()){
             setLiftPower(p);
-            if (getLiftPos() <= 50)
+            if (getLiftPos() <= targetPos)
             {
                 setLiftPower(0);
                 break;
@@ -92,6 +92,7 @@ public class Lift {
 
     public void extendFourBar()
     {
+        grab();
         spinL.setPosition(0.3);
         spinR.setPosition(0.7);
     }
