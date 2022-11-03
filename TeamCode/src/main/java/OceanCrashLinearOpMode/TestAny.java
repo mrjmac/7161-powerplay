@@ -45,6 +45,7 @@ public class TestAny extends LinearOpMode {
     public static double cycle = 1;
     public static double cycleTarget = 5;
     public static double parkPos = 0;
+    private int turnCount = 1;
 
     enum State {
         traj1,
@@ -54,8 +55,7 @@ public class TestAny extends LinearOpMode {
         park,
         grab,
         deposit,
-        turn45CCW,
-        turn45CW,
+        turn45,
         idle,
         turn135
     }
@@ -89,25 +89,23 @@ public class TestAny extends LinearOpMode {
         TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startingPose)
                 //.addTemporalMarker(.25, () -> targetPos = 700)
                 .lineToLinearHeading(new Pose2d(-34, 36, 0))
-                .lineToLinearHeading(new Pose2d(-23.5, 34.5, Math.toRadians(-45)))
+                .lineToLinearHeading(new Pose2d(-22, 34.541, Math.toRadians(-45)))
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end().plus(new Pose2d(0, 0, Math.toRadians(135))))
                 //.lineToLinearHeading(new Pose2d(-29.5, 34.5, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-27, 53.25, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-23.6, 54.5, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .lineToLinearHeading(new Pose2d(-32, 25, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-22.471, 13.6, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .lineToLinearHeading(new Pose2d(-27, 53.25, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-24, 54.5, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
-        Trajectory park = drive.trajectoryBuilder(traj3.end())
-                .lineToLinearHeading(new Pose2d(-24, 36 + parkPos, 0))
-                .build();
+
 
 
 
@@ -168,17 +166,24 @@ public class TestAny extends LinearOpMode {
 
         while(!isStarted()){
             pos = vision.getPark();
-            switch (vision.getPark()) {
-                case 1:
-                    parkPos += 24;
-                    break;
-                case 3:
-                    parkPos -= 24;
-                    break;
-            }
+
             telemetry.addData("park: ", pos);
             telemetry.update();
         }
+
+        switch (pos) {
+            case 1:
+                parkPos += 24;
+                break;
+            case 3:
+                parkPos -= 24;
+                break;
+        }
+
+        Trajectory park = drive.trajectoryBuilder(traj3.end())
+                .lineToLinearHeading(new Pose2d(-24, 36 + parkPos, Math.toRadians(90)))
+                .build();
+
         lift.spinR.setPosition(0.15);
         lift.spinL.setPosition(0.85);
         lift.grab();
@@ -211,8 +216,11 @@ public class TestAny extends LinearOpMode {
                         } else {
                             if (cycle != cycleTarget) {
                                 if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                                    auto = State.traj4;
-                                    drive.followTrajectoryAsync(traj4);
+                                    auto = State.turn45;
+                                    if (turnCount % 2 == 1)
+                                        drive.turnAsync(Math.toRadians(-45));
+                                    else
+                                        drive.turnAsync(Math.toRadians(45));
                                     cycle++;
                                     button.reset();
                                 }
@@ -261,9 +269,28 @@ public class TestAny extends LinearOpMode {
                 case traj3:
                     if (!drive.isBusy())
                         if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                            auto = State.deposit;
+
+                            auto = State.turn45;
+                            if (turnCount % 2 == 1)
+                                drive.turnAsync(Math.toRadians(-45));
+                            else
+                                drive.turnAsync(Math.toRadians(45));
                             button.reset();
                         }
+                    break;
+                case turn45:
+                    if (!drive.isBusy())
+                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                            if (turnCount % 2 == 0) {
+                                drive.followTrajectoryAsync(traj4);
+                                auto = State.traj4;
+                            }
+                            else
+                                auto = State.deposit;
+                            turnCount++;
+                            button.reset();
+                        }
+
                     break;
                 case traj4:
                     if (!drive.isBusy())

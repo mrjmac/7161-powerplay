@@ -29,6 +29,7 @@ import java.util.List;
 
 @Config
 public class TrajectorySequenceRunner {
+    public static double bruh = .672;
     public static String COLOR_INACTIVE_TRAJECTORY = "#4caf507a";
     public static String COLOR_INACTIVE_TURN = "#7c4dff7a";
     public static String COLOR_INACTIVE_WAIT = "#dd2c007a";
@@ -153,11 +154,11 @@ public class TrajectorySequenceRunner {
                 targetPose = startPose.copy(startPose.getX(), startPose.getY(), targetState.getX());
 
                 driveSignal = new DriveSignal(
-                        new Pose2d(0, 0, targetOmega + correction),
+                        new Pose2d(0, 0, (targetOmega + correction) * bruh),
                         new Pose2d(0, 0, targetAlpha)
                 );
 
-                if (deltaTime >= currentSegment.getDuration()) {
+                if (deltaTime >= currentSegment.getDuration() + 1) {
                     currentSegmentIndex++;
                     driveSignal = new DriveSignal();
                 }

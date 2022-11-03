@@ -76,7 +76,10 @@ public class Lift {
 
 
         } else
-        setLiftPower(STALL_POWER);
+            if (liftTargetPos == 0)
+                setLiftPower(0);
+            else
+                setLiftPower(STALL_POWER);
 
     }
 
