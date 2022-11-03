@@ -14,8 +14,8 @@ public class Lift {
 
     private LinearOpMode opMode;
 
-    private Servo spinL; // [C0]
-    private Servo spinR; // [E5]
+    public Servo spinL; // [C0]
+    public Servo spinR; // [E5]
     private Servo grab; // [E4]
 
     private final double STALL_POWER = -0.0005;
@@ -65,17 +65,19 @@ public class Lift {
 
     public void setLiftPos(double liftTargetPos)
     {
-        while (getLiftPos() <= liftTargetPos && this.opMode.opModeIsActive()) {
+        if (Math.abs(liftTargetPos - getLiftPos()) > 150 && this.opMode.opModeIsActive()) {
             this.opMode.telemetry.addData("lift :: ", getLiftPos());
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
-            setLiftPower(-.7);
+            if (liftTargetPos < getLiftPos())
+                setLiftPower(.3);
+            else
+                setLiftPower(-.5);
 
-            if (liftTargetPos - getLiftPos() <= 10) {
-                setLiftPower(STALL_POWER);
-                break;
-            }
-        }
+
+        } else
+        setLiftPower(STALL_POWER);
+
     }
 
     public void resetLift(double p, int targetPos)
@@ -93,8 +95,8 @@ public class Lift {
     public void extendFourBar()
     {
         grab();
-        spinL.setPosition(0.3);
         spinR.setPosition(0.7);
+        spinL.setPosition(0.3);
     }
 
     public void retractFourBar()
