@@ -236,7 +236,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public boolean grabBlue()
     {
-        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 43;
+        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 37;
     }
 
     public boolean grabRed()
