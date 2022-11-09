@@ -178,12 +178,14 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void extendFourBar()
     {
+        grab();
         spinL.setPosition(0.3);
         spinR.setPosition(0.7);
     }
 
     public void retractFourBar()
     {
+        grab();
         spinR.setPosition(0);
         spinL.setPosition(1);
     }
@@ -220,6 +222,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void setLiftPos(double liftTargetPos)
     {
+
         if (getLiftPos() <= liftTargetPos - 50)
         {
             setLiftPower(-.9);
@@ -228,15 +231,18 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void liftReset(double power, double liftTargetPos)
     {
+
+        double p = Math.abs(liftTargetPos - Math.abs(getLiftPos())) / 500.0;
+
         if (getLiftPos() >= 50 + liftTargetPos)
         {
-            setLiftPower(power);
+            setLiftPower(Math.min(power, power * p));
         }
     }
 
     public boolean grabBlue()
     {
-        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 37;
+        return colorS.red() < 35 && colorS.green() < 50 && colorS.blue() > 52;
     }
 
     public boolean grabRed()

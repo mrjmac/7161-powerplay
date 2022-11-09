@@ -23,6 +23,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean grabbed = false;
     private boolean extend = false;
     private boolean active = false;
+    private boolean blue = false;
 
     private enum LiftState {
         IDLE,
@@ -36,7 +37,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 3;
     private int liftTargetPos = 0;
-    public static int low = 1000, medium = 1570, high = 2320;
+    public static int low = 850, medium = 1590, high = 2275;
 
     public void loop() {
 
@@ -70,19 +71,19 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         telemetry.addData("jit :: ", jHeight);
         telemetry.addData("exttimer :: ", extended.milliseconds());
         telemetry.addData("extBool :: ", extend);
-        telemetry.addData("i should go into idle :: ", !(getLiftPos() > 450));
+        telemetry.addData("balue :: ", blue);
         telemetry.update();
 
 
 
         // LIFT
 
-        if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 200) {
+        if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 125) {
             jHeight++;
             jHeightTime.reset();
         }
 
-        if (gamepad1.dpad_down && jHeight > 0 && jHeightTime.milliseconds() > 200) {
+        if (gamepad1.dpad_down && jHeight > 0 && jHeightTime.milliseconds() > 125) {
             jHeight--;
             jHeightTime.reset();
         }
@@ -108,9 +109,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = true;
                     grabTime.reset();
                 }
-                if ((grabRed() || grabBlue()) || grabbed) {
+                if ((grabRed() || blue) || grabbed) {
                     if (getLiftPos() > 50)
-                        liftReset(.3, 0);
+                        liftReset(.6, 0);
                     else {
                         setLiftPower(0);
                         grab();
@@ -127,12 +128,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = false;
                     active = true;
                     lift = LiftState.RAISE;
+
                 }
                 break;
             case RAISE:
                 if (getLiftPos() < liftTargetPos) {
                     setLiftPos(liftTargetPos);
                 } else {
+                    blue = false;
                     extendFourBar();
                     extend = true;
                     if (macroTime.milliseconds() > 400) {
@@ -196,6 +199,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             default:
                 lift = LiftState.IDLE;
                 break;
+        }
+
+        if (grabBlue())
+        {
+            blue = true;
         }
 
 

@@ -55,6 +55,13 @@ public class Lift {
         return Math.abs(liftL.getCurrentPosition() + liftR.getCurrentPosition()) / 2;
     }
 
+    public int getLiftL() {
+        return liftL.getCurrentPosition();
+    }
+
+    public int getLiftR() {
+        return liftR.getCurrentPosition();
+    }
     public void resetEncoder() {
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -65,14 +72,14 @@ public class Lift {
 
     public void setLiftPos(double liftTargetPos)
     {
-        if (Math.abs(liftTargetPos - getLiftPos()) > 150 && this.opMode.opModeIsActive()) {
+        if (Math.abs(liftTargetPos - getLiftPos()) > 100 && this.opMode.opModeIsActive()) {
             this.opMode.telemetry.addData("lift :: ", getLiftPos());
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
-                setLiftPower(.3);
+                setLiftPower(.5);
             else
-                setLiftPower(-.5);
+                setLiftPower(-.9);
 
 
         } else
@@ -100,6 +107,13 @@ public class Lift {
         grab();
         spinR.setPosition(0.7);
         spinL.setPosition(0.3);
+    }
+
+    public void startFourBar()
+    {
+        grab();
+        spinR.setPosition(0.6);
+        spinL.setPosition(0.4);
     }
 
     public void retractFourBar()
