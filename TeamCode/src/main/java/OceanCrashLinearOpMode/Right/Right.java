@@ -112,6 +112,7 @@ public class Right extends LinearOpMode {
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
                 .lineToLinearHeading(new Pose2d(-19.5, -12.6, Math.toRadians(-90)), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(.25, () -> targetPos = 2700)
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
@@ -280,9 +281,11 @@ public class Right extends LinearOpMode {
                     if (state.milliseconds() > 750) {
                         bruh = true;
                         auto = State.turn45;
-                        if (turnCount % 2 == 1)
+                        if (turnCount % 2 == 1) {
                             //drive.followTrajectorySequenceAsync(turnNeg45);
                             drive.turnAsync(Math.toRadians(-45));
+                            targetPos = 800;
+                        }
                         else
                             //drive.followTrajectorySequenceAsync(turn45);
                             drive.turnAsync(Math.toRadians(45));
