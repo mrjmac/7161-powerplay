@@ -1,10 +1,10 @@
-package OceanCrashLinearOpMode.Right;
+package OceanCrashLinearOpMode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.util.ElapsedTime;
 import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
 import OceanCrashLinearOpMode.Lift;
@@ -13,10 +13,13 @@ import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
+// VERY IMPORTANT, BUT NOT FOR THIS AUTO
+import org.apache.commons.math3.genetics.ElitisticListPopulation;
+
 @Config
 
-@Autonomous(name = "ParkRight", group = "Test")
-public class ParkRight extends LinearOpMode {
+@Autonomous(name = "Park", group = "Test")
+public class Park extends LinearOpMode {
 
     private SampleMecanumDrive drive;
     private Drivetrain drivetrain;
@@ -47,7 +50,7 @@ public class ParkRight extends LinearOpMode {
         lift = new Lift(this);
         intake = new Intake(this);
 
-        Pose2d startingPose = new Pose2d(-72, -36, 0);
+        Pose2d startingPose = new Pose2d(-72, 36, 0);
 
         drive.setPoseEstimate(startingPose);
 
@@ -68,8 +71,8 @@ public class ParkRight extends LinearOpMode {
         }
 
         TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-44, -36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(-44, -36 + parkPos, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-44, 36 + parkPos, Math.toRadians(90)))
                 .build();
 
         lift.grab();

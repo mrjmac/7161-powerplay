@@ -114,7 +114,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         liftReset(.6, 0);
                     else {
                         setLiftPower(0);
+                        grab.reset();
                         grab();
+                        if (grab.milliseconds() > 50)
+                        {
+                            grabFourBar();
+                        }
                     }
                 } else {
                     if (getLiftPos() < 450)

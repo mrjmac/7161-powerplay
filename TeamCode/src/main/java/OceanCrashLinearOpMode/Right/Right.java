@@ -1,33 +1,26 @@
 package OceanCrashLinearOpMode.Right;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.google.gson.interceptors.JsonPostDeserializer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-
 import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
+import OceanCrashLinearOpMode.Left.Left;
 import OceanCrashLinearOpMode.Lift;
-import OceanCrashLinearOpMode.TestAny;
 import OceanCrashLinearOpMode.Vision;
-import OceanCrashOpMode.OceanCrashTeleOp;
 import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
+// VERY IMPORTANT
+import org.apache.commons.math3.genetics.ElitisticListPopulation;
+
 @Config
 
-@Autonomous(name = "Left", group = "Test")
+@Autonomous(name = "Right", group = "Test")
 public class Right extends LinearOpMode {
 
     private SampleMecanumDrive drive;
@@ -35,6 +28,7 @@ public class Right extends LinearOpMode {
     private Lift lift;
     private Vision vision;
     private Intake intake;
+    private ElitisticListPopulation probability;
 
     public static double stall = -.0004;
 
@@ -69,12 +63,12 @@ public class Right extends LinearOpMode {
     }
 
     private boolean first = true;
-
+    private boolean bruh = true;
 
     ElapsedTime deposit = new ElapsedTime();
     ElapsedTime grab = new ElapsedTime();
     ElapsedTime button = new ElapsedTime();
-
+    ElapsedTime state = new ElapsedTime();
 
     private State auto = State.traj1;
 
@@ -89,6 +83,7 @@ public class Right extends LinearOpMode {
         vision = new Vision(this);
         lift = new Lift(this);
         intake = new Intake(this);
+        probability = new ElitisticListPopulation(1000, 2.4);
 
         Pose2d startingPose = new Pose2d(-72, -36, 0);
 
@@ -99,12 +94,14 @@ public class Right extends LinearOpMode {
                 //.waitSeconds(.5)
                 .lineToLinearHeading(new Pose2d(-34, -36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(.25, () -> targetPos = 2700)
+                .UNSTABLE_addTemporalMarkerOffset(.25, () -> probability.setElitismRate(probability.getElitismRate() + .1))
                 .lineToLinearHeading(new Pose2d(-20.3, -34.591, Math.toRadians(45)))
                 .UNSTABLE_addTemporalMarkerOffset(1.5, () -> lift.extendFourBar())
                 .build();
 
         TrajectorySequence turn135 = drive.trajectorySequenceBuilder(traj1.end())
                 .addDisplacementMarker(()-> targetPos = 800)
+                .addDisplacementMarker(() -> probability.setElitismRate(probability.getElitismRate() + .1))
                 .turn(Math.toRadians(-135))
                 .build();
 
@@ -170,10 +167,15 @@ public class Right extends LinearOpMode {
             {
                 case traj1:
                     if (!drive.isBusy()) {
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
+                        }
+                        if (state.milliseconds() > 750) {
                             auto = State.deposit;
                             deposit.reset();
-                            button.reset();
+                            bruh = true;
                         }
                     }
                     break;
@@ -186,21 +188,28 @@ public class Right extends LinearOpMode {
                             drive.followTrajectorySequenceAsync(turn135);
                             //drive.turnAsync(Math.toRadians(135));
                         } else {
+                            if (bruh)
+                            {
+                                state.reset();
+                                bruh = false;
+                            }
                             if (cycle != cycleTarget) {
-                                if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                                if (state.milliseconds() > 750) {
+                                    bruh = true;
                                     auto = State.turn45;
                                     if (turnCount % 2 == 1)
                                         //drive.followTrajectorySequenceAsync(turnNeg45);
-                                        drive.turnAsync(Math.toRadians(45));
+                                        drive.turnAsync(Math.toRadians(-45));
                                     else
                                         //drive.followTrajectorySequenceAsync(turn45);
-                                        drive.turnAsync(Math.toRadians(-45));
+                                        drive.turnAsync(Math.toRadians(45));
                                     cycle++;
                                     grabPos -= 25;
                                     button.reset();
                                 }
                             } else {
-                                if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                                if (state.milliseconds() > 750) {
+                                    bruh = true;
                                     auto = State.park;
                                     drive.followTrajectoryAsync(park);
                                     button.reset();
@@ -211,7 +220,13 @@ public class Right extends LinearOpMode {
                     break;
                 case turn135:
                     if (!drive.isBusy()) {
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
+                        }
+                        if (state.milliseconds() > 750) {
+                            bruh = true;
                             auto = State.traj2;
                             drive.followTrajectoryAsync(traj2);
                             button.reset();
@@ -220,21 +235,35 @@ public class Right extends LinearOpMode {
                     break;
                 case traj2:
                     if (!drive.isBusy())
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                            auto = State.grab;
-                            grab.reset();
-                            button.reset();
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
                         }
+                    if (state.milliseconds() > 750) {
+                        bruh = true;
+                        auto = State.grab;
+                        grab.reset();
+                        button.reset();
+                    }
                     break;
                 case grab:
                     if (grab.milliseconds() < 1000)
                         targetPos = grabPos;
+                    probability.setElitismRate(probability.getElitismRate() + .1);
                     if (grab.milliseconds() > 500)
                         lift.grab();
                     if (grab.milliseconds() > 1000)
                         targetPos = 900;
+                    probability.setElitismRate(probability.getElitismRate() + .1);
                     if (grab.milliseconds()> 1500) {
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
+                        }
+                        if (state.milliseconds() > 750) {
+                            bruh = true;
                             auto = State.traj3;
                             drive.followTrajectoryAsync(traj3);
                             button.reset();
@@ -243,46 +272,69 @@ public class Right extends LinearOpMode {
                     break;
                 case traj3:
                     if (!drive.isBusy())
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
-
-                            auto = State.turn45;
-                            if (turnCount % 2 == 1)
-                                //drive.followTrajectorySequenceAsync(turnNeg45);
-                                drive.turnAsync(Math.toRadians(45));
-                            else
-                                //drive.followTrajectorySequenceAsync(turn45);
-                                drive.turnAsync(Math.toRadians(-45));
-                            button.reset();
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
                         }
+                    if (state.milliseconds() > 750) {
+                        bruh = true;
+                        auto = State.turn45;
+                        if (turnCount % 2 == 1)
+                            //drive.followTrajectorySequenceAsync(turnNeg45);
+                            drive.turnAsync(Math.toRadians(-45));
+                        else
+                            //drive.followTrajectorySequenceAsync(turn45);
+                            drive.turnAsync(Math.toRadians(45));
+                        button.reset();
+                    }
                     break;
                 case turn45:
                     if (!drive.isBusy())
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                            if (turnCount % 2 == 0) {
-                                drive.followTrajectoryAsync(traj4);
-                                auto = State.traj4;
-                            }
-                            else
-                                auto = State.deposit;
-                            turnCount++;
-                            button.reset();
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
                         }
+                    if (state.milliseconds() > 750) {
+                        bruh = true;
+                        if (turnCount % 2 == 0) {
+                            drive.followTrajectoryAsync(traj4);
+                            auto = State.traj4;
+                        }
+                        else
+                            auto = State.deposit;
+                        turnCount++;
+                        button.reset();
+                    }
 
                     break;
                 case traj4:
                     if (!drive.isBusy())
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                            auto = State.grab;
-                            grab.reset();
-                            button.reset();
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
                         }
+                    if (state.milliseconds() > 750) {
+                        bruh = true;
+                        auto = State.grab;
+                        grab.reset();
+                        button.reset();
+                    }
                     break;
                 case park:
                     if (!drive.isBusy())
-                        if (gamepad1.dpad_up && button.milliseconds() > 200) {
-                            auto = State.idle;
-                            button.reset();
+                        if (bruh)
+                        {
+                            state.reset();
+                            bruh = false;
                         }
+                    if (state.milliseconds() > 750) {
+                        bruh = true;
+                        auto = State.idle;
+                        button.reset();
+                    }
                     break;
                 case idle:
                     telemetry.addData("state:", "FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU");
@@ -290,6 +342,7 @@ public class Right extends LinearOpMode {
                     break;
                 case dead:
                     lift.setLiftPos(0);
+                    probability.setElitismRate(probability.getElitismRate() + .1);
                     telemetry.addData("state:", "bro what happened to my lift");
                     telemetry.update();
                     break;

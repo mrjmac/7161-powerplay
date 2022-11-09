@@ -190,6 +190,12 @@ public abstract class OceanCrashOpMode extends OpMode {
         spinL.setPosition(1);
     }
 
+    public void grabFourBar()
+    {
+        spinR.setPosition(0.15);
+        spinL.setPosition(0.85);
+    }
+
     public void grab()
     {
         grab.setPosition(.9);
