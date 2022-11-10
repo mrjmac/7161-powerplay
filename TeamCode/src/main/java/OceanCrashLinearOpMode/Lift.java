@@ -72,14 +72,14 @@ public class Lift {
 
     public void setLiftPos(double liftTargetPos)
     {
-        if (Math.abs(liftTargetPos - getLiftPos()) > 100 && this.opMode.opModeIsActive()) {
+        if (Math.abs(liftTargetPos - getLiftPos()) > 50 && this.opMode.opModeIsActive()) {
             this.opMode.telemetry.addData("lift :: ", getLiftPos());
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
                 setLiftPower(.5);
             else
-                setLiftPower(-.9);
+                setLiftPower(-.8);
 
 
         } else
@@ -118,6 +118,7 @@ public class Lift {
 
     public void retractFourBar()
     {
+        grab();
         spinR.setPosition(0);
         spinL.setPosition(1);
     }

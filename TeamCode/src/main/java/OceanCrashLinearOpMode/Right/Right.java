@@ -28,7 +28,7 @@ public class Right extends LinearOpMode {
     private Lift lift;
     private Vision vision;
     private Intake intake;
-    private ElitisticListPopulation probability;
+    //private ElitisticListPopulation probability;
 
     public static double stall = -.0004;
 
@@ -83,7 +83,7 @@ public class Right extends LinearOpMode {
         vision = new Vision(this);
         lift = new Lift(this);
         intake = new Intake(this);
-        probability = new ElitisticListPopulation(1000, 2.4);
+        //probability = new ElitisticListPopulation(1000, 2.4);
 
         Pose2d startingPose = new Pose2d(-72, -36, 0);
 
@@ -94,14 +94,14 @@ public class Right extends LinearOpMode {
                 //.waitSeconds(.5)
                 .lineToLinearHeading(new Pose2d(-34, -36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(.25, () -> targetPos = 2700)
-                .UNSTABLE_addTemporalMarkerOffset(.25, () -> probability.setElitismRate(probability.getElitismRate() + .1))
+                //.UNSTABLE_addTemporalMarkerOffset(.25, () -> probability.setElitismRate(probability.getElitismRate() + .1))
                 .lineToLinearHeading(new Pose2d(-20.3, -34.591, Math.toRadians(45)))
                 .UNSTABLE_addTemporalMarkerOffset(1.5, () -> lift.extendFourBar())
                 .build();
 
         TrajectorySequence turn135 = drive.trajectorySequenceBuilder(traj1.end())
                 .addDisplacementMarker(()-> targetPos = 800)
-                .addDisplacementMarker(() -> probability.setElitismRate(probability.getElitismRate() + .1))
+                //.addDisplacementMarker(() -> probability.setElitismRate(probability.getElitismRate() + .1))
                 .turn(Math.toRadians(-135))
                 .build();
 
@@ -141,14 +141,14 @@ public class Right extends LinearOpMode {
 
         switch (pos) {
             case 1:
-                parkPos += 24;
+                parkPos += 21;
                 break;
             case 3:
-                parkPos -= 24;
+                parkPos -= 21;
                 break;
         }
 
-        Trajectory park = drive.trajectoryBuilder(traj3.end())
+        Trajectory park = drive.trajectoryBuilder(traj1.end())
                 .lineToLinearHeading(new Pose2d(-24, -36 + parkPos, Math.toRadians(90)))
                 .build();
 
@@ -184,9 +184,9 @@ public class Right extends LinearOpMode {
                     lift.release();
                     if (deposit.milliseconds() > 200)
                         if (first) {
-                            auto = State.turn135;
+                            auto = State.park;
                             first = false;
-                            drive.followTrajectorySequenceAsync(turn135);
+                            drive.followTrajectory(park);
                             //drive.turnAsync(Math.toRadians(135));
                         } else {
                             if (bruh)
@@ -251,12 +251,12 @@ public class Right extends LinearOpMode {
                 case grab:
                     if (grab.milliseconds() < 1000)
                         targetPos = grabPos;
-                    probability.setElitismRate(probability.getElitismRate() + .1);
+                    //probability.setElitismRate(probability.getElitismRate() + .1);
                     if (grab.milliseconds() > 500)
                         lift.grab();
                     if (grab.milliseconds() > 1000)
                         targetPos = 900;
-                    probability.setElitismRate(probability.getElitismRate() + .1);
+                    //probability.setElitismRate(probability.getElitismRate() + .1);
                     if (grab.milliseconds()> 1500) {
                         if (bruh)
                         {
@@ -340,12 +340,14 @@ public class Right extends LinearOpMode {
                     }
                     break;
                 case idle:
-                    telemetry.addData("state:", "FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU");
+                    targetPos = 0;
+                    telemetry.addData("state:", "im done");
                     telemetry.update();
                     break;
                 case dead:
                     lift.setLiftPos(0);
-                    probability.setElitismRate(probability.getElitismRate() + .1);
+                    lift.retractFourBar();
+                    //probability.setElitismRate(probability.getElitismRate() + .1);
                     telemetry.addData("state:", "bro what happened to my lift");
                     telemetry.update();
                     break;

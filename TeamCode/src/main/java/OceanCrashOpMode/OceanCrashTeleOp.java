@@ -37,7 +37,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 3;
     private int liftTargetPos = 0;
-    public static int low = 850, medium = 1590, high = 2275;
+    public static int low = 850, medium = 1590, high = 2300;
 
     public void loop() {
 
@@ -109,6 +109,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = true;
                     grabTime.reset();
                 }
+                if (Math.abs(gamepad2.left_stick_y) > .05)
+                    setLiftPower(gamepad2.left_stick_y * 0.2);
                 if ((grabRed() || blue) || grabbed) {
                     if (getLiftPos() > 50)
                         liftReset(.6, 0);

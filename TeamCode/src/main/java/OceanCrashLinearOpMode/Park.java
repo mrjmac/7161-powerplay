@@ -69,21 +69,39 @@ public class Park extends LinearOpMode {
                 parkPos -= 24;
                 break;
         }
+        if (parkPos == 0)
+            parkPos = 1;
 
-        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startingPose)
+        TrajectorySequence traj1_2 = drive.trajectorySequenceBuilder(startingPose)
                 .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(-44, 36 + parkPos, Math.toRadians(90)))
+                //.lineToLinearHeading(new Pose2d(-44, 36, Math.toRadians(90)))
+                .build();
+
+        TrajectorySequence traj1_1 = drive.trajectorySequenceBuilder(startingPose)
+                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-44, 60, Math.toRadians(90)))
+                .build();
+
+        TrajectorySequence traj1_3 = drive.trajectorySequenceBuilder(startingPose)
+                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-44, 12, Math.toRadians(90)))
                 .build();
 
         lift.grab();
 
-        lift.spinR.setPosition(0.15);
-        lift.spinL.setPosition(0.85);
+        //lift.spinR.setPosition(0.15);
+        //lift.spinL.setPosition(0.85);
 
         waitForStart();
 
         //lift.extendFourBar();
-        drive.followTrajectorySequenceAsync(traj1);
+        if (pos == 1)
+            drive.followTrajectorySequenceAsync(traj1_1);
+        else if (pos == 2)
+            drive.followTrajectorySequenceAsync(traj1_2);
+        else
+            drive.followTrajectorySequenceAsync(traj1_3);
+
 
         while (!isStopRequested())
         {
@@ -94,7 +112,7 @@ public class Park extends LinearOpMode {
                         auto = State.idle;
                     break;
                 case idle:
-                    telemetry.addData("state:", "FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU");
+                    telemetry.addData("state:", "im done");
                     telemetry.update();
                     break;
             }
