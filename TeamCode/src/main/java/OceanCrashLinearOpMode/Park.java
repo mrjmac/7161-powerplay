@@ -73,18 +73,20 @@ public class Park extends LinearOpMode {
             parkPos = 1;
 
         TrajectorySequence traj1_2 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
                 //.lineToLinearHeading(new Pose2d(-44, 36, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence traj1_1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(-44, 60, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
+                //.lineToLinearHeading(new Pose2d(-44, 60, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
+                .strafeLeft(20)
                 .build();
 
         TrajectorySequence traj1_3 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-44, 36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(-44, 12, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
+                //.lineToLinearHeading(new Pose2d(-44, 12, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
+                .strafeRight(20)
                 .build();
 
         lift.grab();

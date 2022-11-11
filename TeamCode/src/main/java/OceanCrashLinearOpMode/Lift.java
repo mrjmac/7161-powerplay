@@ -77,7 +77,7 @@ public class Lift {
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
-                setLiftPower(.5);
+                setLiftPower(.6 );
             else
                 setLiftPower(-.8);
 

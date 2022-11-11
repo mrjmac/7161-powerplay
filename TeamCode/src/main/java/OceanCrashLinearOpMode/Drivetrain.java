@@ -32,9 +32,6 @@ public class Drivetrain {
         BR = this.opMode.hardwareMap.dcMotor.get("BR"); // [C0]
         BL = this.opMode.hardwareMap.dcMotor.get("BL"); // [E1]
 
-        this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
-        this.opMode.telemetry.update();
-
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setDirection(DcMotorSimple.Direction.FORWARD);
