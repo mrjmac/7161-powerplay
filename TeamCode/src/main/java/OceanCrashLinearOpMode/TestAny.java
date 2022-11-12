@@ -98,11 +98,12 @@ public class TestAny extends LinearOpMode {
 
         waitForStart();
 
-        lift.retractFourBar();
-        sleep(3000);
-        lift.extendFourBar();
-        sleep(1000);
-
-
+        while (!isStopRequested())
+        {
+            lift.retractFourBar();
+            sleep(2000);
+            lift.extendFourBar();
+            sleep(2000);
+        }
     }
 }

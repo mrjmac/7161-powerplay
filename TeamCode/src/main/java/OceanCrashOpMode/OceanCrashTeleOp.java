@@ -24,6 +24,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean extend = false;
     private boolean active = false;
     private boolean blue = false;
+    private boolean reset = false;
 
     private enum LiftState {
         IDLE,
@@ -111,7 +112,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05)
                     setLiftPower(gamepad2.left_stick_y * 0.2);
-                if ((grabRed() || blue) || grabbed) {
+                if ((grabRed() || blue) || grabbed && !reset) {
                     if (getLiftPos() > 50)
                         liftReset(.6, 0);
                     else {
@@ -124,12 +125,26 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         }
                     }
                 } else {
-                    if (getLiftPos() < 450)
-                        setLiftPos(450);
-                    else {
-                        setLiftPower(0);
-                        release();
+                    if (grabTime.milliseconds() > 400) {
+                        if (getLiftPos() < 450)
+                            setLiftPos(450);
+                        else {
+                            setLiftPower(0);
+                            if (!reset)
+                                release();
+                        }
                     }
+                }
+                if (gamepad2.y && grabTime.milliseconds() > 150) {
+                    if (!reset) {
+                        extendFourBar();
+                        reset = true;
+                    } else {
+                        retractFourBar();
+                        reset = false;
+                    }
+                    grabbed = false;
+                    grabTime.reset();
                 }
                 if (gamepad2.right_bumper && !active) {
                     grabbed = false;
@@ -192,7 +207,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 if (macroTime.milliseconds() > 200) {
                     if (getLiftPos() > 450) {
-                        liftReset(.7, 400);
+                        liftReset(.6, 400);
                     } else {
                         setLiftPower(0);
                         active = false;

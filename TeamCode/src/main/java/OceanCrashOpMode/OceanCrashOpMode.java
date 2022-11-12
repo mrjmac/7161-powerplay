@@ -240,7 +240,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
         double p = Math.abs(liftTargetPos - Math.abs(getLiftPos())) / 500.0;
 
-        if (getLiftPos() >= 50 + liftTargetPos)
+        if (getLiftPos() >= liftTargetPos)
         {
             setLiftPower(Math.min(power, power * p));
         }

@@ -62,6 +62,7 @@ public class Lift {
     public int getLiftR() {
         return liftR.getCurrentPosition();
     }
+
     public void resetEncoder() {
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -77,7 +78,7 @@ public class Lift {
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
-                setLiftPower(.6 );
+                setLiftPower(.6);
             else
                 setLiftPower(-.8);
 
@@ -125,7 +126,7 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(.9);
+        grab.setPosition(.85);
     }
 
     public void release()
