@@ -27,6 +27,8 @@ public class Park extends LinearOpMode {
     private Vision vision;
     private Intake intake;
 
+    private Boolean running = true;
+
     public static double stall = -.0004;
 
     public static double parkPos = 0;
@@ -80,13 +82,15 @@ public class Park extends LinearOpMode {
         TrajectorySequence traj1_1 = drive.trajectorySequenceBuilder(startingPose)
                 .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
                 //.lineToLinearHeading(new Pose2d(-44, 60, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                .strafeLeft(20)
+                .turn(Math.toRadians(90))
+                .forward(24)
                 .build();
 
         TrajectorySequence traj1_3 = drive.trajectorySequenceBuilder(startingPose)
                 .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
                 //.lineToLinearHeading(new Pose2d(-44, 12, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                .strafeRight(20)
+                .turn(Math.toRadians(-90))
+                .forward(24)
                 .build();
 
         lift.grab();
@@ -105,7 +109,7 @@ public class Park extends LinearOpMode {
             drive.followTrajectorySequenceAsync(traj1_3);
 
 
-        while (!isStopRequested())
+        while (!isStopRequested() && running)
         {
             switch (auto)
             {
@@ -116,6 +120,7 @@ public class Park extends LinearOpMode {
                 case idle:
                     telemetry.addData("state:", "im done");
                     telemetry.update();
+                    running = false;
                     break;
             }
             drive.update();

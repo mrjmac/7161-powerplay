@@ -73,7 +73,7 @@ public class Lift {
 
     public void setLiftPos(double liftTargetPos)
     {
-        if (Math.abs(liftTargetPos - getLiftPos()) > 50 && this.opMode.opModeIsActive()) {
+        if (Math.abs(liftTargetPos - getLiftPos()) > 100 && this.opMode.opModeIsActive()) {
             this.opMode.telemetry.addData("lift :: ", getLiftPos());
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();

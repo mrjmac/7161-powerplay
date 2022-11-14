@@ -30,6 +30,8 @@ public class Right extends LinearOpMode {
 
     public static double stall = -.0004;
 
+    boolean active = true;
+
     private final double turnP45 = .43;
     private final double turnD45 = .40;
 
@@ -94,7 +96,7 @@ public class Right extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-34, -36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(.25, () -> targetPos = 2700)
                 //.UNSTABLE_addTemporalMarkerOffset(.25, () -> probability.setElitismRate(probability.getElitismRate() + .1))
-                .lineToLinearHeading(new Pose2d(-19.3, -33.591, Math.toRadians(45)))
+                .lineToLinearHeading(new Pose2d(-18.8, -33.091, Math.toRadians(45)))
                 .UNSTABLE_addTemporalMarkerOffset(1.5, () -> lift.extendFourBar())
                 .build();
 
@@ -161,9 +163,21 @@ public class Right extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-24, -36 + parkPos, Math.toRadians(-90)))
                 .build();
 
-        TrajectorySequence preloadPark = drive.trajectorySequenceBuilder(traj1.end())
-                //.back(3)
-                .lineToLinearHeading(new Pose2d(-24, -38 + parkPos, Math.toRadians(-0)))
+        TrajectorySequence preloadPark2 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(3)
+                .turn(Math.toRadians(45))
+                .build();
+
+        TrajectorySequence preloadPark1 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(5)
+                .turn(Math.toRadians(45))
+                .forward(23)
+                .build();
+
+        TrajectorySequence preloadPark3 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(3)
+                .turn(Math.toRadians(45))
+                .back(20)
                 .build();
 
 
@@ -175,7 +189,7 @@ public class Right extends LinearOpMode {
         //lift.extendFourBar();
         drive.followTrajectorySequenceAsync(traj1);
 
-        while (!isStopRequested())
+        while (!isStopRequested() && active)
         {
             switch (auto)
             {
@@ -201,7 +215,17 @@ public class Right extends LinearOpMode {
                         if (first) {
                             if (cycleTarget == 0) {
                                 auto = State.park;
-                                drive.followTrajectorySequenceAsync(preloadPark);
+                                if (pos == 1)
+                                {
+                                    drive.followTrajectorySequenceAsync(preloadPark1);
+                                }
+                                else if (pos == 2)
+                                {
+                                    drive.followTrajectorySequenceAsync(preloadPark2);
+                                }
+                                else {
+                                    drive.followTrajectorySequenceAsync(preloadPark3);
+                                }
                             } else {
                                 auto = State.turn135;
                                 drive.followTrajectorySequenceAsync(turn135);
@@ -359,6 +383,10 @@ public class Right extends LinearOpMode {
                     targetPos = 0;
                     telemetry.addData("state :: ", "i love goodreau");
                     telemetry.update();
+                    if (lift.getLiftPos() < 50 && !drive.isBusy())
+                    {
+                        active = false;
+                    }
                     break;
                 case dead:
                     lift.setLiftPos(0);

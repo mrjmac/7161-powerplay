@@ -28,6 +28,8 @@ public class Left extends LinearOpMode {
     private Vision vision;
     private Intake intake;
 
+    private boolean active = true;
+
     public static double stall = -.0004;
 
     private final double turnP45 = .43;
@@ -161,9 +163,21 @@ public class Left extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-24, 36 + parkPos, Math.toRadians(90)))
                 .build();
 
-        TrajectorySequence preloadPark = drive.trajectorySequenceBuilder(traj1.end())
-                .back(3)
-                .lineToLinearHeading(new Pose2d(-24, 38 + parkPos, Math.toRadians(0)))
+        TrajectorySequence preloadPark2 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(2)
+                .turn(Math.toRadians(45))
+                .build();
+
+        TrajectorySequence preloadPark1 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(2)
+                .turn(Math.toRadians(45))
+                .forward(21)
+                .build();
+
+        TrajectorySequence preloadPark3 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(2)
+                .turn(Math.toRadians(45))
+                .back(21)
                 .build();
 
 
@@ -175,7 +189,7 @@ public class Left extends LinearOpMode {
         //lift.extendFourBar();
         drive.followTrajectorySequenceAsync(traj1);
 
-        while (!isStopRequested())
+        while (!isStopRequested() && active)
         {
             switch (auto)
             {
@@ -201,7 +215,17 @@ public class Left extends LinearOpMode {
                         if (first) {
                             if (cycleTarget == 0) {
                                 auto = State.park;
-                                drive.followTrajectorySequenceAsync(preloadPark);
+                                if (pos == 1)
+                                {
+                                    drive.followTrajectorySequenceAsync(preloadPark1);
+                                }
+                                else if (pos == 2)
+                                {
+                                    drive.followTrajectorySequenceAsync(preloadPark2);
+                                }
+                                else {
+                                    drive.followTrajectorySequenceAsync(preloadPark3);
+                                }
                             } else {
                                 auto = State.turn135;
                                 drive.followTrajectorySequenceAsync(turn135);
@@ -349,7 +373,7 @@ public class Left extends LinearOpMode {
                             state.reset();
                             bruh = false;
                         }
-                        if (state.milliseconds() > 750) {
+                        if (state.milliseconds() > 3000) {
                             bruh = true;
                             auto = State.idle;
                         }
@@ -359,6 +383,11 @@ public class Left extends LinearOpMode {
                     targetPos = 0;
                     telemetry.addData("state :: ", "i love goodreau");
                     telemetry.update();
+
+                    if (lift.getLiftPos() < 50 && !drive.isBusy())
+                    {
+                        active = false;
+                    }
                     break;
                 case dead:
                     lift.setLiftPos(0);
