@@ -256,4 +256,14 @@ public abstract class OceanCrashOpMode extends OpMode {
         return colorS.red() > 80 && colorS.green() < 55 && colorS.blue() < 50;
 
     }
+
+    public double getLiftL()
+    {
+        return liftL.getCurrentPosition();
+    }
+
+    public double getLiftR()
+    {
+        return liftR.getCurrentPosition();
+    }
 }

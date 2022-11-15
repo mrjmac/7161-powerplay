@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Arrays;
 import java.util.List;
 
+import OceanCrashLinearOpMode.Right.Right;
+
 
 @Config
 @TeleOp(name = "TeleOp", group = "opMode")
@@ -31,6 +33,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         RAISE,
         PLACE,
         LOWER,
+        DEAD,
     }
 
     private LiftState lift = LiftState.IDLE;
@@ -106,7 +109,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if (gamepad2.a && grabTime.milliseconds() > 200) {
+                if ((gamepad2.a || gamepad1.a) && grabTime.milliseconds() > 200) {
                     grabbed = true;
                     grabTime.reset();
                 }
@@ -205,7 +208,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grab();
                     retractFourBar();
                 }
-                if (macroTime.milliseconds() > 200) {
+                if ((macroTime.milliseconds() > 200 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
                     if (getLiftPos() > 450) {
                         liftReset(.6, 400);
                     } else {
@@ -218,6 +221,15 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 liftState = "LOWER";
                 break;
+            case DEAD:
+                if (getLiftPos() > 450) {
+                    liftReset(.6, 400);
+                } else {
+                    setLiftPower(0);
+                    active = false;
+                    lift = LiftState.IDLE;
+                }
+                break;
             default:
                 lift = LiftState.IDLE;
                 break;
@@ -227,6 +239,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         {
             blue = true;
         }
+
+        if (Math.abs(getLiftL() - getLiftR()) > 125)
+            lift = LiftState.DEAD;
 
 
 
