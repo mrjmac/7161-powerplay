@@ -13,7 +13,7 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor BL; // [E1]
     private DcMotor BR; // [C0]
     private DcMotor FL; // [E0]
-    private DcMotor FR; // [C1]
+    private DcMotor FR; // [C1], lateral odom
 
     // Four Bar
     private Servo spinL; // [C0]
@@ -21,8 +21,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     private Servo grab; // [E4]
 
     // Intake
-    private DcMotor intakeL; // [E2]
-    private DcMotor intakeR; // [C2]
+    private DcMotor intakeL; // [E2], left odom
+    private DcMotor intakeR; // [C2], right odom
     public ColorSensor colorS; //[]
 
     // Lift
