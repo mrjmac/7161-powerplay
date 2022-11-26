@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Intake {
 
-    private DcMotor intakeL; // [E2]
-    private DcMotor intakeR; // [C2]
+    private final DcMotor intakeL; // [E2]
+    private final DcMotor intakeR; // [C2]
 
-    private LinearOpMode opMode;
+    private final LinearOpMode opMode;
 
     public Intake(LinearOpMode opMode) throws InterruptedException {
 

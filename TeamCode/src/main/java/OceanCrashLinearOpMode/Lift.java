@@ -9,14 +9,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
 
-    private DcMotor liftL; // [E3]
-    private DcMotor liftR; // [C3]
+    private final DcMotor liftL; // [E3]
+    private final DcMotor liftR; // [C3]
 
-    private LinearOpMode opMode;
+    private final LinearOpMode opMode;
 
     public Servo spinL; // [C0]
     public Servo spinR; // [E5]
-    private Servo grab; // [E4]
+    private final Servo grab; // [E4]
 
     private final double STALL_POWER = -0.0005;
 

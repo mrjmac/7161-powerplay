@@ -42,36 +42,13 @@ public class TestAny extends LinearOpMode {
     private final double moveP4 = 1;
     private final double moveP20 = .432;
 
-    public static double targetPos = 0;
-    public static double cycle = 1;
-    public static double cycleTarget = 1;
-    public static double parkPos = 0;
-    private int turnCount = 1;
-    public static double grabPos = 450;
-
-    enum State {
-        traj1,
-        traj2,
-        traj3,
-        traj4,
-        park,
-        grab,
-        deposit,
-        turn45,
-        idle,
-        dead, turn135
-    }
-
-    private boolean first = true;
-
 
     ElapsedTime deposit = new ElapsedTime();
     ElapsedTime grab = new ElapsedTime();
     ElapsedTime button = new ElapsedTime();
 
-
-    private State auto = State.traj1;
-
+    TrajectorySequence traj1;
+    Trajectory traj2;
 
     private int pos;
 
@@ -84,6 +61,19 @@ public class TestAny extends LinearOpMode {
         lift = new Lift(this);
         intake = new Intake(this);
 
+        Pose2d startingPose = new Pose2d(-72, 36, 0);
+
+        drive.setPoseEstimate(startingPose);
+
+        traj1 = drive.trajectorySequenceBuilder(startingPose)
+                .lineToLinearHeading(new Pose2d(-20.3, 34.591, Math.toRadians(-45)))
+                .back(5)
+                .build();
+
+        traj2 = drive.trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(-22.55, 54, Math.toRadians(90)))
+                .build();
+
 
         /*
         while(!isStarted()){
@@ -95,15 +85,12 @@ public class TestAny extends LinearOpMode {
 
          */
 
-
         waitForStart();
 
-        while (!isStopRequested())
+        if (!isStopRequested())
         {
-            lift.retractFourBar();
-            sleep(2000);
-            lift.extendFourBar();
-            sleep(2000);
+            drive.followTrajectorySequence(traj1);
+            drive.followTrajectory(traj2);
         }
     }
 }

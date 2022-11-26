@@ -15,12 +15,12 @@ import OceanCrashLinearOpMode.Right.Right;
 public class OceanCrashTeleOp extends OceanCrashOpMode{
 
 
-    private ElapsedTime fourbar = new ElapsedTime();
-    private ElapsedTime macroTime = new ElapsedTime();
-    private ElapsedTime grabTime = new ElapsedTime();
-    private ElapsedTime jHeightTime = new ElapsedTime();
-    private ElapsedTime grab = new ElapsedTime();
-    private ElapsedTime extended = new ElapsedTime();
+    private final ElapsedTime fourbar = new ElapsedTime();
+    private final ElapsedTime macroTime = new ElapsedTime();
+    private final ElapsedTime grabTime = new ElapsedTime();
+    private final ElapsedTime jHeightTime = new ElapsedTime();
+    private final ElapsedTime grab = new ElapsedTime();
+    private final ElapsedTime extended = new ElapsedTime();
 
     private boolean grabbed = false;
     private boolean extend = false;

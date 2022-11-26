@@ -21,9 +21,9 @@ public class Vision extends LinearOpMode{
         throw new UnsupportedOperationException();
     }
 
-    private VuforiaLocalizer vuforia;
-    private LinearOpMode opMode;
-    private int park = 3;
+    private final VuforiaLocalizer vuforia;
+    private final LinearOpMode opMode;
+    private final int park = 3;
     private final int highY = 400;
     private final int lowY = 270;
     private final int highX = 380;

@@ -12,17 +12,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Drivetrain {
 
-    private DcMotor BL; // [E1]
-    private DcMotor BR; // [C0]
-    private DcMotor FL; // [E0]
-    private DcMotor FR; // [C1]
+    private final DcMotor BL; // [E1]
+    private final DcMotor BR; // [C0]
+    private final DcMotor FL; // [E0]
+    private final DcMotor FR; // [C1]
 
-    private LinearOpMode opMode;
+    private final LinearOpMode opMode;
     private final String LOG_TAG = "DriveTrain";
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
 
     private Orientation angles;
-    private BNO055IMU imu;
+    private final BNO055IMU imu;
 
     public Drivetrain(LinearOpMode opMode) throws InterruptedException {
 
