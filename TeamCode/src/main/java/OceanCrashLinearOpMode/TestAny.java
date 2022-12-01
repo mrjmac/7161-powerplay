@@ -89,8 +89,17 @@ public class TestAny extends LinearOpMode {
 
         if (!isStopRequested())
         {
+            lift.setLiftPower(.25);
+            sleep(5000);
+            lift.setLiftPower(.5);
+            sleep(5000);
+            lift.setLiftPower(1);
+            sleep(5000);
+            /*
             drive.followTrajectorySequence(traj1);
             drive.followTrajectory(traj2);
+
+             */
         }
     }
 }
