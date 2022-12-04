@@ -87,14 +87,13 @@ public class TestAny extends LinearOpMode {
 
         waitForStart();
 
-        if (!isStopRequested())
+        while (!isStopRequested())
         {
-            lift.setLiftPower(.25);
-            sleep(5000);
-            lift.setLiftPower(.5);
-            sleep(5000);
-            lift.setLiftPower(1);
-            sleep(5000);
+            //test rr2 climbing sequence
+            lift.setLiftPos(1500);
+            sleep(2000);
+            lift.setLiftPos(0);
+            sleep(2000);
             /*
             drive.followTrajectorySequence(traj1);
             drive.followTrajectory(traj2);
