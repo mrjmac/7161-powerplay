@@ -2,11 +2,13 @@ package OceanCrashLinearOpMode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 public class Lift {
 
     private final DcMotor liftL; // [E3]
@@ -14,9 +16,12 @@ public class Lift {
 
     private final LinearOpMode opMode;
 
+    public static double open = 0, close = .5;
     public Servo spinL; // [C0]
     public Servo spinR; // [E5]
     private final Servo grab; // [E4]
+    private Servo swivel;
+
 
     private final double STALL_POWER = -0.0005;
 
@@ -40,6 +45,7 @@ public class Lift {
         spinL = this.opMode.hardwareMap.servo.get("spinL"); // [C0]
         spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
+//        swivel = this.opMode.hardwareMap.servo.get("swivel");
 
         resetEncoder();
 
@@ -124,13 +130,36 @@ public class Lift {
         spinL.setPosition(1);
     }
 
+    public void fourBarLeft()
+    {
+        spinL.setPosition(0);
+    }
+
+    public void fourBarLeft1()
+    {
+        spinL.setPosition(1);
+    }
+
+    public void fourBarRight()
+    {
+        spinR.setPosition(0);
+    }
+
+    public void fourBarRight1()
+    {
+        spinR.setPosition(1);
+    }
+
+
     public void grab()
     {
-        grab.setPosition(.85);
+        //.85
+        grab.setPosition(open);
     }
 
     public void release()
     {
-        grab.setPosition(.7);
+        //.7
+        grab.setPosition(close);
     }
 }

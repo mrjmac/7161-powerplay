@@ -19,6 +19,7 @@ public abstract class OceanCrashOpMode extends OpMode {
     private Servo spinL; // [C0]
     private Servo spinR; // [E5]
     private Servo grab; // [E4]
+    private Servo swivel;
 
     // Intake
     private DcMotor intakeL; // [E2], left odom
@@ -64,6 +65,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         spinL = hardwareMap.servo.get("spinL"); // [C0]
         spinR = hardwareMap.servo.get("spinR"); // [E5]
         grab = hardwareMap.servo.get("grab"); // [E4]
+        swivel = hardwareMap.servo.get("swivel");
 
         // Intake
         intakeL = hardwareMap.dcMotor.get("intakeL"); // [E2]
@@ -185,6 +187,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void retractFourBar()
     {
+        swivelIn();
         grab();
         spinR.setPosition(0);
         spinL.setPosition(1);
@@ -206,6 +209,15 @@ public abstract class OceanCrashOpMode extends OpMode {
         grab.setPosition(.7);  //tune this
     }
 
+    public void swivelIn()
+    {
+        swivel.setPosition(0);
+    }
+
+    public void swivelOut()
+    {
+        swivel.setPosition(1);
+    }
 
     public double getLiftPos()
     {

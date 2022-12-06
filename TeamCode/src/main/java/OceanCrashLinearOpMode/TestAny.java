@@ -90,10 +90,11 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested())
         {
             //test rr2 climbing sequence
-            lift.setLiftPos(1500);
+            lift.grab();
             sleep(2000);
-            lift.setLiftPos(0);
+            lift.release();
             sleep(2000);
+
             /*
             drive.followTrajectorySequence(traj1);
             drive.followTrajectory(traj2);
