@@ -21,12 +21,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private final ElapsedTime jHeightTime = new ElapsedTime();
     private final ElapsedTime grab = new ElapsedTime();
     private final ElapsedTime extended = new ElapsedTime();
+    private final ElapsedTime swivel = new ElapsedTime();
 
     private boolean grabbed = false;
     private boolean extend = false;
     private boolean active = false;
     private boolean blue = false;
     private boolean reset = false;
+    private boolean swivelTrue = false;
 
     private enum LiftState {
         IDLE,
@@ -73,15 +75,15 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         telemetry.addData("blue? :: ", grabBlue());
         telemetry.addData("liftState :: ", liftState);
         telemetry.addData("jit :: ", jHeight);
-        telemetry.addData("exttimer :: ", extended.milliseconds());
-        telemetry.addData("extBool :: ", extend);
-        telemetry.addData("balue :: ", blue);
+        telemetry.addData("swivel :: ", swivelTrue);
+        telemetry.addData("grab :: ", grabbed);
         telemetry.update();
 
 
 
         // LIFT
 
+        /*
         if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 125) {
             jHeight++;
             jHeightTime.reset();
@@ -271,6 +273,43 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         }
         */
 
+        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
+        {
+            grab.reset();
+            grabbed = true;
+            grab();
+        }
 
+
+
+        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
+        {
+            grab.reset();
+            grabbed = false;
+            release();
+        }
+
+        if (gamepad2.y && extended.milliseconds() > 250) {
+            if (extend) {
+                extend = false;
+                retractFourBar();
+            } else {
+                extend = true;
+                extendFourBar();
+            }
+            extended.reset();
+        }
+
+        if (gamepad2.x && swivel.milliseconds() > 250)
+        {
+            if (swivelTrue) {
+                swivelTrue = false;
+                swivelIn();
+            } else {
+                swivelTrue = true;
+                swivelOut();
+            }
+            swivel.reset();
+        }
     }
 }

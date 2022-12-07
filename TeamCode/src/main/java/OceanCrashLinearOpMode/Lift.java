@@ -45,7 +45,7 @@ public class Lift {
         spinL = this.opMode.hardwareMap.servo.get("spinL"); // [C0]
         spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
-//        swivel = this.opMode.hardwareMap.servo.get("swivel");
+        swivel = this.opMode.hardwareMap.servo.get("swivel");
 
         resetEncoder();
 
@@ -161,5 +161,10 @@ public class Lift {
     {
         //.7
         grab.setPosition(close);
+    }
+
+    public void setSwivel(double pos)
+    {
+        swivel.setPosition(pos);
     }
 }
