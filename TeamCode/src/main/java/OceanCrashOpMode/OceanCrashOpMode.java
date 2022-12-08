@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import OceanCrashRoadrunner.drive.SampleMecanumDrive;
+
 public abstract class OceanCrashOpMode extends OpMode {
 
     // Drivetrain

@@ -2,18 +2,20 @@ package OceanCrashOpMode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import java.util.Arrays;
 import java.util.List;
 
 import OceanCrashLinearOpMode.Right.Right;
+import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 
 
 @Config
 @TeleOp(name = "TeleOp", group = "opMode")
 public class OceanCrashTeleOp extends OceanCrashOpMode{
-
 
     private final ElapsedTime fourbar = new ElapsedTime();
     private final ElapsedTime macroTime = new ElapsedTime();
@@ -33,6 +35,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     public static double wait = 200;
 
+
     private enum LiftState {
         IDLE,
         RAISE,
@@ -48,16 +51,21 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private int liftTargetPos = 0;
     public static int low = 850, medium = 1590, high = 2300;
 
+
     public void loop() {
 
         // DRIVE
+        /*
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
-            drive(gamepad1.right_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_trigger);
+            //drive(gamepad1.right_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_trigger);
         } else {
             stopMotors();
         }
+         */
+        startMotors(1, -1, 1, -1);
 
 
+        /*
         // INTAKE
         if (gamepad1.right_bumper && gamepad1.left_bumper)
             setIntake(.5);
@@ -126,12 +134,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         liftReset(.6, 0);
                     else {
                         setLiftPower(0);
-                        grab.reset();
                         grab();
-                        if (grab.milliseconds() > 50)
-                        {
-                            grabFourBar();
-                        }
+                        grabFourBar();
                     }
                 } else {
                     if (grabTime.milliseconds() > 400) {
@@ -166,6 +170,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (getLiftPos() < liftTargetPos) {
                     setLiftPos(liftTargetPos);
                 } else {
+                    if (!extend)
+                        macroTime.reset();
                     blue = false;
                     extendFourBar();
                     extend = true;
@@ -204,7 +210,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     swivel.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
-                    setLiftPower(gamepad2.left_stick_y * 0.2);
+                    setLiftPower(gamepad2.left_stick_y * 0.6);
                 } else {
                     if (jHeight == 0)
                         setLiftPower(0);
@@ -234,6 +240,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(0);
                         active = false;
                         grabbed = false;
+                        extend = false;
                         release();
                         lift = LiftState.IDLE;
                     }
