@@ -87,7 +87,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         // LIFT
 
-        /*
+
         if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 125) {
             jHeight++;
             jHeightTime.reset();
@@ -169,8 +169,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     blue = false;
                     extendFourBar();
                     extend = true;
-                    if (macroTime.milliseconds() > 400) {
+                    if (macroTime.milliseconds() > 750) {
                         macroTime.reset();
+                        swivelOut();
                         lift = LiftState.PLACE;
                     }
                 }
@@ -191,6 +192,17 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                     extended.reset();
                 }
+                if (gamepad2.x && swivel.milliseconds() > 250)
+                {
+                    if (swivelTrue) {
+                        swivelTrue = false;
+                        swivelIn();
+                    } else {
+                        swivelTrue = true;
+                        swivelOut();
+                    }
+                    swivel.reset();
+                }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
                     setLiftPower(gamepad2.left_stick_y * 0.2);
                 } else {
@@ -210,7 +222,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
-                if (grabTime.milliseconds() > 100) {
+                swivelIn();
+                if (grabTime.milliseconds() > 200) {
                     grab();
                     retractFourBar();
                 }
@@ -276,7 +289,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             release();
         }
         */
-
+        /*
         if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
         {
             grab.reset();
@@ -330,5 +343,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             }
             swivel.reset();
         }
+        */
     }
 }
