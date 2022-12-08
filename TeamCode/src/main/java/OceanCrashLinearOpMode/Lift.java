@@ -130,41 +130,28 @@ public class Lift {
         spinL.setPosition(1);
     }
 
-    public void fourBarLeft()
-    {
-        spinL.setPosition(0);
-    }
-
-    public void fourBarLeft1()
-    {
-        spinL.setPosition(1);
-    }
-
-    public void fourBarRight()
-    {
-        spinR.setPosition(0);
-    }
-
-    public void fourBarRight1()
-    {
-        spinR.setPosition(1);
-    }
-
-
     public void grab()
     {
-        //.85
-        grab.setPosition(open);
+        grab.setPosition(0.1);
     }
 
     public void release()
     {
-        //.7
-        grab.setPosition(close);
+        grab.setPosition(.35);  //tune this
     }
 
-    public void setSwivel(double pos)
+    public void swivelIn()
     {
-        swivel.setPosition(pos);
+        swivel.setPosition(0);
+    }
+
+    public void swivelOut()
+    {
+        swivel.setPosition(.67);
+    }
+
+    public void swivelStart()
+    {
+        swivel.setPosition(.57);
     }
 }

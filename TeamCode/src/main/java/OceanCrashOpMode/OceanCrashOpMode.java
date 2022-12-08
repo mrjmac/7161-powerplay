@@ -30,6 +30,9 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor liftL; // [E3]
     private DcMotor liftR; // [C3]
 
+    private ElapsedTime jit;
+
+
     public void init() {
 
 
@@ -100,8 +103,11 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        jit = new ElapsedTime();
+
         telemetry.addData("init ", "completed");
         telemetry.update();
+
     }
 
     public void startMotors(double FLP, double FRP, double BLP, double BRP) {
@@ -201,12 +207,12 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0);
+        grab.setPosition(0.1);
     }
 
     public void release()
     {
-        grab.setPosition(.5);  //tune this
+        grab.setPosition(.35);  //tune this
     }
 
     public void swivelIn()
@@ -216,7 +222,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void swivelOut()
     {
-        swivel.setPosition(.5);
+        swivel.setPosition(.67);
     }
 
     public double getLiftPos()

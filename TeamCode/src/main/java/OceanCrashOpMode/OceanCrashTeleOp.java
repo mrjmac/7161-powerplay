@@ -24,11 +24,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private final ElapsedTime swivel = new ElapsedTime();
 
     private boolean grabbed = false;
+    private boolean bypass = false;
     private boolean extend = false;
     private boolean active = false;
     private boolean blue = false;
     private boolean reset = false;
     private boolean swivelTrue = false;
+
+    public static double wait = 200;
 
     private enum LiftState {
         IDLE,
@@ -77,6 +80,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         telemetry.addData("jit :: ", jHeight);
         telemetry.addData("swivel :: ", swivelTrue);
         telemetry.addData("grab :: ", grabbed);
+        telemetry.addData("extended time :: ", extended.milliseconds());
         telemetry.update();
 
 
@@ -289,15 +293,30 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             release();
         }
 
-        if (gamepad2.y && extended.milliseconds() > 250) {
-            if (extend) {
-                extend = false;
-                retractFourBar();
-            } else {
-                extend = true;
-                extendFourBar();
+        if ((gamepad2.y && extended.milliseconds() > 250) || bypass) {
+            if (!bypass)
+            {
+                extended.reset();
+                bypass = true;
             }
-            extended.reset();
+            if (extend) {
+                swivelIn();
+                grab();
+                if (extended.milliseconds() > wait) {
+                    retractFourBar();
+                    bypass = false;
+                    extended.reset();
+                    extend = false;
+                }
+            } else {
+                extendFourBar();
+                if (extended.milliseconds() > wait + 550) {
+                    swivelOut();
+                    bypass = false;
+                    extended.reset();
+                    extend = true;
+                }
+            }
         }
 
         if (gamepad2.x && swivel.milliseconds() > 250)

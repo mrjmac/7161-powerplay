@@ -1,23 +1,26 @@
 package OceanCrashLinearOpMode;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.google.gson.interceptors.JsonPostDeserializer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import OceanCrashLinearOpMode.Drivetrain;
-import OceanCrashLinearOpMode.Intake;
-import OceanCrashLinearOpMode.Lift;
-import OceanCrashLinearOpMode.Vision;
+
+import org.apache.commons.math3.genetics.ElitisticListPopulation;
+
+import OceanCrashOpMode.OceanCrashTeleOp;
 import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
-// VERY IMPORTANT, BUT NOT FOR THIS AUTO
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-
 @Config
-
 @Autonomous(name = "Park", group = "Test")
 public class Park extends LinearOpMode {
 
@@ -27,21 +30,28 @@ public class Park extends LinearOpMode {
     private Vision vision;
     private Intake intake;
 
-    private Boolean running = true;
-
     public static double stall = -.0004;
 
-    public static double parkPos = 0;
+    private final double turnP45 = .43;
+    private final double turnD45 = .40;
 
-    enum State {
-        traj1,
-        idle
-    }
+    private final double turnP135 = .24;
+    private final double turnD135 = .20;
 
-    private State auto = State.traj1;
+    private final double moveP48 = .442;
+    private final double moveP4 = 1;
+    private final double moveP20 = .432;
 
+
+    ElapsedTime deposit = new ElapsedTime();
+    ElapsedTime grab = new ElapsedTime();
+    ElapsedTime button = new ElapsedTime();
+
+    TrajectorySequence traj1;
+    Trajectory traj2;
 
     private int pos;
+    private int parkMod;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -56,6 +66,11 @@ public class Park extends LinearOpMode {
 
         drive.setPoseEstimate(startingPose);
 
+
+
+
+
+
         while(!isStarted()){
             pos = vision.getPark();
 
@@ -63,66 +78,21 @@ public class Park extends LinearOpMode {
             telemetry.update();
         }
 
-        switch (pos) {
-            case 1:
-                parkPos += 24;
-                break;
-            case 3:
-                parkPos -= 24;
-                break;
-        }
-        if (parkPos == 0)
-            parkPos = 1;
+        if (pos == 1)
+            parkMod = 24;
+        else if (pos == 3)
+            parkMod = -24;
 
-        TrajectorySequence traj1_2 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                //.lineToLinearHeading(new Pose2d(-44, 36, Math.toRadians(90)))
+        traj1 = drive.trajectorySequenceBuilder(startingPose)
+                .lineToLinearHeading(new Pose2d(-16, 36, Math.toRadians(-25)))
+                .lineToLinearHeading(new Pose2d(-16, 36 + parkMod))
                 .build();
 
-        TrajectorySequence traj1_1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                //.lineToLinearHeading(new Pose2d(-44, 60, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                .turn(Math.toRadians(90))
-                .forward(24)
-                .build();
-
-        TrajectorySequence traj1_3 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-46, 36, 0), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                //.lineToLinearHeading(new Pose2d(-44, 12, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
-                .turn(Math.toRadians(-90))
-                .forward(24)
-                .build();
-
-        lift.grab();
-
-        //lift.spinR.setPosition(0.15);
-        //lift.spinL.setPosition(0.85);
-
+        drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
-        //lift.extendFourBar();
-        if (pos == 1)
-            drive.followTrajectorySequenceAsync(traj1_1);
-        else if (pos == 2)
-            drive.followTrajectorySequenceAsync(traj1_2);
-        else
-            drive.followTrajectorySequenceAsync(traj1_3);
-
-
-        while (!isStopRequested() && running)
+        while (!isStopRequested())
         {
-            switch (auto)
-            {
-                case traj1:
-                    if (!drive.isBusy())
-                        auto = State.idle;
-                    break;
-                case idle:
-                    telemetry.addData("state:", "im done");
-                    telemetry.update();
-                    running = false;
-                    break;
-            }
             drive.update();
         }
     }

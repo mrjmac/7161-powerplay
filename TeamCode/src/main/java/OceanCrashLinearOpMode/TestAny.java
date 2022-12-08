@@ -66,13 +66,11 @@ public class TestAny extends LinearOpMode {
         drive.setPoseEstimate(startingPose);
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-20.3, 34.591, Math.toRadians(-45)))
-                .back(5)
+                .addTemporalMarker(0, ()-> lift.extendFourBar())
+                .addTemporalMarker(1, ()-> lift.swivelStart())
+                .lineToLinearHeading(new Pose2d(-28, 36, Math.toRadians(-25)))
                 .build();
 
-        traj2 = drive.trajectoryBuilder(traj1.end())
-                .lineToLinearHeading(new Pose2d(-22.55, 54, Math.toRadians(90)))
-                .build();
 
 
         /*
@@ -84,19 +82,12 @@ public class TestAny extends LinearOpMode {
         }
 
          */
-
+        drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
         while (!isStopRequested())
         {
-            //test rr2 climbing sequence
-            lift.setSwivel(0);
-
-            /*
-            drive.followTrajectorySequence(traj1);
-            drive.followTrajectory(traj2);
-
-             */
+            drive.update();
         }
     }
 }
