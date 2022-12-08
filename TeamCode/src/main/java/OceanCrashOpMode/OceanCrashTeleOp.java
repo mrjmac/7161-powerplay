@@ -55,17 +55,15 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     public void loop() {
 
         // DRIVE
-        /*
+
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
-            //drive(gamepad1.right_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_trigger);
+            drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_trigger);
         } else {
             stopMotors();
         }
-         */
-        startMotors(1, -1, 1, -1);
 
 
-        /*
+
         // INTAKE
         if (gamepad1.right_bumper && gamepad1.left_bumper)
             setIntake(.5);
@@ -170,16 +168,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (getLiftPos() < liftTargetPos) {
                     setLiftPos(liftTargetPos);
                 } else {
-                    if (!extend)
-                        macroTime.reset();
                     blue = false;
                     extendFourBar();
                     extend = true;
-                    if (macroTime.milliseconds() > 750) {
-                        macroTime.reset();
-                        swivelOut();
-                        lift = LiftState.PLACE;
-                    }
+                    lift = LiftState.PLACE;
                 }
                 liftState = "RAISE";
                 break;
@@ -228,7 +220,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
-                swivelIn();
                 if (grabTime.milliseconds() > 200) {
                     grab();
                     retractFourBar();

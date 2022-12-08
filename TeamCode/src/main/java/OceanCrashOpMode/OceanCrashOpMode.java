@@ -54,18 +54,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
         // Four Bar
         spinL = hardwareMap.servo.get("spinL"); // [C0]
         spinR = hardwareMap.servo.get("spinR"); // [E5]
@@ -129,10 +117,10 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void drive(double x, double y, double turn, double trigger) {
 
-        double FLP = y - turn - x;
-        double FRP = y + turn + x;
-        double BLP = y + turn - x;
-        double BRP = y - turn + x;
+        double FLP = y - x - turn;
+        double FRP = y + x + turn;
+        double BLP = y + x - turn;
+        double BRP = y - x + turn;
 
         double speedControl;
         if (trigger > .1) {
