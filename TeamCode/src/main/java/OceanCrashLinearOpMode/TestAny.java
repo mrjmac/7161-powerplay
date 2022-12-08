@@ -62,6 +62,7 @@ public class TestAny extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
         lift = new Lift(this);
+        lift.grab();
         intake = new Intake(this);
 
         Pose2d startingPose = new Pose2d(-72, 36, 0);
@@ -70,14 +71,14 @@ public class TestAny extends LinearOpMode {
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
-                .addTemporalMarker(1, ()-> lift.swivelStart())
+                .addTemporalMarker(.5, ()-> lift.swivelStart())
                 .addTemporalMarker(0, () -> targetPos = 2500)
+                .waitSeconds(1)
                 .lineToLinearHeading(new Pose2d(-28, 36, Math.toRadians(-25)))
                 .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
                 .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
                 .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
                 .waitSeconds(2)
-                /*
                 //1
                 .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
@@ -87,6 +88,7 @@ public class TestAny extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
+                /*
                 .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
                 .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
                 .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)

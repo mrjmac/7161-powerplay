@@ -152,6 +152,6 @@ public class Lift {
 
     public void swivelStart()
     {
-        swivel.setPosition(.57);
+        swivel.setPosition(.51);
     }
 }
