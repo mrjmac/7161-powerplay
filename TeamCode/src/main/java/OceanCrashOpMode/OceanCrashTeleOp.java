@@ -125,6 +125,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = true;
                     grabTime.reset();
                 }
+                else
+                {
+                    release();
+                    grabbed = false;
+                }
                 if (Math.abs(gamepad2.left_stick_y) > .05)
                     setLiftPower(gamepad2.left_stick_y * 0.2);
                 if ((grabRed() || blue) || grabbed && !reset) {
