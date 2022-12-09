@@ -97,6 +97,26 @@ public class Lift {
 
     }
 
+    public void tuneLiftPos(double liftTargetPos, double up, double down)
+    {
+        if (Math.abs(liftTargetPos - getLiftPos()) > 100 && this.opMode.opModeIsActive()) {
+            this.opMode.telemetry.addData("lift :: ", getLiftPos());
+            this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
+            this.opMode.telemetry.update();
+            if (liftTargetPos < getLiftPos())
+                setLiftPower(up);
+            else
+                setLiftPower(down);
+
+
+        } else
+        if (liftTargetPos == 0)
+            setLiftPower(0);
+        else
+            setLiftPower(STALL_POWER);
+
+    }
+
     public void resetLift(double p, int targetPos)
     {
         while (getLiftPos() >= targetPos && this.opMode.opModeIsActive()){
