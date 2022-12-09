@@ -83,12 +83,12 @@ public class TestAny extends LinearOpMode {
                 .waitSeconds(2)
 
                 //CYCLE 1
-                .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
                 /*
@@ -99,12 +99,12 @@ public class TestAny extends LinearOpMode {
                 .waitSeconds(2)
 
                 //CYCLE 2
-                .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
                 .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
@@ -114,12 +114,12 @@ public class TestAny extends LinearOpMode {
                 .waitSeconds(2)
 
                 //CYCLE 3
-                .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
                 .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
@@ -129,12 +129,12 @@ public class TestAny extends LinearOpMode {
                 .waitSeconds(2)
 
                 //CYCLE 4
-                .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
                 .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
@@ -144,12 +144,12 @@ public class TestAny extends LinearOpMode {
                 .waitSeconds(2)
 
                 //CYCLE 5
-                .splineTo(new Vector2d(-15, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-15, 50, Math.toRadians(90)))
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-15, 48, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
                 .splineTo(new Vector2d(-28, 36), Math.toRadians(25))

@@ -138,8 +138,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     else {
                         setLiftPower(0);
                         grab();
-                        if (grabTime.milliseconds() > 200)
-                            grabFourBar();
+                        grabFourBar();
                     }
                 } else {
                     if (grabTime.milliseconds() > 400) {
