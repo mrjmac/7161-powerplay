@@ -138,7 +138,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     else {
                         setLiftPower(0);
                         grab();
-                        grabFourBar();
+                        if (grabTime.milliseconds() > 200)
+                            grabFourBar();
                     }
                 } else {
                     if (grabTime.milliseconds() > 400) {
@@ -225,11 +226,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
-                if (grabTime.milliseconds() > 200) {
+                if (grabTime.milliseconds() > 500) {
                     grab();
                     retractFourBar();
                 }
-                if ((macroTime.milliseconds() > 200 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
+                if ((macroTime.milliseconds() > 500 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
                     if (getLiftPos() > 50) {
                         liftReset(.6, 50);
                     } else {
