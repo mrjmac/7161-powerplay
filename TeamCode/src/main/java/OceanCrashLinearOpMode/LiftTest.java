@@ -56,6 +56,7 @@ public class LiftTest extends LinearOpMode {
     public static double targetPos = 2700;
     public static double up = 1;
     public static double down = -.8;
+    public static double downPos = 100;
     private double parkPos = 0;
 
     @Override
@@ -72,8 +73,12 @@ public class LiftTest extends LinearOpMode {
 
         while (!isStopRequested())
         {
-            lift.tuneLiftPos(targetPos, up, down);
-            sleep(2000);
+            lift.release();
+            sleep(1000);
+            lift.grab();
+            sleep(1000);
+
+
         }
     }
 }

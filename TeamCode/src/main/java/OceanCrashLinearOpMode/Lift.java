@@ -46,9 +46,8 @@ public class Lift {
         spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
         swivel = this.opMode.hardwareMap.servo.get("swivel");
-
         resetEncoder();
-
+        grab();
     }
 
     public void setLiftPower(double power)
@@ -84,16 +83,15 @@ public class Lift {
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
-                setLiftPower(.6);
+                setLiftPower(.7);
             else
-                setLiftPower(-.8);
+                setLiftPower(-1);
 
 
-        } else
-            if (liftTargetPos == 0)
-                setLiftPower(0);
-            else
-                setLiftPower(STALL_POWER);
+        } else if (liftTargetPos == 0)
+            setLiftPower(0);
+        else
+            setLiftPower(STALL_POWER);
 
     }
 
@@ -109,8 +107,7 @@ public class Lift {
                 setLiftPower(down);
 
 
-        } else
-        if (liftTargetPos == 0)
+        } else if (liftTargetPos == 0)
             setLiftPower(0);
         else
             setLiftPower(STALL_POWER);
