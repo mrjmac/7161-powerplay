@@ -1,7 +1,5 @@
 package OceanCrashLinearOpMode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -167,8 +165,13 @@ public class Lift {
         swivel.setPosition(.67);
     }
 
-    public void swivelStart()
+    public void swivelStartLeft()
     {
         swivel.setPosition(.51);
+    }
+
+    public void swivelStartRight()
+    {
+        swivel.setPosition(.83);
     }
 }

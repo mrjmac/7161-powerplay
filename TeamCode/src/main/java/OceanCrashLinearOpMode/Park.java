@@ -51,7 +51,7 @@ public class Park extends LinearOpMode {
     Trajectory traj2;
 
     private int pos;
-    private int parkMod;
+    private int parkMod = 36;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,8 +84,8 @@ public class Park extends LinearOpMode {
             parkMod = -24;
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-16, 36, Math.toRadians(-25)))
-                .lineToLinearHeading(new Pose2d(-16, 36 + parkMod))
+                .lineToLinearHeading(new Pose2d(-16, 36, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-16, parkMod))
                 .build();
 
         drive.followTrajectorySequenceAsync(traj1);

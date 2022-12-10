@@ -1,24 +1,12 @@
 package OceanCrashLinearOpMode;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.google.gson.interceptors.JsonPostDeserializer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-
-import java.util.Vector;
-
-import OceanCrashOpMode.OceanCrashTeleOp;
-import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
@@ -54,7 +42,7 @@ public class TestAny extends LinearOpMode {
 
     private int pos;
     private double targetPos;
-    private double parkPos = 0;
+    private double parkPos = 34;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -70,112 +58,6 @@ public class TestAny extends LinearOpMode {
 
         drive.setPoseEstimate(startingPose);
 
-        traj1 = drive.trajectorySequenceBuilder(startingPose)
-                //PRELOAD
-
-                .addTemporalMarker(0, ()-> lift.extendFourBar())
-                .addTemporalMarker(0, () -> targetPos = 2700)
-                .waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-28, 34, Math.toRadians(-25)))
-                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStart())
-                .waitSeconds(.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 400)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
-
-
-                //CYCLE 1
-
-                .splineTo(new Vector2d(-20, 44), Math.toRadians(90))
-
-                //.lineToLinearHeading(new Pose2d(-20,45.9, Math.toRadians(90))) THIS LINE 
-                //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
-
-
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
-
-
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
-                .waitSeconds(2)
-
-
-                .lineToLinearHeading(new Pose2d(-20, 44, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
-                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 600)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
-/*
-                //CYCLE 2
-                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
-                .waitSeconds(2)
-
-                //CYCLE 3
-                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
-                .waitSeconds(2)
-
-                //CYCLE 4
-                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
-                .waitSeconds(2)
-
-                //CYCLE 5
-                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStart())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
-                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
-                .waitSeconds(2)
-
-
-                //PARK
-                .splineTo(new Vector2d(-36, 36), Math.toRadians(90))
-                .addDisplacementMarker(() -> drive.followTrajectorySequenceAsync(park))
-                */
-                .build();
-
         while(!isStarted()){
             pos = vision.getPark();
             telemetry.addData("park: ", pos);
@@ -190,12 +72,125 @@ public class TestAny extends LinearOpMode {
                 parkPos -= 21;
                 break;
         }
+
+        traj1 = drive.trajectorySequenceBuilder(startingPose)
+                //PRELOAD
+
+                .addTemporalMarker(0, ()-> lift.extendFourBar())
+                .addTemporalMarker(0, () -> targetPos = 2700)
+                .waitSeconds(.5)
+                .lineToLinearHeading(new Pose2d(-28, 34, Math.toRadians(-25)))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartLeft())
+                .waitSeconds(.5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 400)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
+
+
+                //CYCLE 1
+
+                .splineTo(new Vector2d(-20, 42), Math.toRadians(90))
+
+                .lineToLinearHeading(new Pose2d(-20,46, Math.toRadians(90)))// THIS LINE
+                //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
+
+
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
+
+
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
+                .waitSeconds(2)
+
+
+                .lineToLinearHeading(new Pose2d(-20, 42, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 0)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelIn())
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> lift.retractFourBar())
+                .lineToLinearHeading(new Pose2d(-24, 34, Math.toRadians(0)))
+                .lineToConstantHeading(new Vector2d(-24, parkPos))
+
+/*
+                //CYCLE 2
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 3
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 4
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 5
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+
+                //PARK
+                .splineTo(new Vector2d(-36, 36), Math.toRadians(90))
+                .addDisplacementMarker(() -> drive.followTrajectorySequenceAsync(park))
+                */
+                .build();
+
+
 /*
         park = drive.trajectorySequenceBuilder(traj1.end())
-                .addTemporalMarker(() -> lift.setLiftPos(0))
-                .forward(parkPos)
+                .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
                 .build();
-        */
+*/
+
 
         drive.followTrajectorySequenceAsync(traj1);
         waitForStart();

@@ -2,24 +2,20 @@ package OceanCrashLinearOpMode.Right;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
 import OceanCrashLinearOpMode.Lift;
 import OceanCrashLinearOpMode.Vision;
-import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
-// VERY IMPORTANT
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-
 @Config
-
-@Autonomous(name = "Right", group = "Test")
+@Autonomous(name = "Right", group = "Right")
 public class Right extends LinearOpMode {
 
     private SampleMecanumDrive drive;
@@ -29,8 +25,6 @@ public class Right extends LinearOpMode {
     private Intake intake;
 
     public static double stall = -.0004;
-
-    boolean active = true;
 
     private final double turnP45 = .43;
     private final double turnD45 = .40;
@@ -42,39 +36,17 @@ public class Right extends LinearOpMode {
     private final double moveP4 = 1;
     private final double moveP20 = .432;
 
-    public static double targetPos = 0;
-    public static double cycle = 0;
-    public static int cycleTarget = 0;
-    public static double parkPos = 0;
-    private int turnCount = 1;
-    public static double grabPos = 500;
-
-    enum State {
-        traj1,
-        traj2,
-        traj3,
-        traj4,
-        park,
-        grab,
-        deposit,
-        turn45,
-        idle,
-        dead, turn135
-    }
-
-    private boolean first = true;
-    private boolean bruh = true;
 
     ElapsedTime deposit = new ElapsedTime();
     ElapsedTime grab = new ElapsedTime();
-    ElapsedTime state = new ElapsedTime();
-    ElapsedTime dpad = new ElapsedTime();
+    ElapsedTime button = new ElapsedTime();
 
-
-    private State auto = State.traj1;
-
+    TrajectorySequence traj1;
+    TrajectorySequence park;
 
     private int pos;
+    private double targetPos;
+    private double parkPos = 36;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -83,71 +55,17 @@ public class Right extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
         lift = new Lift(this);
+        lift.grab();
         intake = new Intake(this);
-        //probability = new ElitisticListPopulation(1000, 2.4);
 
-        Pose2d startingPose = new Pose2d(-72, -36, 0);
+        Pose2d startingPose = new Pose2d(-72, 36, 0);
 
         drive.setPoseEstimate(startingPose);
 
-        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startingPose)
-                //.addTemporalMarker(0, () -> lift.startFourBar())
-                //.waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-34, -36, 0), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .UNSTABLE_addTemporalMarkerOffset(.25, () -> targetPos = 2700)
-                //.UNSTABLE_addTemporalMarkerOffset(.25, () -> probability.setElitismRate(probability.getElitismRate() + .1))
-                .lineToLinearHeading(new Pose2d(-18.8, -33.091, Math.toRadians(45)))
-                .UNSTABLE_addTemporalMarkerOffset(1.5, () -> lift.extendFourBar())
-                .build();
-
-        TrajectorySequence turn135 = drive.trajectorySequenceBuilder(traj1.end())
-                .addDisplacementMarker(()-> targetPos = 1200)
-                //.addDisplacementMarker(() -> probability.setElitismRate(probability.getElitismRate() + .1))
-                .turn(Math.toRadians(-135))
-                .build();
-
-        Trajectory traj2 = drive.trajectoryBuilder(turn135.end())
-                //.lineToLinearHeading(new Pose2d(-29.5, 34.5, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-22.55, -54, Math.toRadians(-90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
-
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .lineToLinearHeading(new Pose2d(-19.5, -12.6, Math.toRadians(-90)), SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addTemporalMarker(.25, () -> targetPos = 2700)
-                .build();
-
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .lineToLinearHeading(new Pose2d(-23.8, -58, Math.toRadians(-90)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL, Math.toRadians(80), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
-
-
-
-/*
-        TrajectorySequence turn45 = drive.trajectorySequenceBuilder(traj3.end())
-                .turn(Math.toRadians(45))
-                .build();
-
-        TrajectorySequence turnNeg45 = drive.trajectorySequenceBuilder(turn45.end())
-                .turn(Math.toRadians(-45))
-                .build();
-
-         */
-
-        while(!isStarted()) {
+        while(!isStarted()){
             pos = vision.getPark();
-
-            if (gamepad1.dpad_up && dpad.milliseconds() > 200 && cycleTarget < 5) {
-                dpad.reset();
-                cycleTarget++;
-            } else if (gamepad1.dpad_down && dpad.milliseconds() > 200 && cycleTarget > 0) {
-                dpad.reset();
-                cycleTarget--;
-            }
-
             telemetry.addData("park: ", pos);
-            telemetry.addData("cycleTarget: ", cycleTarget);
             telemetry.update();
-            lift.grab();
         }
 
         switch (pos) {
@@ -159,248 +77,122 @@ public class Right extends LinearOpMode {
                 break;
         }
 
-        Trajectory park = drive.trajectoryBuilder(traj3.end())
-                .lineToLinearHeading(new Pose2d(-24, -36 + parkPos, Math.toRadians(-90)))
+        traj1 = drive.trajectorySequenceBuilder(startingPose)
+                //PRELOAD
+
+                .addTemporalMarker(0, ()-> lift.extendFourBar())
+                .addTemporalMarker(0, () -> targetPos = 2700)
+                .waitSeconds(.5)
+                .lineToLinearHeading(new Pose2d(-28, 38, Math.toRadians(25)))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.swivelStartRight())
+                .waitSeconds(.5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 400)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
+
+
+                //CYCLE 1
+                .splineTo(new Vector2d(-20, 30), Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(-20,26, Math.toRadians(-90)))// THIS LINE
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 30, Math.toRadians(-90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartRight())
+                .splineTo(new Vector2d(-28, 38), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 0)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelIn())
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> lift.retractFourBar())
+                .lineToLinearHeading(new Pose2d(-24, 36, Math.toRadians(0)))
+                .lineToConstantHeading(new Vector2d(-24, parkPos))
+/*
+                //CYCLE 2
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 3
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 4
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+                //CYCLE 5
+                .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 50, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()->lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()->targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 48, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()->targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> lift.release())
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> targetPos = 700)
+                .UNSTABLE_addTemporalMarkerOffset(2.75, () -> lift.swivelOut())
+                .waitSeconds(2)
+
+
+                //PARK
+                .splineTo(new Vector2d(-36, 36), Math.toRadians(90))
+                .addDisplacementMarker(() -> drive.followTrajectorySequenceAsync(park))
+                */
                 .build();
 
-        TrajectorySequence preloadPark2 = drive.trajectorySequenceBuilder(traj1.end())
-                .back(3)
-                .turn(Math.toRadians(45))
+
+/*
+        park = drive.trajectorySequenceBuilder(traj1.end())
+                .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
                 .build();
-
-        TrajectorySequence preloadPark1 = drive.trajectorySequenceBuilder(traj1.end())
-                .back(5)
-                .turn(Math.toRadians(45))
-                .forward(23)
-                .build();
-
-        TrajectorySequence preloadPark3 = drive.trajectorySequenceBuilder(traj1.end())
-                .back(3)
-                .turn(Math.toRadians(45))
-                .back(20)
-                .build();
+*/
 
 
-        lift.spinR.setPosition(0.15);
-        lift.spinL.setPosition(0.85);
-
+        drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
-        //lift.extendFourBar();
-        drive.followTrajectorySequenceAsync(traj1);
-
-        while (!isStopRequested() && active)
+        while (!isStopRequested())
         {
-            switch (auto)
-            {
-                case traj1:
-                    if (!drive.isBusy()) {
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                        if (state.milliseconds() > 3000) {
-                            auto = State.deposit;
-                            deposit.reset();
-                            bruh = true;
-                        }
-                    }
-                    break;
-                case deposit:
-                    telemetry.addData("state :: ", "deposit");
-                    telemetry.update();
-                    lift.release();
-                    if (deposit.milliseconds() > 200)
-                        if (first) {
-                            if (cycleTarget == 0) {
-                                auto = State.park;
-                                if (pos == 1)
-                                {
-                                    drive.followTrajectorySequenceAsync(preloadPark1);
-                                }
-                                else if (pos == 2)
-                                {
-                                    drive.followTrajectorySequenceAsync(preloadPark2);
-                                }
-                                else {
-                                    drive.followTrajectorySequenceAsync(preloadPark3);
-                                }
-                            } else {
-                                auto = State.turn135;
-                                drive.followTrajectorySequenceAsync(turn135);
-                            }
-                            first = false;
-                            //drive.turnAsync(Math.toRadians(135));
-                        } else {
-                            if (bruh)
-                            {
-                                state.reset();
-                                bruh = false;
-                            }
-                            if (state.milliseconds() > 750) {
-                                bruh = true;
-                                auto = State.turn45;
-                                if (turnCount % 2 == 1)
-                                    drive.turnAsync(Math.toRadians(45));
-                                else {
-                                    //targetPos = 800;
-                                    drive.turnAsync(Math.toRadians(-45));
-                                }
-                                cycle++;
-                                grabPos -= 25;
-                            }
-                        }
-                    break;
-                case turn135:
-                    telemetry.addData("state :: ", "turn 135");
-                    telemetry.update();
-                    if (!drive.isBusy()) {
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                        if (state.milliseconds() > 750) {
-                            bruh = true;
-                            auto = State.traj2;
-                            drive.followTrajectoryAsync(traj2);
-                        }
-                    }
-                    break;
-                case traj2:
-                    telemetry.addData("state :: ", "traj2");
-                    telemetry.update();
-                    if (!drive.isBusy()) {
-                        if (bruh) {
-                            state.reset();
-                            bruh = false;
-                        }
-                        if (state.milliseconds() > 750) {
-                            bruh = true;
-                            auto = State.grab;
-                            grab.reset();
-                        }
-                    }
-                    break;
-                case grab:
-                    telemetry.addData("state :: ", "grab");
-                    telemetry.update();
-                    if (grab.milliseconds() > 500 && grab.milliseconds() < 1500)
-                        targetPos = grabPos;
-                    //probability.setElitismRate(probability.getElitismRate() + .1);
-                    if (grab.milliseconds() > 1800)
-                        lift.grab();
-                    if (grab.milliseconds() > 2400)
-                        targetPos = 1100;
-                    //probability.setElitismRate(probability.getElitismRate() + .1);
-                    if (grab.milliseconds() > 3000) {
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                        if (state.milliseconds() > 300) {
-                            bruh = true;
-                            auto = State.traj3;
-                            drive.followTrajectoryAsync(traj3);
-                        }
-                    }
-                    break;
-                case traj3:
-                    telemetry.addData("state :: ", "traj3");
-                    telemetry.update();
-                    if (!drive.isBusy())
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                    if (state.milliseconds() > 2500) {
-                            /*
-                            bruh = true;
-                            auto = State.turn45;
-                            if (turnCount % 2 == 1)
-                                drive.turnAsync(Math.toRadians(-45));
-                            else
-                                drive.turnAsync(Math.toRadians(45));
-
-                             */
-                    }
-                    break;
-                case turn45:
-                    telemetry.addData("state :: ", "turn45");
-                    telemetry.update();
-                    if (!drive.isBusy())
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                    if (state.milliseconds() > 750) {
-                        bruh = true;
-                        if (cycle == cycleTarget)
-                            drive.followTrajectoryAsync(park);
-                        else {
-                            if (turnCount % 2 == 0) {
-                                drive.followTrajectoryAsync(traj4);
-                                auto = State.traj4;
-                            } else
-                                auto = State.deposit;
-                            turnCount++;
-                        }
-                    }
-                    break;
-                case traj4:
-                    if (!drive.isBusy())
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                    if (state.milliseconds() > 750) {
-                        bruh = true;
-                        auto = State.grab;
-                        grab.reset();
-                    }
-                    break;
-                case park:
-                    telemetry.addData("state :: ", "park");
-                    telemetry.update();
-                    if (!drive.isBusy())
-                        if (bruh)
-                        {
-                            state.reset();
-                            bruh = false;
-                        }
-                    if (state.milliseconds() > 750) {
-                        bruh = true;
-                        auto = State.idle;
-                    }
-                    break;
-                case idle:
-                    lift.retractFourBar();
-                    targetPos = 0;
-                    telemetry.addData("state :: ", "i love goodreau");
-                    telemetry.update();
-                    if (lift.getLiftPos() < 50 && !drive.isBusy())
-                    {
-                        active = false;
-                    }
-                    break;
-                case dead:
-                    lift.setLiftPos(0);
-                    //probability.setElitismRate(probability.getElitismRate() + .1);
-                    telemetry.addData("state :: ", "bro what happened to my lift");
-                    telemetry.update();
-                    break;
-
-            }
             drive.update();
-            if (Math.abs(lift.getLiftL() - lift.getLiftR()) > 125)
-                auto = State.dead;
-            else
-                lift.setLiftPos(targetPos);
+            lift.setLiftPos(targetPos);
         }
     }
 }

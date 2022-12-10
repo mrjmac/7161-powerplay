@@ -1,4 +1,4 @@
-package OceanCrashLinearOpMode.Left;
+package OceanCrashLinearOpMode.Right;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -15,8 +15,8 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(name = "Left", group = "Left")
-public class Left extends LinearOpMode {
+@Autonomous(name = "RightPreload", group = "Right")
+public class RightPreload extends LinearOpMode {
 
     private SampleMecanumDrive drive;
     private Drivetrain drivetrain;
@@ -79,38 +79,12 @@ public class Left extends LinearOpMode {
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
                 //PRELOAD
-
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(0, () -> targetPos = 2700)
                 .waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-28, 34, Math.toRadians(-25)))
-                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartLeft())
+                .lineToLinearHeading(new Pose2d(-28, 38, Math.toRadians(25)))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartRight())
                 .waitSeconds(.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 400)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
-
-
-                //CYCLE 1
-
-                .splineTo(new Vector2d(-20, 42), Math.toRadians(90))
-
-                .lineToLinearHeading(new Pose2d(-20,46, Math.toRadians(90)))// THIS LINE
-                //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
-
-
-                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
-
-
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
-                .waitSeconds(2)
-
-
-                .lineToLinearHeading(new Pose2d(-20, 42, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 0)
@@ -119,7 +93,22 @@ public class Left extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(2.5, () -> lift.retractFourBar())
                 .lineToLinearHeading(new Pose2d(-24, 36, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(-24, parkPos))
+                //CYCLE 1
+                /*
+                .splineTo(new Vector2d(-20, 44), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
+                .waitSeconds(2)
+                .lineToLinearHeading(new Pose2d(-20, 44, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
+                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
 
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 600)
+                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
 /*
                 //CYCLE 2
                 .splineTo(new Vector2d(-20, 48), Math.toRadians(90))
@@ -191,10 +180,10 @@ public class Left extends LinearOpMode {
 
 /*
         park = drive.trajectorySequenceBuilder(traj1.end())
-                .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
+                .addTemporalMarker(() -> lift.setLiftPos(0))
+                .forward(parkPos)
                 .build();
-*/
-
+        */
 
         drive.followTrajectorySequenceAsync(traj1);
         waitForStart();

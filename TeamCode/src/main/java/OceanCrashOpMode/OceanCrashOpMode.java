@@ -94,6 +94,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         jit = new ElapsedTime();
+        release();
 
         telemetry.addData("init ", "completed");
         telemetry.update();
