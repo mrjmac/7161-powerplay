@@ -11,6 +11,7 @@ import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
 import OceanCrashLinearOpMode.Lift;
 import OceanCrashLinearOpMode.Vision;
+import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
@@ -72,6 +73,9 @@ public class Left extends LinearOpMode {
             case 1:
                 parkPos += 21;
                 break;
+            case 2:
+                parkPos += 1;
+                break;
             case 3:
                 parkPos -= 21;
                 break;
@@ -88,37 +92,34 @@ public class Left extends LinearOpMode {
                 .waitSeconds(.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 400)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelOut())
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 400)
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelOut())
 
 
                 //CYCLE 1
 
                 .splineTo(new Vector2d(-20, 42), Math.toRadians(90))
-
-                .lineToLinearHeading(new Pose2d(-20,46, Math.toRadians(90)))// THIS LINE
+                .waitSeconds(1)
+                .lineToLinearHeading(new Pose2d(-20,48, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))// THIS LINE
                 //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
-
-
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
-
-
-                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 1500)
+                .UNSTABLE_addTemporalMarkerOffset(1.25, ()-> targetPos = 2700)
                 .waitSeconds(2)
-
-
-                .lineToLinearHeading(new Pose2d(-20, 42, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2500)
+                //.lineToLinearHeading(new Pose2d(-20, 42, Math.toRadians(90)))
+                //.UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2700)
+                .setReversed(true)
+                .splineTo(new Vector2d(-28, 36), Math.toRadians(-205))
+                .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
-                .splineTo(new Vector2d(-28, 36), Math.toRadians(25))
+                .waitSeconds(.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 0)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelIn())
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> lift.retractFourBar())
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 0)
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelIn())
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(.75, () -> lift.retractFourBar())
                 .lineToLinearHeading(new Pose2d(-24, 36, Math.toRadians(0)))
-                .lineToConstantHeading(new Vector2d(-24, parkPos))
+                .lineToConstantHeading(new Vector2d(-20, parkPos))
 
 /*
                 //CYCLE 2
@@ -203,6 +204,7 @@ public class Left extends LinearOpMode {
         {
             drive.update();
             lift.setLiftPos(targetPos);
+            if (!drive.isBusy() && lift.getLiftPos() < 100) break;
         }
     }
 }

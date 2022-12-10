@@ -79,13 +79,15 @@ public class Park extends LinearOpMode {
         }
 
         if (pos == 1)
-            parkMod = 24;
+            parkMod += 24;
         else if (pos == 3)
-            parkMod = -24;
+            parkMod -= 24;
+        else
+            parkMod++;
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-16, 36, Math.toRadians(0)))
-                .lineToLinearHeading(new Pose2d(-16, parkMod))
+                .lineToLinearHeading(new Pose2d(-46, 36, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-46, parkMod))
                 .build();
 
         drive.followTrajectorySequenceAsync(traj1);
@@ -94,6 +96,7 @@ public class Park extends LinearOpMode {
         while (!isStopRequested())
         {
             drive.update();
+            if (!drive.isBusy() && lift.getLiftPos() < 100) break;
         }
     }
 }

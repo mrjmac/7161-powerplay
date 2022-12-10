@@ -72,6 +72,9 @@ public class RightPreload extends LinearOpMode {
             case 1:
                 parkPos += 21;
                 break;
+            case 2:
+                parkPos += 1;
+                break;
             case 3:
                 parkPos -= 21;
                 break;
@@ -87,12 +90,12 @@ public class RightPreload extends LinearOpMode {
                 .waitSeconds(.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> targetPos = 0)
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.swivelIn())
-                .UNSTABLE_addTemporalMarkerOffset(1.75, () -> lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> lift.retractFourBar())
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 0)
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelIn())
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(.75, () -> lift.retractFourBar())
                 .lineToLinearHeading(new Pose2d(-24, 36, Math.toRadians(0)))
-                .lineToConstantHeading(new Vector2d(-24, parkPos))
+                .lineToConstantHeading(new Vector2d(-22, parkPos))
                 //CYCLE 1
                 /*
                 .splineTo(new Vector2d(-20, 44), Math.toRadians(90))
@@ -192,6 +195,7 @@ public class RightPreload extends LinearOpMode {
         {
             drive.update();
             lift.setLiftPos(targetPos);
+            if (!drive.isBusy() && lift.getLiftPos() < 100) break;
         }
     }
 }
