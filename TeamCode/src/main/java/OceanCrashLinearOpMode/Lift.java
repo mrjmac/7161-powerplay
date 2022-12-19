@@ -127,8 +127,8 @@ public class Lift {
     public void extendFourBar()
     {
         grab();
-        spinR.setPosition(0.7);
-        spinL.setPosition(0.3);
+        spinR.setPosition(0.6);
+        spinL.setPosition(0.4);
     }
 
     public void startFourBar()

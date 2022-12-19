@@ -11,6 +11,7 @@ import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
 import OceanCrashLinearOpMode.Lift;
 import OceanCrashLinearOpMode.Vision;
+import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
@@ -83,11 +84,11 @@ public class LeftPreload extends LinearOpMode {
         traj1 = drive.trajectorySequenceBuilder(startingPose)
                 //PRELOAD
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
-                .addTemporalMarker(0, () -> targetPos = 2700)
+                .addTemporalMarker(0, () -> targetPos = 2800)
                 .waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-28, 34, Math.toRadians(-25)))
+                .lineToLinearHeading(new Pose2d(-25.5, 33.5, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartLeft())
-                .waitSeconds(.5)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 0)

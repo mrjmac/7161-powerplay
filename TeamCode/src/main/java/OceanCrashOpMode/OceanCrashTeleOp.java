@@ -34,6 +34,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean swivelTrue = false;
 
     public static double wait = 200;
+    private boolean grabd1 = false;
 
 
     private enum LiftState {
@@ -49,7 +50,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 3;
     private int liftTargetPos = 0;
-    public static int low = 850, medium = 1590, high = 2300;
+    public static int low = 850, medium = 1590, high = 2600;
 
 
     public void loop() {
@@ -121,33 +122,40 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if ((gamepad2.a || gamepad1.a) && grabTime.milliseconds() > 200) {
+                if (gamepad2.a && grabTime.milliseconds() > 200) {
                     grabbed = true;
                     grabTime.reset();
                 }
                 else
                 {
-                    release();
                     grabbed = false;
+                }
+                if (gamepad1.a && !grabd1 && grabTime.milliseconds() > 200) {
+                    grab();
+                    grabd1 = true;
+                    grabTime.reset();
+                } else if (gamepad1.a && grabd1 && grabTime.milliseconds() > 200) {
+                    release();
+                    grabd1 = false;
+                    grabTime.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05)
                     setLiftPower(gamepad2.left_stick_y * 0.2);
                 if ((grabRed() || blue) || grabbed && !reset) {
-                    if (getLiftPos() > 50)
+                    if (getLiftPos() > 25)
                         liftReset(.6, 0);
                     else {
                         setLiftPower(0);
                         grab();
-                        grabFourBar();
                     }
                 } else {
                     if (grabTime.milliseconds() > 400) {
-                        if (getLiftPos() < 50)
-                            setLiftPos(50);
+                        if (getLiftPos() < 125)
+                            setLiftPos(125);
                         else {
                             setLiftPower(0);
-                            if (!reset)
-                                release();
+                            //if (!reset)
+                                //release();
                         }
                     }
                 }
@@ -347,5 +355,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             swivel.reset();
         }
         */
+        telemetry.addData("red:", colorS.red());
+        telemetry.addData("blue:", colorS.blue());
+        telemetry.addData("green:", colorS.green());
+        telemetry.update();
+
     }
 }

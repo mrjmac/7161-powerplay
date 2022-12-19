@@ -77,7 +77,7 @@ public class Left extends LinearOpMode {
                 parkPos += 1;
                 break;
             case 3:
-                parkPos -= 21;
+                parkPos -= 23;
                 break;
         }
 
@@ -87,12 +87,12 @@ public class Left extends LinearOpMode {
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(0, () -> targetPos = 2700)
                 .waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-28, 34, Math.toRadians(-25)))
+                .lineToLinearHeading(new Pose2d(-26, 37.25, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartLeft())
                 .waitSeconds(.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 400)
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 350)
                 .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelOut())
 
 
@@ -100,7 +100,7 @@ public class Left extends LinearOpMode {
 
                 .splineTo(new Vector2d(-20, 42), Math.toRadians(90))
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(-20,48, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))// THIS LINE
+                .lineToLinearHeading(new Pose2d(-20,49, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))// THIS LINE
                 //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1.25, ()-> targetPos = 2700)

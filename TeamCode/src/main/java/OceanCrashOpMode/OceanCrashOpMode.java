@@ -178,8 +178,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     public void extendFourBar()
     {
         grab();
-        spinL.setPosition(0.3);
-        spinR.setPosition(0.7);
+        spinL.setPosition(0.35);
+        spinR.setPosition(0.65);
     }
 
     public void retractFourBar()
@@ -262,7 +262,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public boolean grabRed()
     {
-        return colorS.red() > 80 && colorS.green() < 55 && colorS.blue() < 50;
+        return colorS.red() > 75 && colorS.green() < 55 && colorS.blue() < 50;
 
     }
 
