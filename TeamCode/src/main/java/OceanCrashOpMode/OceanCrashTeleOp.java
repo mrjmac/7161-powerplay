@@ -17,6 +17,7 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 @TeleOp(name = "TeleOp", group = "opMode")
 public class OceanCrashTeleOp extends OceanCrashOpMode{
 
+
     private final ElapsedTime fourbar = new ElapsedTime();
     private final ElapsedTime macroTime = new ElapsedTime();
     private final ElapsedTime grabTime = new ElapsedTime();
@@ -32,6 +33,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean blue = false;
     private boolean reset = false;
     private boolean swivelTrue = false;
+    private boolean bruh = true;
 
     public static double wait = 200;
     private boolean grabd1 = false;
@@ -55,7 +57,18 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     public void loop() {
 
+        //setIntake(1);
+        if (bruh)
+        {
+            macroTime.reset();
+            bruh = false;
+        }
+        telemetry.addData("time :: ", macroTime.milliseconds());
+        telemetry.addData("pos :: ", getLiftPos());
+        startLiftR();
         // DRIVE
+
+        /*
 
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
             drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_trigger);
@@ -122,59 +135,61 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if (gamepad2.a && grabTime.milliseconds() > 200) {
-                    grabbed = true;
-                    grabTime.reset();
-                }
-                else
-                {
-                    grabbed = false;
-                }
-                if (gamepad1.a && !grabd1 && grabTime.milliseconds() > 200) {
-                    grab();
-                    grabd1 = true;
-                    grabTime.reset();
-                } else if (gamepad1.a && grabd1 && grabTime.milliseconds() > 200) {
-                    release();
-                    grabd1 = false;
-                    grabTime.reset();
-                }
-                if (Math.abs(gamepad2.left_stick_y) > .05)
-                    setLiftPower(gamepad2.left_stick_y * 0.2);
-                if ((grabRed() || blue) || grabbed && !reset) {
-                    if (getLiftPos() > 25)
-                        liftReset(.6, 0);
-                    else {
-                        setLiftPower(0);
-                        grab();
-                    }
-                } else {
-                    if (grabTime.milliseconds() > 400) {
-                        if (getLiftPos() < 125)
-                            setLiftPos(125);
-                        else {
-                            setLiftPower(0);
-                            //if (!reset)
-                                //release();
-                        }
-                    }
-                }
-                if (gamepad2.y && grabTime.milliseconds() > 150) {
-                    if (!reset) {
-                        extendFourBar();
-                        reset = true;
-                    } else {
-                        retractFourBar();
-                        reset = false;
-                    }
-                    grabbed = false;
-                    grabTime.reset();
-                }
+                // change state to raise for driver 2
                 if (gamepad2.right_bumper && !active) {
                     grabbed = false;
                     active = true;
                     lift = LiftState.RAISE;
-
+                }
+                // manual grab for driver 1
+                if (gamepad1.a && grab.milliseconds() > 250 && !grabbed)
+                {
+                    grab.reset();
+                    grabbed = true;
+                    grab();
+                }
+                if (gamepad1.a && grab.milliseconds() > 250 && grabbed)
+                {
+                    grab.reset();
+                    grabbed = false;
+                    release();
+                }
+                // keep height at 0
+                if (getLiftPos() > 25)
+                {
+                    liftReset(.6, 0);
+                }
+                else
+                {
+                    setLiftPower(0);
+                }
+                // de jam for driver 2 with moving four bar back and forth
+                if (gamepad2.y && extended.milliseconds() > 250 && !extend)
+                {
+                    extended.reset();
+                    extend = true;
+                    extendFourBar();
+                }
+                if (gamepad2.y && extended.milliseconds() > 250 && extend)
+                {
+                    extended.reset();
+                    extend = false;
+                    retractFourBar();
+                }
+                // driver 2 manual movement for lift, automatic grab
+                if (grabRed() || blue || (gamepad2.a && !reset) || bypass)
+                {
+                    if (!bypass)
+                    {
+                        fourbar.reset();
+                        bypass = true;
+                    }
+                    grab();
+                    if (fourbar.milliseconds() > 300)
+                    {
+                        grabFourBar();
+                        bypass = false;
+                    }
                 }
                 break;
             case RAISE:
@@ -354,11 +369,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             }
             swivel.reset();
         }
-        */
+
         telemetry.addData("red:", colorS.red());
         telemetry.addData("blue:", colorS.blue());
         telemetry.addData("green:", colorS.green());
         telemetry.update();
+         */
 
     }
 }

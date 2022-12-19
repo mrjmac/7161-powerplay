@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Lift {
 
     private final DcMotor liftL; // [E3]
-    private final DcMotor liftR; // [C3]
+    public final DcMotor liftR; // [C3]
 
     private final LinearOpMode opMode;
 

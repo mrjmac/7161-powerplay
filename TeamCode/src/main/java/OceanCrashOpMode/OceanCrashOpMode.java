@@ -116,6 +116,11 @@ public abstract class OceanCrashOpMode extends OpMode {
         BR.setPower(0);
     }
 
+    public void startLiftR()
+    {
+        liftR.setPower(-1);
+    }
+
     public void drive(double x, double y, double turn, double trigger) {
 
         double FLP = y - x - turn;

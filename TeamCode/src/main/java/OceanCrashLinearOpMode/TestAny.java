@@ -192,13 +192,13 @@ public class TestAny extends LinearOpMode {
 */
 
 
-        drive.followTrajectorySequenceAsync(traj1);
+        ///drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
         while (!isStopRequested())
         {
-            drive.update();
-            lift.setLiftPos(targetPos);
+            lift.liftR.setPower(-1);
+            intake.startIntake(1);
         }
     }
 }
