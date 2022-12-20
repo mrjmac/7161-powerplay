@@ -74,8 +74,22 @@ public class TestAny extends LinearOpMode {
         }
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
+                .addTemporalMarker(0, ()->targetPos = 1000)
                 //PRELOAD
-
+                .waitSeconds(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> targetPos = 0)
+                .waitSeconds(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()->targetPos = 1000)
+                //PRELOAD
+                .waitSeconds(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> targetPos = 0)
+                .waitSeconds(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()->targetPos = 1000)
+                //PRELOAD
+                .waitSeconds(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> targetPos = 0)
+                .waitSeconds(5)
+/*
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(0, () -> targetPos = 2700)
                 .waitSeconds(.5)
@@ -185,6 +199,7 @@ public class TestAny extends LinearOpMode {
                 .build();
 
 
+
 /*
         park = drive.trajectorySequenceBuilder(traj1.end())
                 .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
@@ -192,13 +207,13 @@ public class TestAny extends LinearOpMode {
 */
 
 
-        ///drive.followTrajectorySequenceAsync(traj1);
+        drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
         while (!isStopRequested())
         {
-            lift.liftR.setPower(-1);
-            intake.startIntake(1);
+            drive.update();
+            lift.setLiftPos(targetPos);
         }
     }
 }
