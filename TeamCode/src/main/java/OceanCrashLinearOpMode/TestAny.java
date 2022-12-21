@@ -212,8 +212,12 @@ public class TestAny extends LinearOpMode {
 
         while (!isStopRequested())
         {
-            drive.update();
-            lift.setLiftPos(targetPos);
+            lift.grab();
+            lift.swivelIn();
+            sleep(1000);
+            //lift.release();
+            lift.swivelOut();
+            sleep(1000);
         }
     }
 }
