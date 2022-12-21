@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
@@ -31,6 +32,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     // Lift
     private DcMotor liftL; // [E3]
     private DcMotor liftR; // [C3]
+
+    private TouchSensor touch;
 
     private ElapsedTime jit;
 
@@ -82,6 +85,8 @@ public abstract class OceanCrashOpMode extends OpMode {
         // Lift
         liftL = hardwareMap.dcMotor.get("liftL"); // [E3]
         liftR = hardwareMap.dcMotor.get("liftR"); // [C3]
+
+        touch = hardwareMap.touchSensor.get("touch"); // [E0]
 
         liftL.setDirection(DcMotorSimple.Direction.FORWARD);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -183,8 +188,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     public void extendFourBar()
     {
         grab();
-        spinL.setPosition(0.35);
-        spinR.setPosition(0.65);
+        spinL.setPosition(0.55);
+        spinR.setPosition(0.45);
     }
 
     public void retractFourBar()
@@ -249,12 +254,24 @@ public abstract class OceanCrashOpMode extends OpMode {
         }
     }
 
+    public void setLiftPosLittle(double liftTargetPos)
+    {
+        if (getLiftPos() <= liftTargetPos)
+        {
+            setLiftPower(-.25);
+        }
+    }
+
     public void liftReset(double power, double liftTargetPos)
     {
 
-        double p = Math.abs(liftTargetPos - Math.abs(getLiftPos())) / 500.0;
+        double p = Math.abs(liftTargetPos - Math.abs(getLiftPos())) / 250.0;
 
-        if (getLiftPos() >= liftTargetPos)
+        if (getLiftPos() - 50 < 0)
+        {
+            setLiftPower(power * .5);
+        }
+        else if (getLiftPos() > liftTargetPos)
         {
             setLiftPower(Math.min(power, power * p));
         }
@@ -268,7 +285,16 @@ public abstract class OceanCrashOpMode extends OpMode {
     public boolean grabRed()
     {
         return colorS.red() > 75 && colorS.green() < 55 && colorS.blue() < 50;
+    }
 
+    public boolean isTouch()
+    {
+        return touch.isPressed();
+    }
+
+    public double getPower()
+    {
+        return (liftL.getPower() + liftR.getPower()) / 2.0;
     }
 
     public double getLiftL()

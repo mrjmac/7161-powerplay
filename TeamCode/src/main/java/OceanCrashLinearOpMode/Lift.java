@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @Config
 public class Lift {
@@ -14,7 +15,10 @@ public class Lift {
 
     private final LinearOpMode opMode;
 
+    private TouchSensor touch;
+
     public static double open = 0, close = .5;
+
     public Servo spinL; // [C0]
     public Servo spinR; // [E5]
     private final Servo grab; // [E4]
@@ -44,6 +48,9 @@ public class Lift {
         spinR = this.opMode.hardwareMap.servo.get("spinR"); // [E5]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
         swivel = this.opMode.hardwareMap.servo.get("swivel");
+
+        touch = this.opMode.hardwareMap.touchSensor.get("touch");
+
         resetEncoder();
         grab();
         swivelIn();
@@ -174,5 +181,10 @@ public class Lift {
     public void swivelStartRight()
     {
         swivel.setPosition(.83);
+    }
+
+    public boolean isTouch()
+    {
+        return touch.isPressed();
     }
 }

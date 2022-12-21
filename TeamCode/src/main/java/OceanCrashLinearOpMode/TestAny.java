@@ -207,18 +207,18 @@ public class TestAny extends LinearOpMode {
 */
 
 
-        drive.followTrajectorySequenceAsync(traj1);
+        //drive.followTrajectorySequenceAsync(traj1);
         waitForStart();
 
         while (!isStopRequested())
         {
-            lift.grab();
-            sleep(500);
-            lift.extendFourBar();
-            sleep(1000);
-            lift.swivelOut();
-            sleep(4000);
-            break;
+            telemetry.addData("lift", lift.getLiftPos());
+            telemetry.update();
+
+            if (lift.isTouch())
+            {
+                lift.resetEncoder();
+            }
         }
     }
 }

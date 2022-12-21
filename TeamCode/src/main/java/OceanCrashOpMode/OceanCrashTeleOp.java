@@ -33,7 +33,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean blue = false;
     private boolean reset = false;
     private boolean swivelTrue = false;
-    private boolean bruh = true;
+    private boolean doNotReset = false;
+    private boolean toggle2 = false;
 
     public static double wait = 200;
     private boolean grabd1 = false;
@@ -52,29 +53,21 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 3;
     private int liftTargetPos = 0;
-    public static int low = 850, medium = 1590, high = 2600;
+    public static int low = 100, medium = 325, high = 550;
 
 
     public void loop() {
 
-        //setIntake(1);
-        if (bruh)
-        {
-            macroTime.reset();
-            bruh = false;
-        }
-        telemetry.addData("time :: ", macroTime.milliseconds());
-        telemetry.addData("pos :: ", getLiftPos());
-        startLiftR();
         // DRIVE
 
-        /*
 
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
             drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_trigger);
         } else {
             stopMotors();
         }
+
+
 
 
 
@@ -89,18 +82,21 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             setIntake(0);
 
         telemetry.addData("Lift Pos :: ", getLiftPos());
-        telemetry.addData("Stick :: ", gamepad2.left_stick_y);
-        telemetry.addData("Encoder :: ", getMotorEncoders());
-        telemetry.addData("Red :: ", colorS.red());
-        telemetry.addData("Green :: ", colorS.green());
-        telemetry.addData("Blue :: ", colorS.blue());
+        telemetry.addData("lift pow :: ", getPower());
+        telemetry.addData("should i not be reseting :: ", doNotReset);
+        telemetry.addData("bypass :: ", bypass);
+        //telemetry.addData("Stick :: ", gamepad2.left_stick_y);
+        //telemetry.addData("Encoder :: ", getMotorEncoders());
+        //telemetry.addData("Red :: ", colorS.red());
+        //telemetry.addData("Green :: ", colorS.green());
+        //telemetry.addData("Blue :: ", colorS.blue());
         telemetry.addData("red? :: ", grabRed());
         telemetry.addData("blue? :: ", grabBlue());
         telemetry.addData("liftState :: ", liftState);
         telemetry.addData("jit :: ", jHeight);
         telemetry.addData("swivel :: ", swivelTrue);
         telemetry.addData("grab :: ", grabbed);
-        telemetry.addData("extended time :: ", extended.milliseconds());
+        //telemetry.addData("extended time :: ", extended.milliseconds());
         telemetry.update();
 
 
@@ -120,7 +116,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (jHeight) {
             case 0:
-                liftTargetPos = 100;
+                liftTargetPos = 0;
                 break;
             case 1:
                 liftTargetPos = low;
@@ -138,7 +134,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // change state to raise for driver 2
                 if (gamepad2.right_bumper && !active) {
                     grabbed = false;
+                    doNotReset = false;
                     active = true;
+                    bypass = false;
+                    blue = false;
                     lift = LiftState.RAISE;
                 }
                 // manual grab for driver 1
@@ -154,14 +153,17 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = false;
                     release();
                 }
-                // keep height at 0
-                if (getLiftPos() > 25)
+                // keep height at 75
+                if (!doNotReset)
                 {
-                    liftReset(.6, 0);
-                }
-                else
-                {
-                    setLiftPower(0);
+                    if (getLiftPos() < 25)
+                    {
+                        setLiftPosLittle(25);
+                    }
+                    else
+                    {
+                        setLiftPower(-0.0005);
+                    }
                 }
                 // de jam for driver 2 with moving four bar back and forth
                 if (gamepad2.y && extended.milliseconds() > 250 && !extend)
@@ -179,16 +181,25 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // driver 2 manual movement for lift, automatic grab
                 if (grabRed() || blue || (gamepad2.a && !reset) || bypass)
                 {
-                    if (!bypass)
+                    doNotReset = true;
+                    if (getLiftPos() > 25)
                     {
-                        fourbar.reset();
-                        bypass = true;
+                        liftReset(.6, 25);
                     }
-                    grab();
-                    if (fourbar.milliseconds() > 300)
+                    else
                     {
-                        grabFourBar();
-                        bypass = false;
+                        setLiftPower(0);
+                        if (!bypass)
+                        {
+                            fourbar.reset();
+                            bypass = true;
+                        }
+                        grab();
+                        if (fourbar.milliseconds() > 300)
+                        {
+                            grabFourBar();
+                            bypass = false;
+                        }
                     }
                 }
                 break;
@@ -230,7 +241,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     swivel.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
-                    setLiftPower(gamepad2.left_stick_y * 0.6);
+                    setLiftPower(gamepad2.left_stick_y * 0.2);
                 } else {
                     if (jHeight == 0)
                         setLiftPower(0);
@@ -253,8 +264,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     retractFourBar();
                 }
                 if ((macroTime.milliseconds() > 500 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
-                    if (getLiftPos() > 50) {
-                        liftReset(.6, 50);
+                    if (getLiftPos() > 25) {
+                        liftReset(.4, 25);
                     } else {
                         setLiftPower(0);
                         active = false;
@@ -283,6 +294,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         if (grabBlue())
         {
             blue = true;
+        }
+
+        if (isTouch())
+        {
+            resetLiftEncoder();
         }
 
         if (Math.abs(getLiftL() - getLiftR()) > 125)
@@ -369,12 +385,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             }
             swivel.reset();
         }
-
-        telemetry.addData("red:", colorS.red());
-        telemetry.addData("blue:", colorS.blue());
-        telemetry.addData("green:", colorS.green());
-        telemetry.update();
          */
+
 
     }
 }
