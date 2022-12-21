@@ -46,6 +46,7 @@ public class Lift {
         swivel = this.opMode.hardwareMap.servo.get("swivel");
         resetEncoder();
         grab();
+        swivelIn();
     }
 
     public void setLiftPower(double power)

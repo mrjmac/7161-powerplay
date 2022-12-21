@@ -213,11 +213,12 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested())
         {
             lift.grab();
-            lift.swivelIn();
+            sleep(500);
+            lift.extendFourBar();
             sleep(1000);
-            //lift.release();
             lift.swivelOut();
-            sleep(1000);
+            sleep(4000);
+            break;
         }
     }
 }
