@@ -139,6 +139,12 @@ public class Lift {
         spinL.setPosition(0.5);
     }
 
+    public void trueExtendFourBar()
+    {
+        spinR.setPosition(0.6);
+        spinL.setPosition(0.4);
+    }
+
     public void startFourBar()
     {
         grab();
@@ -160,7 +166,7 @@ public class Lift {
 
     public void release()
     {
-        grab.setPosition(.35);  //tune this
+        grab.setPosition(.38);  //tune this
     }
 
     public void swivelIn()
@@ -175,7 +181,7 @@ public class Lift {
 
     public void swivelStartLeft()
     {
-        swivel.setPosition(.51);
+        swivel.setPosition(.43);
     }
 
     public void swivelStartRight()

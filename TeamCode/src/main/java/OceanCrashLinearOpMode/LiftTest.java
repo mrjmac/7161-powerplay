@@ -73,12 +73,7 @@ public class LiftTest extends LinearOpMode {
 
         while (!isStopRequested())
         {
-            lift.release();
-            sleep(1000);
-            lift.grab();
-            sleep(1000);
-
-
+            lift.extendFourBar();
         }
     }
 }

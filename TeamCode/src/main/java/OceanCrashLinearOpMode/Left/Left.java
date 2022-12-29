@@ -87,55 +87,48 @@ public class Left extends LinearOpMode {
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(0, () -> targetPos = 925)
                 .waitSeconds(.5)
-                .lineToLinearHeading(new Pose2d(-26, 37.25, Math.toRadians(-25)))//, SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.swivelStartLeft())
-                .waitSeconds(.5)
+                .lineToLinearHeading(new Pose2d(-24.5, 32.93, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .UNSTABLE_addTemporalMarkerOffset(.25, ()->lift.swivelStartLeft())
+                .waitSeconds(.65)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(.5) // 1
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> targetPos = 80)
+                .UNSTABLE_addTemporalMarkerOffset(1.45, () -> targetPos = 80)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.swivelOut())
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.trueExtendFourBar())
 
 
                 //CYCLE 1
 
-                .lineToLinearHeading(new Pose2d(-22, 49, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
+                .lineToLinearHeading(new Pose2d(-20.15, 48.8, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(.5) // 1
                 .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 925)
                 .waitSeconds(1.25) // 2
-                .lineToLinearHeading(new Pose2d(-24, 37.25, Math.toRadians(-25)))//, SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
-                .waitSeconds(.5)
+                .lineToLinearHeading(new Pose2d(-25.3, 32.15, Math.toRadians(-25)))//, SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.extendFourBar())
+                .waitSeconds(.65)
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
                 .waitSeconds(.5) // 1
+                .UNSTABLE_addTemporalMarkerOffset(1.45, () -> targetPos = 80)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.swivelOut())
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.trueExtendFourBar())
 
 
-/*
+
+
                 //CYCLE 2
-                .lineToLinearHeading(new Pose2d(-18, 48, Math.toRadians(90)))
-                .waitSeconds(.5) //1
-                //.lineToLinearHeading(new Pose2d(-19,49, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))// THIS LINE
-                //.lineToLinearHeading(new Pose2d(-20, 46, Math.toRadians(90))) this was commented
-                //.UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
-                //.UNSTABLE_addTemporalMarkerOffset(1.25, ()-> targetPos = 2700)
-                .waitSeconds(.5) //2
-                //.lineToLinearHeading(new Pose2d(-20, 42, Math.toRadians(90)))
-                //.UNSTABLE_addTemporalMarkerOffset(.2, ()-> targetPos = 2700)
-                //.setReversed(true)
-                .lineToLinearHeading(new Pose2d(-21, 36.25, Math.toRadians(-25)))
-                //.splineTo(new Vector2d(-21.5, 36.25), Math.toRadians(-205), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                //.setReversed(false)
-                //.UNSTABLE_addTemporalMarkerOffset(.2, ()-> lift.swivelStartLeft())
-                .waitSeconds(.5)
-                //.UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
-                .waitSeconds(.5) //1
-                /*.UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 0)
-                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelIn())
-                .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.grab())
-                .UNSTABLE_addTemporalMarkerOffset(.75, () -> lift.retractFourBar())
-
-                //.lineToLinearHeading(new Pose2d(-18, 35, Math.toRadians(0)))
-                //.lineToConstantHeading(new Vector2d(-18, parkPos))
+                .lineToLinearHeading(new Pose2d(-19, 48, Math.toRadians(90)), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(.5) // 1
+                .UNSTABLE_addTemporalMarkerOffset(.5, ()-> lift.grab())
+                .UNSTABLE_addTemporalMarkerOffset(1, ()-> targetPos = 925)
+                .waitSeconds(1.25) // 2
+                .lineToLinearHeading(new Pose2d(-25.3, 32.15, Math.toRadians(-25)))//, SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> lift.extendFourBar())
+                .waitSeconds(.65)
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.release())
+                .waitSeconds(.5) // 1
+                /*
 
                 //CYCLE 3
                 .lineToLinearHeading(new Pose2d(-15, 47, Math.toRadians(90)))
@@ -214,12 +207,14 @@ public class Left extends LinearOpMode {
                  */
 
                 //PARK
+
                 .UNSTABLE_addTemporalMarkerOffset(.5, () -> targetPos = 0)
                 .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.swivelIn())
                 .UNSTABLE_addTemporalMarkerOffset(.5, () -> lift.grab())
                 .UNSTABLE_addTemporalMarkerOffset(.75, () -> lift.retractFourBar())
                 .lineToLinearHeading(new Pose2d(-16, 35, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(-16, parkPos))
+
 
                 .build();
 

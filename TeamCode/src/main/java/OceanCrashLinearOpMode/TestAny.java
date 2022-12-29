@@ -215,10 +215,7 @@ public class TestAny extends LinearOpMode {
             telemetry.addData("lift", lift.getLiftPos());
             telemetry.update();
 
-            if (lift.isTouch())
-            {
-                lift.resetEncoder();
-            }
+            lift.setLiftPos(1200);
         }
     }
 }
