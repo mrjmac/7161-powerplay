@@ -156,9 +156,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // keep height at 75
                 if (!doNotReset)
                 {
-                    if (getLiftPos() < 25)
+                    if (getLiftPos() < 5)
                     {
-                        setLiftPosLittle(25);
+                        setLiftPosLittle(0);
                     }
                     else
                     {
