@@ -38,6 +38,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     public static double wait = 200;
     private boolean grabd1 = false;
+    private boolean mG = false;
 
 
     private enum LiftState {
@@ -131,6 +132,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
+                if (gamepad2.a)
+                    mG = true;
+                swivelIn();
                 // change state to raise for driver 2
                 if (gamepad2.right_bumper && !active) {
                     grabbed = false;
@@ -138,6 +142,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     active = true;
                     bypass = false;
                     blue = false;
+                    mG = false;
                     lift = LiftState.RAISE;
                 }
                 // manual grab for driver 1
@@ -153,12 +158,16 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = false;
                     release();
                 }
-                // keep height at 0
+                // keep height at 35
                 if (!doNotReset)
                 {
-                    if (getLiftPos() > 5)
+                    if (getLiftPos() > 60)
                     {
-                        liftReset(.6, 0);
+                        liftReset(.6, 60);
+                    }
+                    else if(getLiftPos() < 30)
+                    {
+                        setLiftPosLittle(50);
                     }
                     else
                     {
@@ -179,12 +188,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     retractFourBar();
                 }
                 // driver 2 manual movement for lift, automatic grab
-                if (grabRed() || blue || (gamepad2.a && !reset) || bypass)
+                if (grabRed() || blue || (mG) || bypass)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 5)
+                    if (getLiftPos() > 20)
                     {
-                        liftReset(.6, 0);
+                        liftReset(.6, 5);
                     }
                     else
                     {
@@ -204,6 +213,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 break;
             case RAISE:
+                swivelIn();
                 if (getLiftPos() < liftTargetPos) {
                     setLiftPos(liftTargetPos);
                 } else {
@@ -259,6 +269,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
+                swivelIn();
                 if (grabTime.milliseconds() > 500) {
                     grab();
                     retractFourBar();

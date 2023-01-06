@@ -16,7 +16,7 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(name = "LeftPreload", group = "Left")
+@Autonomous(name = "rightPreload", group = "right")
 public class RightPreload extends LinearOpMode {
 
     private SampleMecanumDrive drive;

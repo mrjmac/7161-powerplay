@@ -4,9 +4,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import OceanCrashLinearOpMode.Lift;
+
 
 @Config
-@TeleOp(name = "TeleOp", group = "opMode")
+@TeleOp(name = "judging", group = "opMode")
 public class judgingTeleOp extends OceanCrashOpMode{
 
 
@@ -36,9 +38,9 @@ public class judgingTeleOp extends OceanCrashOpMode{
                 // keep height at 75
                 if (!doNotReset)
                 {
-                    if (getLiftPos() < 75)
+                    if (getLiftPos() < 65)
                     {
-                        setLiftPosLittle(75);
+                        setLiftPosLittle(80);
                     }
                     else
                     {
@@ -62,19 +64,20 @@ public class judgingTeleOp extends OceanCrashOpMode{
                             bypass = true;
                         }
                         grab();
-                        if (fourbar.milliseconds() > 300)
+                        if (fourbar.milliseconds() > 500)
                         {
                             extendFourBar();
                             bypass = false;
                             drop.reset();
                             liftState = "PLACE";
-
+                            lift = LiftState.PLACE;
                         }
                     }
                 }
                 break;
             case PLACE:
-                if (drop.milliseconds() > 1000 && !goAhead)
+                setLiftPower(0);
+                if (drop.milliseconds() > 500 && !goAhead)
                 {
                     release();
                     grabbed = false;
@@ -83,18 +86,22 @@ public class judgingTeleOp extends OceanCrashOpMode{
                 }
                 if (drop.milliseconds() > 1500 && goAhead)
                 {
+                    drop.reset();
                     grab();
                     grabbed = true;
-                    drop.reset();
                     liftState = "RETRACT";
+                    lift = LiftState.RETRACT;
                 }
                 break;
             case RETRACT:
+                setLiftPower(0);
                 if (drop.milliseconds() > 500)
                 {
                     retractFourBar();
                     extend = false;
+                    doNotReset = false;
                     liftState = "IDLE";
+                    lift = LiftState.IDLE;
                 }
         }
 
@@ -102,11 +109,19 @@ public class judgingTeleOp extends OceanCrashOpMode{
         {
             blue = true;
         }
+        else
+        {
+            blue = false;
+        }
 
         if (isTouch())
         {
             resetLiftEncoder();
         }
+
+        telemetry.addData("STATE :: ", liftState);
+        telemetry.addData("DROP :: ", drop.milliseconds());
+        telemetry.addData("GOAHEAD :: ", goAhead);
 
     }
 }
