@@ -153,12 +153,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grabbed = false;
                     release();
                 }
-                // keep height at 75
+                // keep height at 0
                 if (!doNotReset)
                 {
-                    if (getLiftPos() < 5)
+                    if (getLiftPos() > 5)
                     {
-                        setLiftPosLittle(0);
+                        liftReset(.6, 0);
                     }
                     else
                     {
@@ -182,9 +182,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (grabRed() || blue || (gamepad2.a && !reset) || bypass)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 25)
+                    if (getLiftPos() > 5)
                     {
-                        liftReset(.6, 25);
+                        liftReset(.6, 0);
                     }
                     else
                     {
