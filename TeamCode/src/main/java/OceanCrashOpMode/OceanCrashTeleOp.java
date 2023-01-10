@@ -25,13 +25,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private final ElapsedTime grab = new ElapsedTime();
     private final ElapsedTime extended = new ElapsedTime();
     private final ElapsedTime swivel = new ElapsedTime();
+    private final ElapsedTime reset = new ElapsedTime();
 
     private boolean grabbed = false;
     private boolean bypass = false;
     private boolean extend = false;
     private boolean active = false;
     private boolean blue = false;
-    private boolean reset = false;
+    private boolean resetbo = false;
     private boolean swivelTrue = false;
     private boolean doNotReset = false;
     private boolean toggle2 = false;
@@ -52,25 +53,19 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private LiftState lift = LiftState.IDLE;
     private String liftState = "IDLE";
 
-    private int jHeight = 3;
+    private int jHeight = 1;
     private int liftTargetPos = 0;
-    public static int low = 100, medium = 325, high = 550;
+    public static int low = 65, medium = 300, high = 600;
 
 
     public void loop() {
 
         // DRIVE
-
-
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
             drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_trigger);
         } else {
             stopMotors();
         }
-
-
-
-
 
         // INTAKE
         if (gamepad1.right_bumper && gamepad1.left_bumper)
@@ -104,20 +99,30 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         // LIFT
 
-
-        if (gamepad1.dpad_up && jHeight < 3 && jHeightTime.milliseconds() > 125) {
-            jHeight++;
+        //dpad up high, dpad down low, dpad left ground, dpad right mid
+        if (gamepad2.dpad_up && jHeightTime.milliseconds() > 125) {
+            jHeight = 3;
             jHeightTime.reset();
         }
 
-        if (gamepad1.dpad_down && jHeight > 0 && jHeightTime.milliseconds() > 125) {
-            jHeight--;
+        if (gamepad2.dpad_down && jHeightTime.milliseconds() > 125) {
+            jHeight = 1;
+            jHeightTime.reset();
+        }
+
+        if (gamepad2.dpad_right && jHeightTime.milliseconds() > 125) {
+            jHeight = 2;
+            jHeightTime.reset();
+        }
+
+        if (gamepad2.dpad_left && jHeightTime.milliseconds() > 125) {
+            jHeight = 0;
             jHeightTime.reset();
         }
 
         switch (jHeight) {
             case 0:
-                liftTargetPos = 0;
+                liftTargetPos = 10;
                 break;
             case 1:
                 liftTargetPos = low;
@@ -157,6 +162,17 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grab.reset();
                     grabbed = false;
                     release();
+                }
+                //manual reset for driver 2
+                if (gamepad2.x && reset.milliseconds() > 250)
+                {
+                    retractFourBar();
+                    release();
+                    grabbed = false;
+                    doNotReset = false;
+                    bypass = false;
+                    blue = false;
+                    mG = false;
                 }
                 // keep height at 35
                 if (!doNotReset)
@@ -218,7 +234,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     setLiftPos(liftTargetPos);
                 } else {
                     blue = false;
-                    extendFourBar();
+                    if (jHeight != 0)
+                    {
+                        extendFourBar();
+                    }
+                    else
+                    {
+                        trueExtendFourBar();
+                    }
                     extend = true;
                     lift = LiftState.PLACE;
                 }
@@ -251,7 +274,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     swivel.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
-                    setLiftPower(gamepad2.left_stick_y * 0.2);
+                    setLiftPower(gamepad2.left_stick_y * 0.1);
                 } else {
                     if (jHeight == 0)
                         setLiftPower(0);

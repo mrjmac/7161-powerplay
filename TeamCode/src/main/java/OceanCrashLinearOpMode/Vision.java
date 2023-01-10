@@ -26,8 +26,11 @@ public class Vision extends LinearOpMode{
     private final int park = 3;
     private final int highY = 400;
     private final int lowY = 270;
-    private final int highX = 380;
-    private final int lowX = 330;
+    private final int highXLeft = 300;
+    private final int lowXLeft = 200;
+
+    private final int highXRight = 500;
+    private final int lowXRight = 400;
 
     public Vision(LinearOpMode opMode){
         this.opMode = opMode;
@@ -58,12 +61,12 @@ public class Vision extends LinearOpMode{
         return bm;
     }
 
-    public int getPark() throws InterruptedException {
+    public int getParkLeft() throws InterruptedException {
         Bitmap rgbImage = getImage();
         int r = 0, g = 0, b = 0;
 
         for (int y = lowY; y < highY; y++) {
-            for (int x = lowX; x < highX; x++) {
+            for (int x = lowXLeft; x < highXLeft; x++) {
                 int pixel = rgbImage.getPixel(x, y);
                 r += red(pixel);
                 b += blue(pixel);
@@ -74,11 +77,35 @@ public class Vision extends LinearOpMode{
         if (r > g && r > b) {
             return 1;
         }
-        else if (g > r && g > b) {
-            return 2;
+        else if (b > r && b > g) {
+            return 3;
         }
         else {
+            return 2;
+        }
+    }
+
+    public int getParkRight() throws InterruptedException {
+        Bitmap rgbImage = getImage();
+        int r = 0, g = 0, b = 0;
+
+        for (int y = lowY; y < highY; y++) {
+            for (int x = lowXRight; x < highXRight; x++) {
+                int pixel = rgbImage.getPixel(x, y);
+                r += red(pixel);
+                b += blue(pixel);
+                g += green(pixel);
+            }
+        }
+
+        if (r > g && r > b) {
+            return 1;
+        }
+        else if (b > r && b > g) {
             return 3;
+        }
+        else {
+            return 2;
         }
     }
 }

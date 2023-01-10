@@ -64,7 +64,7 @@ public class Right extends LinearOpMode {
         drive.setPoseEstimate(startingPose);
 
         while(!isStarted()){
-            pos = vision.getPark();
+            pos = vision.getParkRight();
             telemetry.addData("park: ", pos);
             telemetry.update();
         }

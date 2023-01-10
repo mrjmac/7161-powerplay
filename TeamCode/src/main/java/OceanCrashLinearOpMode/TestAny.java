@@ -59,7 +59,7 @@ public class TestAny extends LinearOpMode {
         drive.setPoseEstimate(startingPose);
 
         while(!isStarted()){
-            pos = vision.getPark();
+            pos = vision.getParkLeft();
             telemetry.addData("park: ", pos);
             telemetry.update();
         }
@@ -212,10 +212,8 @@ public class TestAny extends LinearOpMode {
 
         while (!isStopRequested())
         {
-            telemetry.addData("lift", lift.getLiftPos());
-            telemetry.update();
-
-            lift.setLiftPos(1200);
+            lift.grab();
+            sleep(1000);
         }
     }
 }

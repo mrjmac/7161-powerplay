@@ -46,7 +46,7 @@ public class LeftPreload extends LinearOpMode {
         drive.setPoseEstimate(startingPose);
 
         while(!isStarted()){
-            pos = vision.getPark();
+            pos = vision.getParkLeft();
             telemetry.addData("park: ", pos);
             telemetry.update();
         }

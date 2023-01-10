@@ -192,6 +192,12 @@ public abstract class OceanCrashOpMode extends OpMode {
         spinR.setPosition(0.45);
     }
 
+    public void trueExtendFourBar()
+    {
+        spinR.setPosition(0.65);
+        spinL.setPosition(0.35);
+    }
+
     public void retractFourBar()
     {
         swivelIn();
@@ -208,7 +214,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.08);
+        grab.setPosition(0);
     }
 
     public void release()
@@ -247,7 +253,6 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void setLiftPos(double liftTargetPos)
     {
-
         if (getLiftPos() <= liftTargetPos - 50)
         {
             setLiftPower(-.9);

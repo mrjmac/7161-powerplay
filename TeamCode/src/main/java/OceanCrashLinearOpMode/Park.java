@@ -72,7 +72,7 @@ public class Park extends LinearOpMode {
 
 
         while(!isStarted()){
-            pos = vision.getPark();
+            pos = vision.getParkLeft();
 
             telemetry.addData("park: ", pos);
             telemetry.update();

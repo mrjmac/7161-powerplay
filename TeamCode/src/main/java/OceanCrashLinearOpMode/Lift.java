@@ -168,7 +168,7 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.1);
+        grab.setPosition(0);
     }
 
     public void release()
