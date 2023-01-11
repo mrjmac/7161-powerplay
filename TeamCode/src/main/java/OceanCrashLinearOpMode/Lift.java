@@ -54,6 +54,7 @@ public class Lift {
         resetEncoder();
         grab();
         swivelIn();
+        //swivelOut();
     }
 
     public void setLiftPower(double power)
@@ -91,7 +92,7 @@ public class Lift {
             if (liftTargetPos < getLiftPos())
                 setLiftPower(.7);
             else
-                setLiftPower(-1);
+                setLiftPower(-.7);
 
 
         } else if (liftTargetPos == 0)
@@ -168,12 +169,12 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0);
+        grab.setPosition(0.05);
     }
 
     public void release()
     {
-        grab.setPosition(.38);  //tune this
+        grab.setPosition(.43);  //tune this
     }
 
     public void swivelIn()

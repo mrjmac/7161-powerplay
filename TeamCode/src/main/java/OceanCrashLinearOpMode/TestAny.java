@@ -201,7 +201,7 @@ public class TestAny extends LinearOpMode {
 
 
 /*
-        park = drive.trajectorySequenceBuilder(traj1.end())
+        park = drive.trajectorySequenceBuilder(traj1.end(x  ))
                 .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
                 .build();
 */
@@ -213,6 +213,7 @@ public class TestAny extends LinearOpMode {
         while (!isStopRequested())
         {
             lift.grab();
+            //lift.grab();
             sleep(1000);
         }
     }
