@@ -81,6 +81,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         telemetry.addData("lift pow :: ", getPower());
         telemetry.addData("should i not be reseting :: ", doNotReset);
         telemetry.addData("bypass :: ", bypass);
+        telemetry.addData("voltage :: ", getVoltage());
         //telemetry.addData("Stick :: ", gamepad2.left_stick_y);
         //telemetry.addData("Encoder :: ", getMotorEncoders());
         //telemetry.addData("Red :: ", colorS.red());

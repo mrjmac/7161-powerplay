@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
@@ -36,6 +37,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     private TouchSensor touch;
 
     private ElapsedTime jit;
+
+    private VoltageSensor voltage;
 
 
     public void init() {
@@ -183,6 +186,16 @@ public abstract class OceanCrashOpMode extends OpMode {
     {
         intakeL.setPower(p);
         intakeR.setPower(-p);
+    }
+
+    public double getVoltage()
+    {
+        double result = Double.POSITIVE_INFINITY;
+        double curr = voltage.getVoltage();
+        if (curr > 0) {
+            result = Math.min(result, curr);
+        }
+        return result;
     }
 
     public void extendFourBar()
