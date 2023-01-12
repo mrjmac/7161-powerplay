@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @Config
 public class Lift {
@@ -17,11 +18,13 @@ public class Lift {
 
     private TouchSensor touch;
 
-    public static double open = 0, close = .5;
+    private double power = .7;
+
+    private boolean LBat = true;
 
     public Servo spinL; // [C0]
     public Servo spinR; // [E5]
-    private final Servo grab; // [E4]
+    private Servo grab; // [E4]
     private Servo swivel;
 
 
@@ -50,6 +53,16 @@ public class Lift {
         swivel = this.opMode.hardwareMap.servo.get("swivel");
 
         touch = this.opMode.hardwareMap.touchSensor.get("touch");
+
+        if (getVoltage() > 14.5)
+        {
+            power = .4;
+
+        }
+        else
+        {
+            power = .7;
+        }
 
         resetEncoder();
         grab();
@@ -90,9 +103,9 @@ public class Lift {
             this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
             this.opMode.telemetry.update();
             if (liftTargetPos < getLiftPos())
-                setLiftPower(.7);
+                setLiftPower(power);
             else
-                setLiftPower(-.7);
+                setLiftPower(-power);
 
 
         } else if (liftTargetPos == 0)
@@ -120,6 +133,18 @@ public class Lift {
         else
             setLiftPower(STALL_POWER);
 
+    }
+
+    public double getVoltage()
+    {
+        double result = Double.POSITIVE_INFINITY;
+        for (VoltageSensor sensor : this.opMode.hardwareMap.voltageSensor) {
+            double voltage = sensor.getVoltage();
+            if (voltage > 0) {
+                result = Math.min(result, voltage);
+            }
+        }
+        return result;
     }
 
     public void resetLift(double p, int targetPos)
@@ -169,7 +194,7 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.05);
+        grab.setPosition(0.1);
     }
 
     public void release()

@@ -123,7 +123,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (jHeight) {
             case 0:
-                liftTargetPos = 10;
+                liftTargetPos = 30;
                 break;
             case 1:
                 liftTargetPos = low;
@@ -167,8 +167,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 //manual reset for driver 2
                 if (gamepad2.x && reset.milliseconds() > 250)
                 {
-                    retractFourBar();
                     release();
+                    retractFourBar();
                     grabbed = false;
                     doNotReset = false;
                     bypass = false;
@@ -275,7 +275,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     swivel.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
-                    setLiftPower(gamepad2.left_stick_y * 0.1);
+                    setLiftPower(gamepad2.left_stick_y * 0.15);
                 } else {
                     if (jHeight == 0)
                         setLiftPower(0);
@@ -285,6 +285,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(-0.0005);
                 }
                 if (gamepad2.a && grabTime.milliseconds() > 200) {
+                    setLiftPower(0);
                     release(); //need to test timing, will prob have to modify delay using macroTime
                     grabTime.reset();
                     lift = LiftState.LOWER;

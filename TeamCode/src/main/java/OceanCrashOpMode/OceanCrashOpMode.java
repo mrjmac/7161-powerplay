@@ -38,7 +38,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     private ElapsedTime jit;
 
-    private VoltageSensor voltage;
+    //private VoltageSensor voltage;
 
 
     public void init() {
@@ -101,6 +101,8 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //voltage = hardwareMap.voltageSensor.get("Voltage");
+
         jit = new ElapsedTime();
         release();
 
@@ -151,8 +153,17 @@ public abstract class OceanCrashOpMode extends OpMode {
             BLP /= max;
             BRP /= max;
         }
-
-        startMotors(FLP * speedControl, FRP * speedControl, BLP * speedControl, BRP * speedControl);
+        double voltageC = 1;
+        if (turn > 0)
+            if (getVoltage() > 14)
+                voltageC = .8;
+            else if (getVoltage() > 13.8)
+                voltageC = .85;
+            else if (getVoltage() > 13.6)
+                voltageC = .9;
+            else if (getVoltage() > 13.4)
+                voltageC = .95;
+        startMotors(FLP * speedControl * voltageC, FRP * speedControl * voltageC, BLP * speedControl * voltageC, BRP * speedControl * voltageC);
 
         telemetry.addData("FLP: ", FLP * speedControl);
         telemetry.addData("FRP: ", FRP * speedControl);
@@ -191,9 +202,11 @@ public abstract class OceanCrashOpMode extends OpMode {
     public double getVoltage()
     {
         double result = Double.POSITIVE_INFINITY;
-        double curr = voltage.getVoltage();
-        if (curr > 0) {
-            result = Math.min(result, curr);
+        for (VoltageSensor sensor : hardwareMap.voltageSensor) {
+            double voltage = sensor.getVoltage();
+            if (voltage > 0) {
+                result = Math.min(result, voltage);
+            }
         }
         return result;
     }
@@ -227,12 +240,12 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.05);
+        grab.setPosition(0.1);
     }
 
     public void release()
     {
-        grab.setPosition(.4);  //tune this
+        grab.setPosition(.38);  //tune this
     }
 
     public void swivelIn()
