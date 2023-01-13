@@ -56,12 +56,12 @@ public class Lift {
 
         if (getVoltage() > 14.5)
         {
-            power = .4;
+            power = .3;
 
         }
         else
         {
-            power = .7;
+            power = .6;
         }
 
         resetEncoder();
@@ -212,9 +212,14 @@ public class Lift {
         swivel.setPosition(.67);
     }
 
+    public void swivelDeposit()
+    {
+        swivel.setPosition(.74);
+    }
+
     public void swivelStartLeft()
     {
-        swivel.setPosition(.43);
+        swivel.setPosition(.36);
     }
 
     public void swivelStartRight()
