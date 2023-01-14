@@ -54,14 +54,26 @@ public class Lift {
 
         touch = this.opMode.hardwareMap.touchSensor.get("touch");
 
-        if (getVoltage() > 14.5)
+        if (getVoltage() > 14.2)
         {
-            power = .3;
+            power = .46;
 
+        }
+        else if (getVoltage() > 13.8)
+        {
+            power = .5;
+        }
+        else if (getVoltage() > 13.4)
+        {
+            power = .5;
+        }
+        else if (getVoltage() > 13.1)
+        {
+            power = .55;
         }
         else
         {
-            power = .6;
+            power = .725;
         }
 
         resetEncoder();
@@ -185,6 +197,18 @@ public class Lift {
         spinL.setPosition(0.4);
     }
 
+    public void grabFourBar()
+    {
+        spinR.setPosition(0.15);
+        spinL.setPosition(0.85);
+    }
+
+    public void swivelFourBar() {
+        grab();
+        spinL.setPosition(.40);
+        spinR.setPosition(.60);
+    }
+
     public void retractFourBar()
     {
         grab();
@@ -194,7 +218,7 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.1);
+        grab.setPosition(0.15);
     }
 
     public void release()
