@@ -45,8 +45,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private enum LiftState {
         IDLE,
+        GRAB,
         RAISE,
         PLACE,
+        STACK,
         LOWER,
         DEAD,
     }
@@ -139,19 +141,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
-                if (gamepad2.a)
-                    mG = true;
                 swivelIn();
-                // change state to raise for driver 2
-                if (gamepad2.right_bumper && !active) {
-                    grabbed = true;
-                    doNotReset = false;
-                    active = true;
-                    bypass = false;
-                    blue = false;
-                    mG = false;
-                    lift = LiftState.RAISE;
-                }
+                retractFourBar();
                 // manual grab for driver 1
                 if (gamepad1.a && grab.milliseconds() > 250 && !grabbed)
                 {
@@ -164,19 +155,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grab.reset();
                     grabbed = false;
                     release();
-                }
-                //manual reset for driver 2
-                if (gamepad1.x && reset.milliseconds() > 250)
-                {
-                    release();
-                    grabbed = false;
-                    doNotReset = false;
-                    bypass = false;
-                    blue = false;
-                    mG = false;
-                    pleasework.reset();
-                    fourbar.reset();
-                    reset.reset();
                 }
                 // keep height at 35
                 if (!doNotReset)
@@ -194,21 +172,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(-0.0005);
                     }
                 }
-                // de jam for driver 2 with moving four bar back and forth
-                if (gamepad2.y && extended.milliseconds() > 250 && !extend)
-                {
-                    extended.reset();
-                    extend = true;
-                    extendFourBar();
-                }
-                if (gamepad2.y && extended.milliseconds() > 250 && extend)
-                {
-                    extended.reset();
-                    extend = false;
-                    retractFourBar();
-                }
                 // driver 2 manual movement for lift, automatic grab
-                if (grabRed() || blue || (mG) || bypass)
+                if ((grabRed() || blue || gamepad2.a) && reset.milliseconds() > 100)
                 {
                     doNotReset = true;
                     if (getLiftPos() > 10)
@@ -218,30 +183,34 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     else
                     {
                         setLiftPower(0);
-                        if (!bypass)
-                        {
-                            grab();
-                            fourbar.reset();
-                            bypass = true;
-                        }
-                        /*if (pleasework.milliseconds() < 1000)
-                            resetFourBar();
-                        else {
-                            grab();
-                            grabFourBar();
-                            //grabbed = true;
-                        }
-                      */
-                        if (fourbar.milliseconds() > 500)
-                        {
-                            grabFourBar();
-                            bypass = false;
-                        } else {
-                        }
-
-
+                        grabbed = true;
+                        grab();
+                        fourbar.reset();
+                        doNotReset = false;
+                        lift = LiftState.PLACE;
                     }
                 }
+                liftState = "IDLE";
+                break;
+            case GRAB:
+                if (fourbar.milliseconds() > 250)
+                {
+                    grabFourBar();
+                }
+                if (gamepad2.right_bumper && !active)
+                {
+                    active = true;
+                    blue = false;
+                    lift = LiftState.RAISE;
+                }
+                if (gamepad1.x)
+                {
+                    release();
+                    grabbed = false;
+                    reset.reset();
+                    lift = LiftState.IDLE;
+                }
+                liftState = "GRAB";
                 break;
             case RAISE:
                 swivelIn();
