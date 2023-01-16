@@ -175,6 +175,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     blue = false;
                     mG = false;
                     pleasework.reset();
+                    fourbar.reset();
                     reset.reset();
                 }
                 // keep height at 35
@@ -210,7 +211,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (grabRed() || blue || (mG) || bypass)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 20)
+                    if (getLiftPos() > 10)
                     {
                         liftReset(.6, 5);
                     }
@@ -219,20 +220,26 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(0);
                         if (!bypass)
                         {
+                            grab();
                             fourbar.reset();
                             bypass = true;
                         }
-                        if (pleasework.milliseconds() < 200)
+                        /*if (pleasework.milliseconds() < 1000)
                             resetFourBar();
                         else {
                             grab();
+                            grabFourBar();
                             //grabbed = true;
                         }
-                        if (fourbar.milliseconds() > 300)
+                      */
+                        if (fourbar.milliseconds() > 500)
                         {
                             grabFourBar();
                             bypass = false;
+                        } else {
                         }
+
+
                     }
                 }
                 break;
