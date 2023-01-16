@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.io.BufferedInputStream;
 
 @Config
 public class Lift {
@@ -29,6 +32,11 @@ public class Lift {
 
 
     private final double STALL_POWER = -0.0005;
+
+    private double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
+    public static double kP = .02, kD = 0.05;
+    public double pastError = 0, pastTime = 0;
+    private ElapsedTime liftTime = new ElapsedTime();
 
     public Lift(LinearOpMode opMode) throws InterruptedException {
 
@@ -254,5 +262,42 @@ public class Lift {
     public boolean isTouch()
     {
         return touch.isPressed();
+    }
+
+    public double liftTickstoInches(double ticks) {
+        return ticks / 145.1 * (1.5 * Math.PI);
+    }
+
+    public void setSlideTarget(double target) {
+        currentTargetSlidesPos = liftTickstoInches(target);
+    }
+
+    public double getSlidesPos() {
+        return liftTickstoInches(getLiftPos());
+    }
+
+    public void updateLiftLength(double inches, double liftTime) {
+        double error = currentTargetSlidesPos - getSlidesPos();
+
+        if (opMode.opModeIsActive() && Math.abs(error) > .5) {
+            double p = (error) * kP;
+
+            double dT = liftTime - pastTime;
+            double d = (error - pastError) / dT * kD;
+
+
+            //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
+            if (Math.abs(currentTargetSlidesPos - getSlidesPos()) < 2) {
+                p = .0005;
+                d = 0;
+            } else if (getSlidesPos() > currentTargetSlidesPos) {
+                p /= 2.0;
+                d /= 2.0;
+            }
+            double power = p + d;
+            setLiftPower(power);
+        }
+        pastTime = liftTime;
+        pastError = error;
     }
 }
