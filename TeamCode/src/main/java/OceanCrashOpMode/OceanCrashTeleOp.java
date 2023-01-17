@@ -33,7 +33,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean extend = false;
     private boolean active = false;
     private boolean blue = false;
-    private boolean resetbo = false;
+    private boolean manualGrab = false;
     private boolean swivelTrue = false;
     private boolean doNotReset = false;
     private boolean toggle2 = false;
@@ -141,6 +141,10 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
+                if (gamepad2.a)
+                {
+                    manualGrab = true;
+                }
                 swivelIn();
                 retractFourBar();
                 // manual grab for driver 1
@@ -173,7 +177,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                 }
                 // driver 2 manual movement for lift, automatic grab
-                if ((grabRed() || blue || gamepad2.a) && reset.milliseconds() > 100)
+                if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 100)
                 {
                     doNotReset = true;
                     if (getLiftPos() > 10)
@@ -183,10 +187,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     else
                     {
                         setLiftPower(0);
-                        grabbed = true;
                         grab();
                         fourbar.reset();
+                        grabbed = true;
                         doNotReset = false;
+                        manualGrab = false;
                         lift = LiftState.PLACE;
                     }
                 }
