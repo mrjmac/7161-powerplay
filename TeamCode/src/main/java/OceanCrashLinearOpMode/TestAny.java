@@ -75,23 +75,36 @@ public class TestAny extends LinearOpMode {
                 parkPos -= 21;
                 break;
         }
-
+/*
         auto = drive.trajectoryBuilder(startingPose)
+                /*
                 .splineToSplineHeading(new Pose2d(-44.3, 34.3, Math.toRadians(0)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(-26.8, 32.3, Math.toRadians(-25)), Math.toRadians(-25), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                //.addDisplacementMarker(() -> drive.followTrajectoryAsync(auto2))
+
+
+
+
+
+
+                .addTemporalMarker(0, ()-> lift.setSlideTarget(950))
+                .addTemporalMarker(5, ()->lift.setSlideTarget(200))
+                .addDisplacementMarker(() -> drive.followTrajectoryAsync(auto2))
                 .build();
 
         auto2 = drive.trajectoryBuilder(auto.end())
                 .splineTo(new Vector2d(5, 5), 0)
                 .build();
 
-        drive.followTrajectoryAsync(auto);
+        */
+        //drive.followTrajectoryAsync(auto);
         waitForStart();
-
+        liftTime.reset();
         while (!isStopRequested())
         {
-            drive.update();
+            if (liftTime.milliseconds() < 5000)
+                lift.setSlideTarget(950);
+            else
+                lift.setSlideTarget(200);
             lift.updateLiftLength(liftTime.milliseconds());
             telemetry.addData("slidetarget:", lift.currentTargetSlidesPos);
             telemetry.addData("slidepos:", lift.getLiftPos());

@@ -34,9 +34,10 @@ public class Lift {
     private final double STALL_POWER = -0.0005;
 
     public double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
-    public static double kP = .00275, kD = 0;
+    public static double kP = .00275, kD = 0, kStatic = .0000005;
     public double pastError = 0, pastTime = 0;
     private ElapsedTime liftTime = new ElapsedTime();
+
 
     public Lift(LinearOpMode opMode) throws InterruptedException {
 
@@ -290,14 +291,15 @@ public class Lift {
             double dT = liftTime - pastTime;
             double d = (error - pastError) / dT * kD;
 
-
+            double f = 0;
             //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
             if (Math.abs(currentTargetSlidesPos - getSlidesPos()) < 2) {
-                p = .0005;
+                //f = getSlidesPos() * kStatic;
+                p = -0.0005;
                 d = 0;
             } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= 2.8;
-                d /= 2.8;
+                p /= 3.1;
+                d /= 3.1;
             }
             double power = p + d;
             setLiftPower(-power);
