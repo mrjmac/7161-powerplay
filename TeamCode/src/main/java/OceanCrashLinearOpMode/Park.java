@@ -86,7 +86,7 @@ public class Park extends LinearOpMode {
             parkMod++;
 
         traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .lineToLinearHeading(new Pose2d(-46, 36, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-46, 36, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .lineToLinearHeading(new Pose2d(-46, parkMod))
                 .build();
 

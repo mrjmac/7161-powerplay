@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Intake {
 
-    private final DcMotor intakeL; // [E2]
-    private final DcMotor intakeR; // [C2]
+    private final DcMotor intakeL; // [E3]
+    private final DcMotor intakeR; // [C3]
 
     private final LinearOpMode opMode;
 
@@ -15,8 +15,8 @@ public class Intake {
 
         this.opMode = opMode;
 
-        intakeL = this.opMode.hardwareMap.dcMotor.get("intakeL"); // [E2]
-        intakeR = this.opMode.hardwareMap.dcMotor.get("intakeR"); // [C2]
+        intakeL = this.opMode.hardwareMap.dcMotor.get("intakeL"); // [E3]
+        intakeR = this.opMode.hardwareMap.dcMotor.get("intakeR"); // [C3]
 
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

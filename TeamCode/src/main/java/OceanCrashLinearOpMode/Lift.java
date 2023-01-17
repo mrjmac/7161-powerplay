@@ -14,8 +14,8 @@ import java.io.BufferedInputStream;
 @Config
 public class Lift {
 
-    private final DcMotor liftL; // [E3]
-    public final DcMotor liftR; // [C3]
+    private final DcMotor liftL; // [E2]
+    public final DcMotor liftR; // [C2]
 
     private final LinearOpMode opMode;
 
@@ -27,14 +27,14 @@ public class Lift {
 
     public Servo spinL; // [C0]
     public Servo spinR; // [E5]
-    private Servo grab; // [E4]
+    private Servo grab; // [C2]
     private Servo swivel;
 
 
     private final double STALL_POWER = -0.0005;
 
-    private double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
-    public static double kP = .02, kD = 0.05;
+    public double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
+    public static double kP = .00275, kD = 0;
     public double pastError = 0, pastTime = 0;
     private ElapsedTime liftTime = new ElapsedTime();
 
@@ -42,8 +42,8 @@ public class Lift {
 
         this.opMode = opMode;
 
-        liftL = this.opMode.hardwareMap.dcMotor.get("liftL"); // [E3]
-        liftR = this.opMode.hardwareMap.dcMotor.get("liftR"); // [C3]
+        liftL = this.opMode.hardwareMap.dcMotor.get("liftL"); // [E2]
+        liftR = this.opMode.hardwareMap.dcMotor.get("liftR"); // [C2]
 
         liftL.setDirection(DcMotorSimple.Direction.FORWARD);
         liftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -224,6 +224,11 @@ public class Lift {
         spinL.setPosition(1);
     }
 
+    public void halfFourBar() {
+        spinR.setPosition(.325);
+        spinL.setPosition(1-.325);
+    }
+
     public void grab()
     {
         grab.setPosition(0.15);
@@ -269,14 +274,14 @@ public class Lift {
     }
 
     public void setSlideTarget(double target) {
-        currentTargetSlidesPos = liftTickstoInches(target);
+        currentTargetSlidesPos = target;
     }
 
     public double getSlidesPos() {
-        return liftTickstoInches(getLiftPos());
+        return getLiftPos();
     }
 
-    public void updateLiftLength(double inches, double liftTime) {
+    public void updateLiftLength(double liftTime) {
         double error = currentTargetSlidesPos - getSlidesPos();
 
         if (opMode.opModeIsActive() && Math.abs(error) > .5) {
@@ -291,11 +296,11 @@ public class Lift {
                 p = .0005;
                 d = 0;
             } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= 2.0;
-                d /= 2.0;
+                p /= 2.8;
+                d /= 2.8;
             }
             double power = p + d;
-            setLiftPower(power);
+            setLiftPower(-power);
         }
         pastTime = liftTime;
         pastError = error;
