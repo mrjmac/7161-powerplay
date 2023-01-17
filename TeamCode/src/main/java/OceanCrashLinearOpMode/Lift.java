@@ -34,7 +34,7 @@ public class Lift {
     private final double STALL_POWER = -0.0005;
 
     public double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
-    public static double kP = .00275, kD = 0, kStatic = .0000005;
+    public static double kP = .00175, kD = 0, kStatic = .0000005;
     public double pastError = 0, pastTime = 0;
     private ElapsedTime liftTime = new ElapsedTime();
 
@@ -298,7 +298,7 @@ public class Lift {
                 p = -0.0005;
                 d = 0;
             } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= 3.1;
+                p /= (3.1/0.6363636364);
                 d /= 3.1;
             }
             double power = p + d;
