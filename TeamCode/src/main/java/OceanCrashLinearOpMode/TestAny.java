@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -40,8 +41,7 @@ public class TestAny extends LinearOpMode {
     ElapsedTime button = new ElapsedTime();
     ElapsedTime liftTime = new ElapsedTime();
 
-    TrajectorySequence traj1;
-    TrajectorySequence park;
+    Trajectory auto, auto2;
 
     private int pos;
     private double targetPos;
@@ -76,29 +76,17 @@ public class TestAny extends LinearOpMode {
                 break;
         }
 
-        traj1 = drive.trajectorySequenceBuilder(startingPose)
-                .addTemporalMarker(0, ()->liftTime.reset())
-                .addTemporalMarker(0, ()->lift.setSlideTarget(900))
-                .waitSeconds(5)
-                .UNSTABLE_addTemporalMarkerOffset(0, ()-> lift.setSlideTarget(135))
-                /*.UNSTABLE_addTemporalMarkerOffset(0, ()->lift.setSlideTarget(200))
-                .waitSeconds(5)
-                .UNSTABLE_addTemporalMarkerOffset(0, ()->lift.setSlideTarget(300))
-                .waitSeconds(10)
-
-                 */
+        auto = drive.trajectoryBuilder(startingPose)
+                .splineToSplineHeading(new Pose2d(-44.3, 34.3, Math.toRadians(0)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-26.8, 32.3, Math.toRadians(-25)), Math.toRadians(-25), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                //.addDisplacementMarker(() -> drive.followTrajectoryAsync(auto2))
                 .build();
 
-
-
-/*
-        park = drive.trajectorySequenceBuilder(traj1.end(x  ))
-                .lineToConstantHeading(new Vector2d(-24, 34 + parkPos))
+        auto2 = drive.trajectoryBuilder(auto.end())
+                .splineTo(new Vector2d(5, 5), 0)
                 .build();
-*/
 
-
-        drive.followTrajectorySequenceAsync(traj1);
+        drive.followTrajectoryAsync(auto);
         waitForStart();
 
         while (!isStopRequested())
