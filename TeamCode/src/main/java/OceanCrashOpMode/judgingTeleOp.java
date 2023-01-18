@@ -77,14 +77,14 @@ public class judgingTeleOp extends OceanCrashOpMode{
                 break;
             case PLACE:
                 setLiftPower(0);
-                if (drop.milliseconds() > 500 && !goAhead)
+                if (drop.milliseconds() > 1000 && !goAhead)
                 {
                     release();
                     grabbed = false;
                     goAhead = true;
 
                 }
-                if (drop.milliseconds() > 1500 && goAhead)
+                if (drop.milliseconds() > 2000 && goAhead)
                 {
                     drop.reset();
                     grab();

@@ -298,8 +298,8 @@ public class Lift {
                 p = -0.0005;
                 d = 0;
             } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= (3.1/0.6363636364);
-                d /= 3.1;
+                p /= 2.5;
+                //d /= 3.1;
             }
             double power = p + d;
             setLiftPower(-power);
