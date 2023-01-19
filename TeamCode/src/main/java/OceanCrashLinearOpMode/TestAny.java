@@ -101,7 +101,7 @@ public class TestAny extends LinearOpMode {
         liftTime.reset();
         while (!isStopRequested())
         {
-            if (liftTime.milliseconds() < 5000)
+            /*if (liftTime.milliseconds() < 5000)
                 lift.setSlideTarget(950);
             else
                 lift.setSlideTarget(200);
@@ -109,6 +109,10 @@ public class TestAny extends LinearOpMode {
             telemetry.addData("slidetarget:", lift.currentTargetSlidesPos);
             telemetry.addData("slidepos:", lift.getLiftPos());
             telemetry.update();
+
+             */
+            lift.swivelOut();
+            lift.release();
         }
     }
 }

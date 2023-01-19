@@ -246,12 +246,12 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.1);
+        grab.setPosition(0.2);
     }
 
     public void release()
     {
-        grab.setPosition(.38);  //tune this
+        grab.setPosition(.47);  //tune this
     }
 
     public void swivelIn()

@@ -232,12 +232,12 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.15);
+        grab.setPosition(0.2);
     }
 
     public void release()
     {
-        grab.setPosition(.43);  //tune this
+        grab.setPosition(.47);  //tune this
     }
 
     public void swivelIn()

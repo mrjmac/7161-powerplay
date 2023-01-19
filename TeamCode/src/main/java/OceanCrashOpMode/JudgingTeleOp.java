@@ -4,12 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import OceanCrashLinearOpMode.Lift;
-
 
 @Config
-@TeleOp(name = "judging", group = "opMode")
-public class judgingTeleOp extends OceanCrashOpMode{
+@TeleOp(name = "Judging", group = "opMode")
+public class JudgingTeleOp extends OceanCrashOpMode{
 
 
     private final ElapsedTime fourbar = new ElapsedTime();
@@ -51,9 +49,9 @@ public class judgingTeleOp extends OceanCrashOpMode{
                 if (grabRed() || blue || bypass)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 5)
+                    if (getLiftPos() > 10)
                     {
-                        liftReset(.6, 0);
+                        liftReset(.6, 5);
                     }
                     else
                     {
@@ -66,6 +64,7 @@ public class judgingTeleOp extends OceanCrashOpMode{
                         grab();
                         if (fourbar.milliseconds() > 500)
                         {
+                            setLiftPower(0);
                             extendFourBar();
                             bypass = false;
                             drop.reset();
@@ -100,8 +99,6 @@ public class judgingTeleOp extends OceanCrashOpMode{
                     retractFourBar();
                     extend = false;
                     doNotReset = false;
-                    liftState = "IDLE";
-                    lift = LiftState.IDLE;
                 }
         }
 
@@ -122,6 +119,7 @@ public class judgingTeleOp extends OceanCrashOpMode{
         telemetry.addData("STATE :: ", liftState);
         telemetry.addData("DROP :: ", drop.milliseconds());
         telemetry.addData("GOAHEAD :: ", goAhead);
+
 
     }
 }

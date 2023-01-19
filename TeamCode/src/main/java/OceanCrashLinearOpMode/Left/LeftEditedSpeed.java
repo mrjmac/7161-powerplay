@@ -98,7 +98,7 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
                 .splineToSplineHeading(new Pose2d(-21.1, 34.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-21.1, 49.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-21.1, 47.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[0] = drive.trajectoryBuilder(grabs[0].end())
@@ -112,7 +112,7 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
                 .splineToSplineHeading(new Pose2d(-21.1, 34.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-21.1, 49.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-21.1, 47.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[1] = drive.trajectoryBuilder(grabs[1].end())
@@ -126,7 +126,7 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
                 .splineToSplineHeading(new Pose2d(-19.6, 32.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-19.6, 47.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-19.6, 45.2, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[2] = drive.trajectoryBuilder(grabs[2].end())
@@ -140,7 +140,7 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
                 .splineToSplineHeading(new Pose2d(-18.3, 30, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-18.3, 45.6, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-18.3, 43.6, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[3] = drive.trajectoryBuilder(grabs[3].end())
