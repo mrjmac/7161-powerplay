@@ -78,13 +78,13 @@ public class LeftEditedSpeed extends LinearOpMode {
 
         switch (pos) {
             case 1:
-                parkPos += 15.5;
+                parkPos += 19.5;
                 break;
             case 2:
-                parkPos -= 6;
+                parkPos -= 1;
                 break;
             case 3:
-                parkPos -= 29;
+                parkPos -= 22;
                 break;
         }
 
@@ -92,68 +92,72 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(1, () -> lift.setSlideTarget(875))
                 .addTemporalMarker(2.1, ()-> lift.swivelStartLeft())
-                .splineToSplineHeading(new Pose2d(-24.8, 33, Math.toRadians(-25)), Math.toRadians(-15), SampleMecanumDrive.getVelocityConstraint(35, 35, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
+                .splineToSplineHeading(new Pose2d(-24.8, 33.6, Math.toRadians(-25)), Math.toRadians(-15), SampleMecanumDrive.getVelocityConstraint(33, 35, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(30))
                 .build();
 
         grabs[0] = drive.trajectoryBuilder(preload.end())
-                .addTemporalMarker(.25, () -> lift.setSlideTarget(120))
+                .addTemporalMarker(.5, () -> lift.setSlideTarget(120))
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
-                .splineToSplineHeading(new Pose2d(-21.1, 34.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-21.1, 46.8, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-21.5, 34.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-21.5, 47.3, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[0] = drive.trajectoryBuilder(grabs[0].end())
                 .addTemporalMarker(0, () -> lift.extendFourBar())
-                .addTemporalMarker(.5, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-24.3, 32.5, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(.65, () -> lift.setSlideTarget(850))
+                .lineToLinearHeading(new Pose2d(-26.3, 32.5, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         grabs[1] = drive.trajectoryBuilder(deposits[0].end())
-                .addTemporalMarker(0.25, () -> lift.setSlideTarget(110))
+                .addTemporalMarker(.5, () -> lift.setSlideTarget(110))
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
                 .splineToSplineHeading(new Pose2d(-20.7, 34.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-20.7, 46.8, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-20.7, 47, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[1] = drive.trajectoryBuilder(grabs[1].end())
                 .addTemporalMarker(0, () -> lift.extendFourBar())
-                .addTemporalMarker(.5, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-24.3, 30.7, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(.65, () -> lift.setSlideTarget(850))
+                .lineToLinearHeading(new Pose2d(-23.8, 31.9, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         grabs[2] = drive.trajectoryBuilder(deposits[1].end())
-                .addTemporalMarker(0.25, () -> lift.setSlideTarget(100))
+                .addTemporalMarker(.5, () -> lift.setSlideTarget(78))
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
-                .splineToSplineHeading(new Pose2d(-19.6, 32.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-19.6, 44.8, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-19, 32.3, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-19, 45.9, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[2] = drive.trajectoryBuilder(grabs[2].end())
                 .addTemporalMarker(0, () -> lift.extendFourBar())
-                .addTemporalMarker(.5, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-24.3, 29.9, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(.65, () -> lift.setSlideTarget(850))
+                .lineToLinearHeading(new Pose2d(-23, 31.4, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         grabs[3] = drive.trajectoryBuilder(deposits[2].end())
-                .addTemporalMarker(0.25, () -> lift.setSlideTarget(90))
+                .addTemporalMarker(.5, () -> lift.setSlideTarget(65))
                 .addTemporalMarker(.5, ()-> lift.trueExtendFourBar())
                 .addTemporalMarker(.9, ()-> lift.swivelOut())
-                .splineToSplineHeading(new Pose2d(-18.3, 30, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-18.3, 43, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-18.5, 36, Math.toRadians(90)), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-18.5, 44.3, Math.toRadians(90)), Math.toRadians(90),SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(10), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         deposits[3] = drive.trajectoryBuilder(grabs[3].end())
                 .addTemporalMarker(0, () -> lift.extendFourBar())
-                .addTemporalMarker(.5, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-24, 28.5, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(.65, () -> lift.setSlideTarget(850))
+                .lineToLinearHeading(new Pose2d(-21.3, 31.2, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         park = drive.trajectoryBuilder(deposits[3].end())
-                .addTemporalMarker(0, ()-> lift.setSlideTarget(0))
-                .lineToLinearHeading(new Pose2d(-24, 29.5, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(70), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(0, () -> lift.grab())
+                .addTemporalMarker(.2, ()-> lift.swivelIn())
+                .addTemporalMarker(.9, () -> lift.retractFourBar())
+                .addTemporalMarker(1, ()-> lift.setSlideTarget(0))
+                .splineToSplineHeading(new Pose2d(-22, 38, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-22, parkPos), Math.toRadians(-90))
                 .build();
 
         waitForStart();
@@ -188,13 +192,18 @@ public class LeftEditedSpeed extends LinearOpMode {
                 {
                     if (!drive.isBusy() && !goNext) {
                         state.reset();
-                        lift.release();
                         goNext = true;
                     }
-                    if (state.milliseconds() > 200 && goNext) {
+                    if (state.milliseconds() > 50 && goNext)
+                    {
+                        lift.release();
+                    }
+                    if (state.milliseconds() > 250 && goNext) {
                         goNext = false;
                         state.reset();
+                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         cycleNum++;
+                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         if (cycleNum < 4)
                         {
                             drive.followTrajectoryAsync(grabs[cycleNum]);
@@ -215,11 +224,11 @@ public class LeftEditedSpeed extends LinearOpMode {
                         lift.grab();
                         goNext = true;
                     }
-                    if (state.milliseconds() > 200 && goNext)
+                    if (state.milliseconds() > 220 && goNext)
                     {
-                        lift.setSlideTarget(200);
+                        lift.setSlideTarget(250);
                     }
-                    if (state.milliseconds() > 300 && goNext) {
+                    if (state.milliseconds() > 350 && goNext) {
                         goNext = false;
                         drive.followTrajectoryAsync(deposits[cycleNum]);
                         auto = State.deposit;

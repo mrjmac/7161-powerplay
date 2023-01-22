@@ -232,12 +232,12 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.2);
+        grab.setPosition(0.25);
     }
 
     public void release()
     {
-        grab.setPosition(.47);  //tune this
+        grab.setPosition(.52);  //tune this
     }
 
     public void swivelIn()
@@ -298,7 +298,7 @@ public class Lift {
                 p = -0.0005;
                 d = 0;
             } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= 2.5;
+                p /= 2.8;
                 //d /= 3.1;
             }
             double power = p + d;
