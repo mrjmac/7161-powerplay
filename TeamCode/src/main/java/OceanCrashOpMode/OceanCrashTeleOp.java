@@ -146,7 +146,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     manualGrab = true;
                 }
                 swivelIn();
-                retractFourBar();
+                //retractFourBar();
                 // manual grab for driver 1
                 if (gamepad1.a && grab.milliseconds() > 250 && !grabbed)
                 {
@@ -177,7 +177,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                 }
                 // driver 2 manual movement for lift, automatic grab
-                if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 100)
+                if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
                 {
                     doNotReset = true;
                     if (getLiftPos() > 10)
@@ -192,7 +192,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         grabbed = true;
                         doNotReset = false;
                         manualGrab = false;
-                        lift = LiftState.PLACE;
+                        lift = LiftState.GRAB;
                     }
                 }
                 liftState = "IDLE";
@@ -210,6 +210,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 if (gamepad1.x)
                 {
+                    retractFourBar();
                     release();
                     grabbed = false;
                     reset.reset();
@@ -220,7 +221,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             case RAISE:
                 swivelIn();
                 if (getLiftPos() < liftTargetPos) {
-                    setLiftPos(liftTargetPos);
+                    if (jHeight != 0)
+                    {
+                        setLiftPos(liftTargetPos);
+                    }
+                    else
+                    {
+                        setLiftPosLittle(liftTargetPos);
+                    }
                 } else {
                     blue = false;
                     if (jHeight != 0)

@@ -246,7 +246,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.2);
+        grab.setPosition(0.25);
     }
 
     public void release()
