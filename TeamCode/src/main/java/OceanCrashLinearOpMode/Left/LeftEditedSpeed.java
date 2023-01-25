@@ -157,12 +157,12 @@ public class LeftEditedSpeed extends LinearOpMode {
 
         park[2] = drive.trajectoryBuilder(deposits[3].end(), true)
                 .addTemporalMarker(0, () -> lift.grab())
-                .addTemporalMarker(.2, ()-> lift.swivelIn())
-                .addTemporalMarker(.9, () -> lift.retractFourBar())
-                .addTemporalMarker(.5, ()-> lift.setSlideTarget(0))
+                .addTemporalMarker(0, ()-> lift.swivelIn())
+                .addTemporalMarker(.5, () -> lift.retractFourBar())
+                .addTemporalMarker(1.26, ()-> lift.setSlideTarget(0))
                 .splineToConstantHeading(new Vector2d(-15, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToConstantHeading(new Vector2d(-15, 18), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-30, 18, Math.toRadians(0)), Math.toRadians(147.5), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-30, 18, Math.toRadians(0)), Math.toRadians(147.5))
                 .build();
 
         while(!isStarted()){

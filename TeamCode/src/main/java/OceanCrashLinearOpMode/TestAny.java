@@ -57,7 +57,7 @@ public class TestAny extends LinearOpMode {
         lift.grab();
         intake = new Intake(this);
 
-        Pose2d startingPose = new Pose2d(-72, 36, 0);
+        Pose2d startingPose = new Pose2d(-21.8, 30.8, -25);
 
         drive.setPoseEstimate(startingPose);
 
@@ -75,32 +75,19 @@ public class TestAny extends LinearOpMode {
                 parkPos -= 21;
                 break;
         }
-/*
+
         auto = drive.trajectoryBuilder(startingPose)
-                /*
-                .splineToSplineHeading(new Pose2d(-44.3, 34.3, Math.toRadians(0)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-26.8, 32.3, Math.toRadians(-25)), Math.toRadians(-25), SampleMecanumDrive.getVelocityConstraint(55, 50, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-
-
-
-
-
-
-                .addTemporalMarker(0, ()-> lift.setSlideTarget(950))
-                .addTemporalMarker(5, ()->lift.setSlideTarget(200))
-                .addDisplacementMarker(() -> drive.followTrajectoryAsync(auto2))
+                .splineToConstantHeading(new Vector2d(-15, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-15, 18), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-30, 18, Math.toRadians(0)), Math.toRadians(147.5))
                 .build();
 
-        auto2 = drive.trajectoryBuilder(auto.end())
-                .splineTo(new Vector2d(5, 5), 0)
-                .build();
-
-        */
-        //drive.followTrajectoryAsync(auto);
+        drive.followTrajectoryAsync(auto);
         waitForStart();
         liftTime.reset();
         while (!isStopRequested())
         {
+//------------------------------------DEBUG LIFT----------------------------------------------------
             /*if (liftTime.milliseconds() < 5000)
                 lift.setSlideTarget(950);
             else
@@ -111,8 +98,16 @@ public class TestAny extends LinearOpMode {
             telemetry.update();
 
              */
+//------------------------------------REPLACE CLAW----------------------------------------------------
+/*
             lift.swivelOut();
             lift.release();
+
+ */
+//------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
+            lift.retractFourBar();
+//-----------------------------------TEST MOVEMENT-----------------------------------------------------
+            drive.update();
         }
     }
 }
