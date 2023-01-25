@@ -232,7 +232,7 @@ public class Lift {
 
     public void grab()
     {
-        grab.setPosition(0.25);
+        grab.setPosition(0.275);
     }
 
     public void release()
