@@ -180,9 +180,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 10)
+                    if (getLiftPos() > 10 && !manualGrab)
                     {
-                        liftReset(.6, 5);
+                        liftReset(.5, 5);
                     }
                     else
                     {
@@ -271,7 +271,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     swivel.reset();
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
-                    setLiftPower(gamepad2.left_stick_y * 0.15);
+                    setLiftPower(gamepad2.left_stick_y * 0.20);
                 } else {
                     if (getLiftPos() > 100)
                         setLiftPower(-.0005);
@@ -307,7 +307,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     grab();
                     retractFourBar();
                 }
-                if ((macroTime.milliseconds() > 500 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
+                if ((macroTime.milliseconds() > 750 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
                     if (getLiftPos() > 25) {
                         liftReset(.4, 25);
                     } else {

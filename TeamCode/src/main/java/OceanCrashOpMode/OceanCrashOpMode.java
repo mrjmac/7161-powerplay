@@ -246,7 +246,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.25);
+        grab.setPosition(0.275);
     }
 
     public void release()
@@ -295,7 +295,7 @@ public abstract class OceanCrashOpMode extends OpMode {
     {
         if (getLiftPos() <= liftTargetPos)
         {
-            setLiftPower(-.25);
+            setLiftPower(-.8);
         }
     }
 
@@ -306,7 +306,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
         if (getLiftPos() - 50 < 0)
         {
-            setLiftPower(power * .5);
+            setLiftPower(power);
         }
         else if (getLiftPos() > liftTargetPos)
         {

@@ -57,7 +57,7 @@ public class TestAny extends LinearOpMode {
         lift.grab();
         intake = new Intake(this);
 
-        Pose2d startingPose = new Pose2d(-21.8, 30.8, -25);
+        Pose2d startingPose = new Pose2d(-21.8, 30.8, 25);
 
         drive.setPoseEstimate(startingPose);
 
@@ -77,9 +77,9 @@ public class TestAny extends LinearOpMode {
         }
 
         auto = drive.trajectoryBuilder(startingPose)
-                .splineToConstantHeading(new Vector2d(-15, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(-15, 18), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-30, 18, Math.toRadians(0)), Math.toRadians(147.5))
+                .splineToConstantHeading(new Vector2d(-18, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-18, 8), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-30, 8, Math.toRadians(0)), Math.toRadians(147.5))
                 .build();
 
         drive.followTrajectoryAsync(auto);
@@ -105,7 +105,11 @@ public class TestAny extends LinearOpMode {
 
  */
 //------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
-            lift.retractFourBar();
+  /*          lift.retractFourBar();
+            sleep(2500);
+            lift.trueExtendFourBar();
+            sleep(2500);
+   */
 //-----------------------------------TEST MOVEMENT-----------------------------------------------------
             drive.update();
         }

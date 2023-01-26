@@ -120,7 +120,7 @@ public class LeftEditedSpeed extends LinearOpMode {
         deposits[2] = drive.trajectoryBuilder(grabs[2].end())
                 .addTemporalMarker(0, () -> lift.extendFourBar())
                 .addTemporalMarker(.25, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-23.5, 31, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(60), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(25))
+                .lineToLinearHeading(new Pose2d(-24.1, 31, Math.toRadians(-25)), SampleMecanumDrive.getVelocityConstraint(35, Math.toRadians(60), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(25))
                 .build();
 
         grabs[3] = drive.trajectoryBuilder(deposits[2].end())
@@ -159,10 +159,10 @@ public class LeftEditedSpeed extends LinearOpMode {
                 .addTemporalMarker(0, () -> lift.grab())
                 .addTemporalMarker(0, ()-> lift.swivelIn())
                 .addTemporalMarker(.5, () -> lift.retractFourBar())
-                .addTemporalMarker(1.26, ()-> lift.setSlideTarget(0))
-                .splineToConstantHeading(new Vector2d(-15, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(-15, 18), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-30, 18, Math.toRadians(0)), Math.toRadians(147.5))
+                .addTemporalMarker(.8, ()-> lift.setSlideTarget(0))
+                .splineToConstantHeading(new Vector2d(-18, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-18, 8), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(22.5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-30, 8, Math.toRadians(0)), Math.toRadians(147.5))
                 .build();
 
         while(!isStarted()){
@@ -213,7 +213,9 @@ public class LeftEditedSpeed extends LinearOpMode {
                         goNext = false;
                         state.reset();
                         // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
+                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         cycleNum++;
+                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         if (cycleNum < 4)
                         {
