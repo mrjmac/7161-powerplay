@@ -95,3 +95,5 @@ TeamCode/build.gradle
 *.gradle
 build.gradle
 TeamCode/build.gradle
+MeepMeep/src/main/java/meep/meep/MeepMeep.java
+settings.gradle
