@@ -262,7 +262,7 @@ public class Lift {
 
     public void swivelStartRight()
     {
-        swivel.setPosition(.83);
+        swivel.setPosition(.93);
     }
 
     public boolean isTouch()
