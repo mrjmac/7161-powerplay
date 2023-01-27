@@ -16,7 +16,6 @@ public class JudgingTeleOp extends OceanCrashOpMode{
     private final ElapsedTime drop = new ElapsedTime();
 
     private boolean grabbed = false;
-    private boolean bypass = false;
     private boolean extend = false;
     private boolean goAhead = false;
     private boolean blue = false;
@@ -25,7 +24,10 @@ public class JudgingTeleOp extends OceanCrashOpMode{
     private enum LiftState {
         IDLE,
         PLACE,
+        RAISE,
+        GRAB,
         RETRACT,
+        DONE
     }
 
     private LiftState lift = LiftState.IDLE;
@@ -38,9 +40,13 @@ public class JudgingTeleOp extends OceanCrashOpMode{
                 // keep height at 75
                 if (!doNotReset)
                 {
-                    if (getLiftPos() < 65)
+                    if (getLiftPos() > 60)
                     {
-                        setLiftPosLittle(80);
+                        liftReset(.6, 60);
+                    }
+                    else if(getLiftPos() < 30)
+                    {
+                        setLiftPosLittle(50);
                     }
                     else
                     {
@@ -48,35 +54,47 @@ public class JudgingTeleOp extends OceanCrashOpMode{
                     }
                 }
                 // driver 2 manual movement for lift, automatic grab
-                if (grabRed() || blue || bypass)
+                if (grabRed() || blue)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 5)
+                    if (getLiftPos() > 10)
                     {
-                        liftReset(.6, 0);
+                        liftReset(.5, 5);
                     }
                     else
                     {
                         setLiftPower(0);
-                        if (!bypass)
-                        {
-                            fourbar.reset();
-                            bypass = true;
-                        }
                         grab();
-                        if (fourbar.milliseconds() > 500)
-                        {
-                            extendFourBar();
-                            bypass = false;
-                            drop.reset();
-                            liftState = "PLACE";
-                            lift = LiftState.PLACE;
-                        }
+                        fourbar.reset();
+                        drop.reset();
+                        lift = LiftState.GRAB;
                     }
                 }
                 break;
+            case GRAB:
+                if (fourbar.milliseconds() > 250)
+                {
+                    extendFourBar();
+                    lift = LiftState.RAISE;
+                }
+                liftState = "GRAB";
+                break;
+            case RAISE:
+                swivelIn();
+                if (getLiftPos() < 200) {
+                    setLiftPos(200);
+                } else {
+                    setLiftPower(-0.0005);
+                    blue = false;
+                    extendFourBar();
+                    extend = true;
+                    drop.reset();
+                    lift = LiftState.PLACE;
+                }
+                liftState = "RAISE";
+                break;
             case PLACE:
-                setLiftPower(0);
+                setLiftPower(-0.0005);
                 if (drop.milliseconds() > 1000 && !goAhead)
                 {
                     release();
@@ -103,6 +121,9 @@ public class JudgingTeleOp extends OceanCrashOpMode{
                     liftState = "IDLE";
                     lift = LiftState.IDLE;
                 }
+            case DONE:
+                setLiftPower(0);
+                break;
         }
 
         if (grabBlue())

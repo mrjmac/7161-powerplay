@@ -295,7 +295,7 @@ public abstract class OceanCrashOpMode extends OpMode {
     {
         if (getLiftPos() <= liftTargetPos)
         {
-            setLiftPower(-.8);
+            setLiftPower(-.2);
         }
     }
 
