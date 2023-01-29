@@ -82,7 +82,7 @@ public class TestAny extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-30, 8, Math.toRadians(0)), Math.toRadians(147.5))
                 .build();
 
-        drive.followTrajectoryAsync(auto);
+        //drive.followTrajectoryAsync(auto);
         waitForStart();
         liftTime.reset();
         while (!isStopRequested())
@@ -98,20 +98,24 @@ public class TestAny extends LinearOpMode {
             telemetry.update();
 
              */
-//------------------------------------REPLACE CLAW----------------------------------------------------
-/*
-            lift.swivelOut();
+//------------------------------------REPLACE CLAW------------------------------------------x----------
+
+            /*lift.swivelOut();
             lift.release();
 
- */
+             */
+
 //------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
-  /*          lift.retractFourBar();
+
+            lift.retractFourBar();
             sleep(2500);
             lift.trueExtendFourBar();
             sleep(2500);
-   */
+
+
+
 //-----------------------------------TEST MOVEMENT-----------------------------------------------------
-            drive.update();
+            //drive.update();
         }
     }
 }
