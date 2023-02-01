@@ -1,4 +1,4 @@
-package OceanCrashPurePursuit.robot;
+package OceanCrashPurePursuit.robot.util;
 
 import com.qualcomm.robotcore.util.Range;
 

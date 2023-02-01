@@ -8,7 +8,7 @@ import OceanCrashPurePursuit.autonomous.waypoints.Waypoint;
 import OceanCrashPurePursuit.common.math.MathUtil;
 import OceanCrashPurePursuit.common.math.Point;
 import OceanCrashPurePursuit.common.math.Pose;
-import OceanCrashPurePursuit.robot.MecanumPowers;
+import OceanCrashPurePursuit.robot.util.MecanumPowers;
 
 @Config
 public class MecanumPurePursuitController {

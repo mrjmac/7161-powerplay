@@ -15,7 +15,7 @@ public class Subroutines {
     }
 
     public interface MetaSubroutine extends Subroutine {
-        void runOnce(PurePursuitPath path, Double robot);
+        void runOnce(PurePursuitPath path, CombinedRobot robot);
     }
 
     public interface RepeatedSubroutine extends Subroutine {

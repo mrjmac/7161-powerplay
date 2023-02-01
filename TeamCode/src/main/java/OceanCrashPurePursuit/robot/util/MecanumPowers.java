@@ -1,4 +1,4 @@
-package OceanCrashPurePursuit.robot;
+package OceanCrashPurePursuit.robot.util;
 
 import OceanCrashPurePursuit.common.math.MathUtil;
 import OceanCrashPurePursuit.common.math.Pose;
