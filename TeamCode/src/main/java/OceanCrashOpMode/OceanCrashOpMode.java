@@ -37,6 +37,9 @@ public abstract class OceanCrashOpMode extends OpMode {
     private TouchSensor touch;
 
     private ElapsedTime jit;
+    private double currentTargetSlidesPos = 0;
+    public static double kP = .00166666667, kD = .0425, kStatic = -0.0005;
+    public double pastError = 0, pastTime = 0;
 
     //private VoltageSensor voltage;
 
@@ -342,5 +345,39 @@ public abstract class OceanCrashOpMode extends OpMode {
     public double getLiftR()
     {
         return liftR.getCurrentPosition();
+    }
+
+    public void setSlideTarget(double target) {
+        currentTargetSlidesPos = target;
+    }
+
+    public void updateLiftLength(double liftTime) {
+        double error = currentTargetSlidesPos - getLiftPos();
+
+        if (Math.abs(error) > .5) {
+            double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP);
+
+            double dT = liftTime - pastTime;
+            double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
+
+            double f = 0;
+            //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
+            if (Math.abs(error) < 5) {
+                //f = getSlidesPos() * kStatic;
+                p = 0.0005;
+                d = 0;
+            } else if (error > 250) {
+                p *= 1.2;
+            } else if (error < 30 && error > 0 && liftTime > 500) {
+                p *= .4;
+            } else if (getLiftPos() > currentTargetSlidesPos) {
+                p /= 1.2;
+                d *= .099705882;
+            }
+            double power = p + d;
+            setLiftPower(-power);
+        }
+        pastTime = liftTime;
+        pastError = error;
     }
 }

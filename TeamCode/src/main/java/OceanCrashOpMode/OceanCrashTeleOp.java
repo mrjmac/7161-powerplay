@@ -26,7 +26,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private final ElapsedTime extended = new ElapsedTime();
     private final ElapsedTime swivel = new ElapsedTime();
     private final ElapsedTime reset = new ElapsedTime();
-    private final ElapsedTime pleasework = new ElapsedTime();
+    private final ElapsedTime liftTime = new ElapsedTime();
 
     private boolean grabbed = false;
     private boolean bypass = false;
@@ -41,6 +41,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     public static double wait = 200;
     private boolean grabd1 = false;
     private boolean mG = false;
+    private boolean liftEdited = false;
 
 
     private enum LiftState {
@@ -107,21 +108,25 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         if (gamepad2.dpad_up && jHeightTime.milliseconds() > 125) {
             jHeight = 3;
             jHeightTime.reset();
+            liftEdited = false;
         }
 
         if (gamepad2.dpad_down && jHeightTime.milliseconds() > 125) {
             jHeight = 1;
             jHeightTime.reset();
+            liftEdited = false;
         }
 
         if (gamepad2.dpad_right && jHeightTime.milliseconds() > 125) {
             jHeight = 2;
             jHeightTime.reset();
+            liftEdited = false;
         }
 
         if (gamepad2.dpad_left && jHeightTime.milliseconds() > 125) {
             jHeight = 0;
             jHeightTime.reset();
+            liftEdited = false;
         }
 
         switch (jHeight) {
@@ -141,6 +146,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
+                updateLiftLength(liftTime.milliseconds());
                 if (gamepad2.a)
                 {
                     manualGrab = true;
@@ -163,18 +169,20 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // keep height at 35
                 if (!doNotReset)
                 {
-                    if (getLiftPos() > 60)
+                    setSlideTarget(30);
+                    /*if (getLiftPos() > 60)
                     {
-                        liftReset(.6, 60);
+                        setSlideTarget(60);
                     }
                     else if(getLiftPos() < 30)
                     {
-                        setLiftPosLittle(50);
+                        setSlideTarget(50);
                     }
                     else
                     {
                         setLiftPower(-0.0005);
                     }
+                     */
                 }
                 // driver 2 manual movement for lift, automatic grab
                 if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
@@ -182,11 +190,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     doNotReset = true;
                     if (getLiftPos() > 10 && !manualGrab)
                     {
-                        liftReset(.5, 5);
+                        setSlideTarget(5);
                     }
                     else
                     {
-                        setLiftPower(0);
+                        //setLiftPower(0);
                         grab();
                         fourbar.reset();
                         grabbed = true;
@@ -198,6 +206,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "IDLE";
                 break;
             case GRAB:
+                updateLiftLength(liftTime.milliseconds());
                 if (fourbar.milliseconds() > 250)
                 {
                     grabFourBar();
@@ -219,16 +228,17 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "GRAB";
                 break;
             case RAISE:
+                updateLiftLength(liftTime.milliseconds());
                 swivelIn();
                 if (getLiftPos() < liftTargetPos) {
-                    if (jHeight != 0)
-                    {
-                        setLiftPos(liftTargetPos);
-                    }
+                    //if (jHeight != 0)
+                    //{
+                        setSlideTarget(liftTargetPos);
+                    /*}
                     else
                     {
                         setLiftPosLittle(liftTargetPos);
-                    }
+                    }*/
                 } else {
                     blue = false;
                     if (jHeight != 0)
@@ -272,6 +282,18 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 if (Math.abs(gamepad2.left_stick_y) > .05) {
                     setLiftPower(gamepad2.left_stick_y * 0.20);
+                    liftEdited = true;
+                } else if (!liftEdited) {
+                    setSlideTarget(liftTargetPos);
+                    updateLiftLength(liftTime.milliseconds());
+                    /*if (getLiftPos() > 100)
+                        setLiftPower(-.0005);
+                    else if (jHeight == 0)
+                        setLiftPower(0);
+                    else if (jHeight == 1)
+                        setLiftPower(-0.0005);
+                    else
+                        setLiftPower(-0.0005);*/
                 } else {
                     if (getLiftPos() > 100)
                         setLiftPower(-.0005);
@@ -283,7 +305,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(-0.0005);
                 }
                 if (gamepad2.a && grabTime.milliseconds() > 200) {
-                    setLiftPower(-0.0005);
+                    //setLiftPower(-0.0005);
                     release(); //need to test timing, will prob have to modify delay using macroTime
                     grabTime.reset();
                     lift = LiftState.LOWER;
@@ -302,6 +324,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
+                updateLiftLength(liftTime.milliseconds());
                 swivelIn();
                 if (grabTime.milliseconds() > 500) {
                     grab();
@@ -309,9 +332,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 }
                 if ((macroTime.milliseconds() > 750 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
                     if (getLiftPos() > 25) {
-                        liftReset(.4, 25);
+                        setSlideTarget(25);
                     } else {
-                        setLiftPower(0);
+                        //setLiftPower(0);
                         active = false;
                         grabbed = false;
                         extend = false;
@@ -322,10 +345,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "LOWER";
                 break;
             case DEAD:
+                updateLiftLength(liftTime.milliseconds());
                 if (getLiftPos() > 50) {
-                    liftReset(.6, 50);
+                    setSlideTarget(50);
                 } else {
-                    setLiftPower(0);
+                    //setLiftPower(0);
                     active = false;
                     lift = LiftState.IDLE;
                 }
