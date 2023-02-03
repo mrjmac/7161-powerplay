@@ -22,8 +22,8 @@ public class TwoWheelTrackingLocalizer {
 
     // CALCULATE
 
-    public static double PARALLEL_TICKS_PER_INCH = 1111.587; // 0.688975 * 2 * Math.PI * ticks / 8192
-    public static double LATERAL_TICKS_PER_INCH = 1111.587; // 0.688975 * 2 * Math.PI * ticks / 8192
+    public static double PARALLEL_TICKS_PER_INCH = 1892.37243; // 0.688975 * 2 * Math.PI * ticks / 8192 = 1
+    public static double LATERAL_TICKS_PER_INCH = 1892.37243; // 0.688975 * 2 * Math.PI * ticks / 8192 = 1
     public static int VELOCITY_READ_TICKS = 5;
 
     public static int PARALLEL_ENCODER_PORT = 0; //intakeL

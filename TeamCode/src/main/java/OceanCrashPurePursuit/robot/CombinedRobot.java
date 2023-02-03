@@ -102,8 +102,8 @@ public class CombinedRobot {
     public Servo swivel;
 
     /* Uneditable constants */
-    public final static double TRACK_WIDTH = 16.5; // in
-    public final static double WHEEL_DIAMETER = 4; // in
+    public final static double TRACK_WIDTH = 13.83; // in
+    public final static double WHEEL_DIAMETER = 1.8898 * 2; // in
 
     /**
      * Instantiates a <b>real</b> SkystoneHardware object that will try to communicate with the REV

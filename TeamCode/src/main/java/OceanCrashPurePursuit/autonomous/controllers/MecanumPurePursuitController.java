@@ -18,7 +18,7 @@ public class MecanumPurePursuitController {
     public static double MIN_SLIP_SPEED = 8;
     public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(12, 12, Math.PI);
     public static Pose ONE_AWAY_POWERS = new Pose(0.08, 0.12, 0.1);
-    public static double CLOSE_EXPONENT = 1.0/6.0;
+    public static double CLOSE_EXPONENT = 1.0 / 6.0;
 
 
     private static Pose relDistanceToTarget(Pose robot, Point target) {

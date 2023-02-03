@@ -12,6 +12,7 @@ public class Waypoint extends Point implements Cloneable {
     public Waypoint(Point p, double followDistance) {
         this(p.x, p.y, followDistance, null);
     }
+
     public Waypoint(Point p, double followDistance, Subroutines.Subroutine action) {
         this(p.x, p.y, followDistance, action);
     }
