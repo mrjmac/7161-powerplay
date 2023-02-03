@@ -26,8 +26,8 @@ public class TwoWheelTrackingLocalizer {
     public static double LATERAL_TICKS_PER_INCH = 1892.37243; // 0.688975 * 2 * Math.PI * ticks / 8192 = 1
     public static int VELOCITY_READ_TICKS = 5;
 
-    public static int PARALLEL_ENCODER_PORT = 0; //intakeL
-    public static int LATERAL_ENCODER_PORT = 1; // intakeR
+    public static int PARALLEL_ENCODER_PORT = 3; //intakeL
+    public static int LATERAL_ENCODER_PORT = 3; // intakeR
 
     public static double PARALLEL_Y_POS = -5.85310937;
     public static double LATERAL_X_POS = 5.25;
@@ -88,18 +88,18 @@ public class TwoWheelTrackingLocalizer {
         return (int) (inches * PARALLEL_TICKS_PER_INCH);
     }
 
-    public void update(RevBulkData data, double heading) {
+    public void update(int parallel, int lateral, double heading) {
         double[] deltas = new double[] {
-                encoderTicksToInches(data.getMotorCurrentPosition(PARALLEL_ENCODER_PORT) - prevWheelPositions[0],
+                encoderTicksToInches(parallel - prevWheelPositions[0],
                         PARALLEL_TICKS_PER_INCH),
-                encoderTicksToInches(data.getMotorCurrentPosition(LATERAL_ENCODER_PORT) - prevWheelPositions[1],
+                encoderTicksToInches(lateral - prevWheelPositions[1],
                         LATERAL_TICKS_PER_INCH),
                 MathUtil.angleWrap(heading - prevHeading)
         };
         System.out.println(Arrays.toString(deltas));
-        prevWheelPositions[0] = data.getMotorCurrentPosition(PARALLEL_ENCODER_PORT);
+        prevWheelPositions[0] = parallel;
         prevHeading = heading;
-        prevWheelPositions[1] = data.getMotorCurrentPosition(LATERAL_ENCODER_PORT);
+        prevWheelPositions[1] = lateral;
         updateFromRelative(deltas);
     }
 
