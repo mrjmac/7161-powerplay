@@ -108,10 +108,8 @@ public abstract class OceanCrashOpMode extends OpMode {
 
         jit = new ElapsedTime();
         release();
-
         telemetry.addData("init ", "completed");
         telemetry.update();
-
     }
 
     public void startMotors(double FLP, double FRP, double BLP, double BRP) {
@@ -362,17 +360,27 @@ public abstract class OceanCrashOpMode extends OpMode {
 
             double f = 0;
             //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
-            if (Math.abs(error) < 5) {
+            if (Math.abs(error) < 2) {
                 //f = getSlidesPos() * kStatic;
-                p = 0.0005;
-                d = 0;
+                if (getLiftPos() > 20) {
+                    p = 0.0005;
+                    d = 0;
+                } else {
+                    p = 0;
+                    d = 0;
+                }
             } else if (error > 250) {
                 p *= 1.2;
-            } else if (error < 30 && error > 0 && liftTime > 500) {
+            } else if (error < 30 && error > 0 && liftTime > 1500) {
                 p *= .4;
             } else if (getLiftPos() > currentTargetSlidesPos) {
-                p /= 1.2;
-                d *= .099705882;
+                if (error > 30) {
+                    p /= 1.2;
+                    d *= .099705882;
+                } else {
+                    p *= 1.2;
+                    d = 0;
+                }
             }
             double power = p + d;
             setLiftPower(-power);

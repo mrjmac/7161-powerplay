@@ -37,6 +37,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean swivelTrue = false;
     private boolean doNotReset = false;
     private boolean toggle2 = false;
+    private boolean firstLoop = true;
 
     public static double wait = 200;
     private boolean grabd1 = false;
@@ -59,10 +60,14 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 1;
     private int liftTargetPos = 0;
-    public static int low = 65, medium = 300, high = 600;
+    public static int low = 125, medium = 340, high = 700;
 
 
     public void loop() {
+        if (firstLoop) {
+            liftTime.reset();
+            firstLoop = false;
+        }
 
         // DRIVE
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
@@ -188,9 +193,9 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 10 && !manualGrab)
+                    if (getLiftPos() > 1 && !manualGrab)
                     {
-                        setSlideTarget(5);
+                        setSlideTarget(0);
                     }
                     else
                     {
