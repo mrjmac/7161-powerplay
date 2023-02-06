@@ -1,7 +1,5 @@
 package OceanCrashPurePursuit.robot;
 
-import android.os.Build;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -31,13 +29,8 @@ import OceanCrashPurePursuit.common.math.Pose;
 import OceanCrashPurePursuit.robot.util.MecanumPowers;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.teamcode.BuildConfig;
-import org.openftc.revextensions2.ExpansionHubEx;
-import org.openftc.revextensions2.RevBulkData;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,12 +64,9 @@ public class CombinedRobot {
     /* Misc. state */
     public double lastHeading;
 
-    public RevBulkData lastChassisRead;
     private MecanumPowers powers;
 
     /* Components */
-    public ExpansionHubEx controlHub;
-    public ExpansionHubEx expansionHub;
     public BNO055IMU imu;
 
     public List<DcMotorEx> allMotors;
@@ -102,8 +92,8 @@ public class CombinedRobot {
     public Servo swivel;
 
     /* Uneditable constants */
-    public final static double TRACK_WIDTH = 16.5; // in
-    public final static double WHEEL_DIAMETER = 4; // in
+    public final static double TRACK_WIDTH = 13.83; // in
+    public final static double WHEEL_DIAMETER = 1.8898 * 2; // in
 
     /**
      * Instantiates a <b>real</b> SkystoneHardware object that will try to communicate with the REV
@@ -177,10 +167,6 @@ public class CombinedRobot {
         allMotors = Arrays.asList(FL, BL, FR, BR, intakeL, intakeR, liftL, liftR);
         allServos = Arrays.asList(spinL, spinR, grab, swivel);
 
-        expansionHub = hardwareMap.get(ExpansionHubEx.class, "expansionHub");
-        controlHub = hardwareMap.get(ExpansionHubEx.class, "controlHub");
-        lastChassisRead = null;
-
         LoadTimer calTime = new LoadTimer();
         initBNO055IMU(hardwareMap);
         calTime.stop();
@@ -210,28 +196,6 @@ public class CombinedRobot {
     }
 
     private void logBootTelemetry(HardwareMap hardwareMap, LoadTimer lT, LoadTimer cT) {
-        Telemetry.Log log = telemetry.log();
-        log.clear();
-        log.setCapacity(6);
-
-        log.add("-- 7161 RC --");
-
-        // Robot information
-        List<LynxModule> revHubs = hardwareMap.getAll(LynxModule.class);
-        List<DcMotor> motors = hardwareMap.getAll(DcMotor.class);
-        List<Servo> servos = hardwareMap.getAll(Servo.class);
-        List<DigitalChannel> digital = hardwareMap.getAll(DigitalChannel.class);
-        List<AnalogInput> analog = hardwareMap.getAll(AnalogInput.class);
-        List<I2cDevice> i2c = hardwareMap.getAll(I2cDevice.class);
-        log.add(revHubs.size() + " Hubs; " + motors.size() + " Motors; " + servos.size() +
-                " Servos; " + (digital.size() + analog.size() + i2c.size()) + " Sensors");
-
-        lT.stop();
-
-        // Load information
-        log.add("Total time " + lT.millis() + " ms; Calibrate time " + cT.millis() + " ms");
-        telemetry.update();
-        lastTelemetryUpdate = System.nanoTime();
     }
 
     private void initBNO055IMU(HardwareMap hardwareMap) {
@@ -245,65 +209,11 @@ public class CombinedRobot {
     }
 
     public void initBulkReadTelemetry() {
-        Telemetry.Line odometryLine = telemetry.addLine();
-        telOdometry = new Telemetry.Item[3];
-        telOdometry[0] = odometryLine.addData("X", "0");
-        telOdometry[1] = odometryLine.addData("Y", "0");
-        telOdometry[2] = odometryLine.addData("θ", "0");
-
-        Telemetry.Line encoderLine = telemetry.addLine();
-        telEncoders = new Telemetry.Item[4];
-        for (int i = 0; i < 4; i++) {
-            telEncoders[i] = encoderLine.addData("E" + i, -1);
-        }
-
-        Telemetry.Line powersLine = telemetry.addLine();
-        telPowers = new Telemetry.Item[4];
-        telPowers[0] = powersLine.addData("FL", "0");
-        telPowers[1] = powersLine.addData("FR", "0");
-        telPowers[2] = powersLine.addData("BL", "0");
-        telPowers[3] = powersLine.addData("BR", "0");
-
-        Telemetry.Line analogLine = telemetry.addLine();
-        telAnalog = new Telemetry.Item[4];
-        for (int i = 0; i < 4; i++) {
-            telAnalog[i] = analogLine.addData("A" + i, -1);
-        }
-
-        telDigital = telemetry.addLine().addData("DIGITALS", "0 0 0 0 0 0 0 0");
-
-        Telemetry.Line timingLine = telemetry.addLine("LOOP ");
-        telHertz = timingLine.addData("Hertz", -1);
-        telLoopTime = timingLine.addData("Millis", -1);
     }
 
-    public RevBulkData performBulkRead() {
-        this.lastChassisRead = controlHub.getBulkInputData();
+    public void performBulkRead() {
         this.lastHeading = imu.getAngularOrientation().firstAngle - headingOffset;
-        localizer.update(lastChassisRead, lastHeading);
-
-        // Adjust telemetry localizer info
-        telOdometry[0].setValue(String.format("%.1f", localizer.x()));
-        telOdometry[1].setValue(String.format("%.1f", localizer.y()));
-        telOdometry[2].setValue(String.format("%.1f", Math.toDegrees(localizer.h())));
-
-        telPowers[0].setValue(String.format("%.2f", powers.frontLeft));
-        telPowers[1].setValue(String.format("%.2f", powers.frontRight));
-        telPowers[2].setValue(String.format("%.2f", powers.backLeft));
-        telPowers[3].setValue(String.format("%.2f", powers.backRight));
-
-        // Adjust encoders and analog inputs
-        for (int i = 0; i < 4; i++) {
-            telEncoders[i].setValue(lastChassisRead.getMotorCurrentPosition(i));
-            telAnalog[i].setValue(lastChassisRead.getAnalogInputValue(i));
-        }
-
-        // Adjust digital inputs
-        StringBuilder digitals = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            digitals.append(lastChassisRead.getDigitalInputState(i) ? 1 : 0).append(" ");
-        }
-        telDigital.setValue(digitals.toString());
+        localizer.update(intakeL.getCurrentPosition(), intakeR.getCurrentPosition(), lastHeading);
 
         // Run any cached actions
         Iterator<DelayedSubroutine> iterator = actionCache.listIterator();
@@ -316,31 +226,18 @@ public class CombinedRobot {
             }
         }
 
-        // Adjust elapsed time
-        double elapsed = ((System.nanoTime() - lastTelemetryUpdate) / 1000000.0);
-        telLoopTime.setValue("%.1f", elapsed);
-        telHertz.setValue("%.1f", 1000 / elapsed);
-
-        // Finalize telemetry update
-        telemetry.update();
-
-        this.packet = new TelemetryPacket();
-        packet.put("x", localizer.x());
-        packet.put("y", localizer.y());
-        packet.put("h", localizer.h());
-        packet.put("e0", lastChassisRead.getMotorCurrentPosition(0));
-        packet.put("e1", lastChassisRead.getMotorCurrentPosition(1));
-
+        /*
         packet.fieldOverlay()
                 .setFill("blue")
                 .fillCircle(localizer.x(), localizer.y(), 3);
 
+         */
+
         lastTelemetryUpdate = System.nanoTime();
-        return lastChassisRead;
     }
 
     public void drawDashboardPath(PurePursuitPath path) {
-        path.draw(packet.fieldOverlay());
+        //path.draw(packet.fieldOverlay());
     }
 
     public void sendDashboardTelemetryPacket() {
