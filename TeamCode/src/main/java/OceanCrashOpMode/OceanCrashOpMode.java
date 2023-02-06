@@ -1,5 +1,7 @@
 package OceanCrashOpMode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 
@@ -42,6 +46,9 @@ public abstract class OceanCrashOpMode extends OpMode {
     public double pastError = 0, pastTime = 0;
 
     //private VoltageSensor voltage;
+
+    private Orientation angles;
+    private BNO055IMU imu;
 
 
     public void init() {
@@ -106,8 +113,21 @@ public abstract class OceanCrashOpMode extends OpMode {
 
         //voltage = hardwareMap.voltageSensor.get("Voltage");
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu2");
+        imu.initialize(parameters);
+
         jit = new ElapsedTime();
         release();
+
+
         telemetry.addData("init ", "completed");
         telemetry.update();
     }
@@ -171,6 +191,80 @@ public abstract class OceanCrashOpMode extends OpMode {
         telemetry.addData("BLP: ", BLP * speedControl);
         telemetry.addData("BRP: ", BRP * speedControl);
         telemetry.addData("right trigger: ", gamepad1.right_trigger);
+    }
+
+    public void testDrive(double x, double y, double turn, double trigger, boolean angleLock, double lockedAngle) {
+
+        double FLP = y - x - turn;
+        double FRP = y + x + turn;
+        double BLP = y + x - turn;
+        double BRP = y - x + turn;
+
+        double speedControl;
+        if (trigger > .1) {
+            speedControl = .35;
+        } else {
+            speedControl = 1;
+        }
+
+        double max = Math.max(Math.max(Math.abs(FLP), Math.abs(FRP)), Math.max(Math.abs(BLP), Math.abs(BRP)));
+
+        if (max > 1) {
+            FLP /= max;
+            FRP /= max;
+            BLP /= max;
+            BRP /= max;
+        }
+        double voltageC = 1;
+        if (!angleLock) {
+            if (turn > 0)
+                if (getVoltage() > 14)
+                    voltageC = .8;
+                else if (getVoltage() > 13.8)
+                    voltageC = .85;
+                else if (getVoltage() > 13.6)
+                    voltageC = .9;
+                else if (getVoltage() > 13.4)
+                    voltageC = .95;
+        } else {
+            if (Math.abs(x) > .05) {
+                double angleDiff = gimbleCalc(lockedAngle, getGyroYaw());
+                double GyroScalePower = angleDiff * .02;
+                BRP -= GyroScalePower;
+                FRP -= GyroScalePower;
+                BLP += GyroScalePower;
+                FLP += GyroScalePower;
+            }
+        }
+
+        startMotors(FLP * speedControl * voltageC, FRP * speedControl * voltageC, BLP * speedControl * voltageC, BRP * speedControl * voltageC);
+
+        telemetry.addData("FLP: ", FLP * speedControl);
+        telemetry.addData("FRP: ", FRP * speedControl);
+        telemetry.addData("BLP: ", BLP * speedControl);
+        telemetry.addData("BRP: ", BRP * speedControl);
+        telemetry.addData("right trigger: ", gamepad1.right_trigger);
+    }
+
+    public void updateGyroValues() {
+        angles = imu.getAngularOrientation();
+    }
+
+    public double getGyroYaw() {
+        updateGyroValues();
+        return angles.firstAngle;
+    }
+
+    public double gimbleCalc(double initVal, double curVal) {
+        double angleDiff;
+        if (initVal - curVal >= 180)
+            angleDiff = -1 * ((360 + curVal) - initVal);
+        else if (curVal - initVal >= 180)
+            angleDiff = (360 + initVal) - curVal;
+        else
+            angleDiff = initVal - curVal;
+
+        return angleDiff;
     }
 
     public double getMotorEncoders()
