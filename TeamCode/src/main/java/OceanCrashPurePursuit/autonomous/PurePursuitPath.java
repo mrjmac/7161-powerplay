@@ -138,7 +138,9 @@ public class PurePursuitPath {
 
             }
         } while (jumpToNextSegment && currPoint < waypoints.size() - 1);
-        if (finished()) {return;}
+        if (finished()) {
+            return;
+        }
 
         Waypoint target = waypoints.get(currPoint + 1);
         // If we're making a stop and in the stop portion of the move
