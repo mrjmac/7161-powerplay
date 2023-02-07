@@ -38,7 +38,7 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit{
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 24, 36, 3, -Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x, 36, 3, -Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x, 10, 3, -Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x, 0, 8, Math.toRadians(90), 1)));
+                new StopWaypoint(DEFAULT_START_POSITION.x, 0, 3, -Math.toRadians(90), 1)));
 
         return scoreSkystones;
     }

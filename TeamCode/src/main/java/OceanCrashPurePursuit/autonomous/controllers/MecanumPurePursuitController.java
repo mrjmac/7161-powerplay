@@ -16,7 +16,7 @@ public class MecanumPurePursuitController {
     public static Pose SLIP_DISTANCES = new Pose(5.0, 0, 0);
     public static double UNDERSHOOT_DIST = 5; // Aim to stop 2 in away from target, and use small motions to finish it
     public static double MIN_SLIP_SPEED = 4;
-    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(12, 12, 2 * Math.PI);
+    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(4, 4, 3 * Math.PI);
     public static Pose ONE_AWAY_POWERS = new Pose(0.08, 0.12, 0.1);
     public static double CLOSE_EXPONENT = 1.0 / 6.0;
 
