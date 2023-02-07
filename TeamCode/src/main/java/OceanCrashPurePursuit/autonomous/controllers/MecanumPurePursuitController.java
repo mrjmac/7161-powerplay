@@ -14,8 +14,8 @@ import OceanCrashPurePursuit.robot.util.MecanumPowers;
 public class MecanumPurePursuitController {
     // How far we slip if we're moving 1 in/sec (or 1 rad/sec) in each of these directions
     public static Pose SLIP_DISTANCES = new Pose(5.0, 0, 0);
-    public static double UNDERSHOOT_DIST = 5; // Aim to stop 2 in away from target, and use small motions to finish it
-    public static double MIN_SLIP_SPEED = 4;
+    public static double UNDERSHOOT_DIST = 3; // Aim to stop 2 in away from target, and use small motions to finish it
+    public static double MIN_SLIP_SPEED = 3;
     public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(12, 12, 2 * Math.PI);
     public static Pose ONE_AWAY_POWERS = new Pose(0.08, 0.12, 0.1);
     public static double CLOSE_EXPONENT = 1.0 / 6.0;
