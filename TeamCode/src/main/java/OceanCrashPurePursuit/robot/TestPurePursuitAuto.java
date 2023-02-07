@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import OceanCrashPurePursuit.autonomous.PurePursuitPath;
 import OceanCrashPurePursuit.autonomous.waypoints.HeadingControlledWaypoint;
+import OceanCrashPurePursuit.autonomous.waypoints.PointTurnWaypoint;
 import OceanCrashPurePursuit.autonomous.waypoints.StopWaypoint;
 import OceanCrashPurePursuit.autonomous.waypoints.Waypoint;
 import OceanCrashPurePursuit.common.SimulatablePurePursuit;
@@ -27,7 +28,7 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit{
     PurePursuitPath followPath;
 
     public final static double FIELD_RADIUS = 141 / 2.0; // in
-    Pose DEFAULT_START_POSITION = new Pose(-FIELD_RADIUS + 22.75 + 9, FIELD_RADIUS - 9, 0);
+    Pose DEFAULT_START_POSITION = new Pose(-FIELD_RADIUS + 22.75 + 9, FIELD_RADIUS - 9, -Math.toRadians(90));
 
     public List<Waypoint> getPurePursuitWaypoints() {
         LinkedList<Waypoint> scoreSkystones = Waypoint.collate(
@@ -42,6 +43,7 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit{
 
         return scoreSkystones;
     }
+
 
     @Override
     public void init() {
