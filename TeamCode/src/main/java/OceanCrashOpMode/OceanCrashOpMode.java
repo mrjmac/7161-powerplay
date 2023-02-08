@@ -217,7 +217,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         }
         double voltageC = 1;
         if (!angleLock) {
-            if (turn > 0)
+            if (Math.abs(turn) > .1)
                 if (getVoltage() > 14)
                     voltageC = .8;
                 else if (getVoltage() > 13.8)
@@ -227,9 +227,9 @@ public abstract class OceanCrashOpMode extends OpMode {
                 else if (getVoltage() > 13.4)
                     voltageC = .95;
         } else {
-            if (Math.abs(x) > .05) {
+            if (Math.abs(x) > .05 && Math.abs(y) > .05) {
                 double angleDiff = gimbleCalc(lockedAngle, getGyroYaw());
-                double GyroScalePower = angleDiff * .02;
+                double GyroScalePower = angleDiff * .1;
                 BRP -= GyroScalePower;
                 FRP -= GyroScalePower;
                 BLP += GyroScalePower;
@@ -244,6 +244,8 @@ public abstract class OceanCrashOpMode extends OpMode {
         telemetry.addData("BLP: ", BLP * speedControl);
         telemetry.addData("BRP: ", BRP * speedControl);
         telemetry.addData("right trigger: ", gamepad1.right_trigger);
+        telemetry.addData("angleLock:", angleLock);
+        telemetry.addData("lockedAngle:", lockedAngle);
     }
 
     public void updateGyroValues() {

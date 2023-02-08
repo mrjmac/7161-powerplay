@@ -14,10 +14,10 @@ import OceanCrashPurePursuit.robot.util.MecanumPowers;
 public class MecanumPurePursuitController {
     // How far we slip if we're moving 1 in/sec (or 1 rad/sec) in each of these directions
     public static Pose SLIP_DISTANCES = new Pose(5.0, 0, 0);
-    public static double UNDERSHOOT_DIST = 5; // Aim to stop 2 in away from target, and use small motions to finish it
-    public static double MIN_SLIP_SPEED = 4;
-    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(12, 12, 2 * Math.PI);
-    public static Pose ONE_AWAY_POWERS = new Pose(0.08, 0.12, 0.1);
+    public static double UNDERSHOOT_DIST = 5; // Aim to stop 5 in away from target, and use small motions to finish it
+    public static double MIN_SLIP_SPEED = 3;
+    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(6, 6, .2 * Math.PI);
+    public static Pose ONE_AWAY_POWERS = new Pose(0.16, 0.12, .1 * Math.PI);
     public static double CLOSE_EXPONENT = 1.0 / 6.0;
 
 
@@ -56,7 +56,7 @@ public class MecanumPurePursuitController {
             double desiredAngle = target instanceof HeadingControlledWaypoint ? ((HeadingControlledWaypoint) target).targetHeading : autoAngle;
 
             double angleToTarget = MathUtil.angleWrap(desiredAngle - robotPose.heading);
-            translationPowers.heading = angleToTarget / GUNNING_REDUCTION_DISTANCES.heading;
+            translationPowers.heading = -angleToTarget / GUNNING_REDUCTION_DISTANCES.heading;
 
             return new MecanumPowers(translationPowers);
         }
@@ -86,7 +86,7 @@ public class MecanumPurePursuitController {
             // Now we just need to nudge the robot. We'll hold our heading with a simple P-loop,
             // and adjust our position with a special function
             Pose relAbsTarget = relDistanceToTarget(robotPose, finalTarget);
-            double angleToTarget = MathUtil.angleWrap(finalTarget.targetHeading - robotPose.heading);
+            double angleToTarget = -MathUtil.angleWrap(finalTarget.targetHeading - robotPose.heading);
 
             // Now, we're going to use the polynomial function x^1/6 to compute our powers
             Pose dirPowers = new Pose(-MathUtil.powRetainingSign(relAbsTarget.x, CLOSE_EXPONENT), -MathUtil.powRetainingSign(relAbsTarget.y, CLOSE_EXPONENT), MathUtil.powRetainingSign(angleToTarget, CLOSE_EXPONENT));

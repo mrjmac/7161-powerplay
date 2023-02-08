@@ -39,5 +39,6 @@ public class TestTeleOp extends OceanCrashOpMode{
         } else {
             stopMotors();
         }
+        telemetry.update();
     }
 }

@@ -60,7 +60,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 1;
     private int liftTargetPos = 0;
-    public static int low = 125, medium = 340, high = 700;
+    public static int low = 250, medium = 450, high = 800;
 
 
     public void loop() {
@@ -80,7 +80,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         if (gamepad1.right_bumper && gamepad1.left_bumper)
             setIntake(.5);
         else if (gamepad1.right_bumper)
-            setIntake(-.9);
+            setIntake(-1);
         else if (gamepad1.left_bumper)
             setIntake(-.5);
         else
@@ -174,7 +174,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // keep height at 35
                 if (!doNotReset)
                 {
-                    setSlideTarget(30);
+                    setSlideTarget(50);
                     /*if (getLiftPos() > 60)
                     {
                         setSlideTarget(60);
