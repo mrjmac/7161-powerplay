@@ -23,7 +23,7 @@ import java.util.List;
 @Config
 public class PurePursuitPath {
     public static double TRACK_SPEED = 0.5;
-    public static double DEAD_MAN_SWITCH = 10000;
+    public static double DEAD_MAN_SWITCH = 1000;
     private CombinedRobot robot;
     public List<Waypoint> waypoints;
 
@@ -99,7 +99,6 @@ public class PurePursuitPath {
                 timeUntilDeadman.reset();
             }
             if (target instanceof StopWaypoint) {
-                //TODO: ADD HEADING ALLOWED ERROR, ALTHOUGH I CAN JUST USE A POINT TURN WAYPOINT
                 if (robotPosition.distance(target) < ((StopWaypoint) target).allowedPositionError) {
                     jumpToNextSegment = true;
                 }
