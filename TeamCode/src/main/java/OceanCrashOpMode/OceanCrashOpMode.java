@@ -24,8 +24,10 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor FR; // [C1], lateral odom
 
     // Four Bar
-    private Servo spinL; // [C0]
-    private Servo spinR; // [E5]
+    public Servo spinL1; // [C0] // this might be right
+    public Servo spinL2; // []
+    public Servo spinR1; // [E5] // this is wrong
+    public Servo spinR2; // []
     private Servo grab; // [E4]
     private Servo swivel;
 
@@ -71,8 +73,10 @@ public abstract class OceanCrashOpMode extends OpMode {
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Four Bar
-        spinL = hardwareMap.servo.get("spinL"); // [C0]
-        spinR = hardwareMap.servo.get("spinR"); // [E5]
+        spinL1 = hardwareMap.servo.get("spinL1"); // [C0]
+        spinL2 = hardwareMap.servo.get("spinL2"); // []
+        spinR1 = hardwareMap.servo.get("spinR1"); // [E5] //these are wrong
+        spinR2 = hardwareMap.servo.get("spinR2"); // [C0]
         grab = hardwareMap.servo.get("grab"); // [E4]
         swivel = hardwareMap.servo.get("swivel");
 
@@ -308,38 +312,35 @@ public abstract class OceanCrashOpMode extends OpMode {
         return result;
     }
 
+    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
     public void extendFourBar()
     {
         grab();
-        spinL.setPosition(0.55);
-        spinR.setPosition(0.45);
+        spinR1.setPosition(0.45);
+        spinL1.setPosition(0.55);
+
     }
 
     public void trueExtendFourBar()
     {
-        spinR.setPosition(0.65);
-        spinL.setPosition(0.35);
+        spinR1.setPosition(0.65);
+        spinL1.setPosition(0.35);
     }
 
     public void retractFourBar()
     {
         swivelIn();
         grab();
-        spinR.setPosition(0);
-        spinL.setPosition(1);
-    }
-
-    public void resetFourBar() {
-        swivelIn();
-        spinR.setPosition(0);
-        spinL.setPosition(1);
+        spinR1.setPosition(0);
+        spinL1.setPosition(1);
     }
 
     public void grabFourBar()
     {
-        spinR.setPosition(0.15);
-        spinL.setPosition(0.85);
+        spinR1.setPosition(0.15);
+        spinL1.setPosition(0.85);
     }
+    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
     public void grab()
     {
