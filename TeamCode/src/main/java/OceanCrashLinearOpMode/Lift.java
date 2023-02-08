@@ -283,23 +283,37 @@ public class Lift {
     }
 
     public void updateLiftLength(double liftTime) {
-        double error = currentTargetSlidesPos - getSlidesPos();
+        double error = currentTargetSlidesPos - getLiftPos();
 
-        if (opMode.opModeIsActive() && Math.abs(error) > .5) {
-            double p = (error) * kP;
+        if (Math.abs(error) > .5) {
+            double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP);
 
             double dT = liftTime - pastTime;
-            double d = (error - pastError) / dT * kD;
+            double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
 
             double f = 0;
             //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
-            if (Math.abs(currentTargetSlidesPos - getSlidesPos()) < 2) {
+            if (Math.abs(error) < 2) {
                 //f = getSlidesPos() * kStatic;
-                p = -0.0005;
-                d = 0;
-            } else if (getSlidesPos() > currentTargetSlidesPos) {
-                p /= 2.8;
-                //d /= 3.1;
+                if (getLiftPos() > 20) {
+                    p = 0.0005;
+                    d = 0;
+                } else {
+                    p = 0;
+                    d = 0;
+                }
+            } else if (error > 250) {
+                p *= 1.2;
+            } else if (error < 30 && error > 0 && liftTime > 1500) {
+                p *= .4;
+            } else if (getLiftPos() > currentTargetSlidesPos) {
+                if (error > 30) {
+                    p /= 1.2;
+                    d *= .099705882;
+                } else {
+                    p *= 1.2;
+                    d = 0;
+                }
             }
             double power = p + d;
             setLiftPower(-power);
