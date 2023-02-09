@@ -188,21 +188,27 @@ public class Lift {
     public void extendFourBar()
     {
         grab();
-        spinR1.setPosition(0.5);
-        spinL1.setPosition(0.5);
+        spinR1.setPosition(0.6);
+        spinR2.setPosition(0.6);
+        spinL1.setPosition(0.4);
+        spinL2.setPosition(0.4);
     }
 
     public void trueExtendFourBar()
     {
-        spinR1.setPosition(0.65);
-        spinL1.setPosition(0.35);
+        spinR1.setPosition(0.35);
+        spinR2.setPosition(0.35);
+        spinL1.setPosition(0.65);
+        spinL2.setPosition(0.65);
     }
 
-    public void retractFourBar()
+    public void retractFourBar() //NEW R is 1; OLD R is 0
     {
         grab();
-        spinR1.setPosition(0);
-        spinL1.setPosition(1);
+        spinR1.setPosition(1);
+        spinR2.setPosition(1);
+        spinL1.setPosition(0);
+        spinL2.setPosition(0);
     }
 
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS

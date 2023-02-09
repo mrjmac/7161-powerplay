@@ -25,9 +25,9 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     // Four Bar
     public Servo spinL1; // [C0] // this might be right
-    public Servo spinL2; // []
+    public Servo spinL2; // [C5]
     public Servo spinR1; // [E5] // this is wrong
-    public Servo spinR2; // []
+    public Servo spinR2; // [C4]
     private Servo grab; // [E4]
     private Servo swivel;
 
@@ -316,29 +316,36 @@ public abstract class OceanCrashOpMode extends OpMode {
     public void extendFourBar()
     {
         grab();
-        spinR1.setPosition(0.45);
-        spinL1.setPosition(0.55);
-
+        spinR1.setPosition(0.6);
+        spinR2.setPosition(0.6);
+        spinL1.setPosition(0.4);
+        spinL2.setPosition(0.4);
     }
 
     public void trueExtendFourBar()
     {
-        spinR1.setPosition(0.65);
-        spinL1.setPosition(0.35);
+        spinR1.setPosition(0.35);
+        spinR2.setPosition(0.35);
+        spinL1.setPosition(0.65);
+        spinL2.setPosition(0.65);
     }
 
     public void retractFourBar()
     {
         swivelIn();
         grab();
-        spinR1.setPosition(0);
-        spinL1.setPosition(1);
+        spinR1.setPosition(1);
+        spinR2.setPosition(1);
+        spinL1.setPosition(0);
+        spinL2.setPosition(0);
     }
 
     public void grabFourBar()
     {
-        spinR1.setPosition(0.15);
-        spinL1.setPosition(0.85);
+        spinR1.setPosition(0.9);
+        spinR2.setPosition(0.9);
+        spinL1.setPosition(0.1);
+        spinL2.setPosition(0.1);
     }
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
