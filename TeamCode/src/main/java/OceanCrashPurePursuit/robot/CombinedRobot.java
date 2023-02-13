@@ -95,9 +95,8 @@ public class CombinedRobot {
 
     private final double STALL_POWER = -0.0005;
 
-    public double currentSlidesPos = 0, currentTargetSlidesPos = 0, pastTargetSlidesPos = 0;
-    public static double kP = .005, kD = 0, kStatic = .0000005;
-    public double pastError = 0, pastTime = 0;
+    public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
+    public static double kP = .00166666667, kD = .0425, kStatic = -0.0005;
 
     /* Uneditable constants */
     public final static double TRACK_WIDTH = 13.83; // in

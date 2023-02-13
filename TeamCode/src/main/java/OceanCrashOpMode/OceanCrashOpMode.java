@@ -43,10 +43,8 @@ public abstract class OceanCrashOpMode extends OpMode {
     private TouchSensor touch;
 
     private ElapsedTime jit;
-    private double currentTargetSlidesPos = 0;
+    public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
     public static double kP = .00166666667, kD = .0425, kStatic = -0.0005;
-    public double pastError = 0, pastTime = 0;
-
     //private VoltageSensor voltage;
 
     private Orientation angles;
