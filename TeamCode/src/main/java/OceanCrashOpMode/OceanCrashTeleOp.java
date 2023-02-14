@@ -43,6 +43,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean grabd1 = false;
     private boolean mG = false;
     private boolean liftEdited = false;
+    private boolean dtMovement = false;
 
 
     private enum LiftState {
@@ -60,7 +61,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 1;
     private int liftTargetPos = 0;
-    public static int low = 250, medium = 450, high = 800;
+    public static int low = 225, medium = 450, high = 800;
 
 
     public void loop() {
@@ -72,6 +73,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         // DRIVE
         if (Math.abs(gamepad1.left_stick_x) > .1 || Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.right_stick_x) > .1) {
             drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_trigger);
+            dtMovement = true;
         } else {
             stopMotors();
         }
@@ -193,7 +195,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
                 {
                     doNotReset = true;
-                    if (getLiftPos() > 1 && !manualGrab)
+                    if (getLiftPos() > 2 && !manualGrab)
                     {
                         setSlideTarget(0);
                     }
@@ -312,6 +314,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (gamepad2.a && grabTime.milliseconds() > 200) {
                     //setLiftPower(-0.0005);
                     release(); //need to test timing, will prob have to modify delay using macroTime
+                    dtMovement = false;
                     grabTime.reset();
                     lift = LiftState.LOWER;
                     macroTime.reset();
@@ -329,22 +332,27 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 liftState = "PLACE";
                 break;
             case LOWER:
-                updateLiftLength(liftTime.milliseconds());
-                swivelIn();
-                if (grabTime.milliseconds() > 500) {
-                    grab();
-                    retractFourBar();
-                }
-                if ((macroTime.milliseconds() > 750 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
-                    if (getLiftPos() > 25) {
-                        setSlideTarget(25);
-                    } else {
-                        //setLiftPower(0);
-                        active = false;
-                        grabbed = false;
-                        extend = false;
-                        release();
-                        lift = LiftState.IDLE;
+                if (!dtMovement) {
+                    grabTime.reset();
+                } else {
+                    swivelIn();
+                    //}
+                    if (grabTime.milliseconds() > 500) {
+                        grab();
+                        updateLiftLength(liftTime.milliseconds());
+                        retractFourBar();
+                    }
+                    if ((macroTime.milliseconds() > 750 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
+                        if (getLiftPos() > 25) {
+                            setSlideTarget(25);
+                        } else {
+                            //setLiftPower(0);
+                            active = false;
+                            grabbed = false;
+                            extend = false;
+                            release();
+                            lift = LiftState.IDLE;
+                        }
                     }
                 }
                 liftState = "LOWER";
