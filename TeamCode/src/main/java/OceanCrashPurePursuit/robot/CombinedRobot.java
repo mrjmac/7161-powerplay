@@ -96,7 +96,7 @@ public class CombinedRobot {
     private final double STALL_POWER = -0.0005;
 
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00166666667, kD = .0425, kStatic = -0.0005;
+    public static double kP = .00175, kD = .0425, kStatic = -0.0005;
 
     /* Uneditable constants */
     public final static double TRACK_WIDTH = 13.83; // in
@@ -413,10 +413,10 @@ public class CombinedRobot {
     public void extendFourBar()
     {
         grab();
-        spinR1.setPosition(0.6);
-        spinR2.setPosition(0.6);
-        spinL1.setPosition(0.4);
-        spinL2.setPosition(0.4);
+        spinR1.setPosition(0.5);
+        spinR2.setPosition(0.5);
+        spinL1.setPosition(0.5);
+        spinL2.setPosition(0.5);
     }
 
     public void trueExtendFourBar()
@@ -434,6 +434,14 @@ public class CombinedRobot {
         spinR2.setPosition(1);
         spinL1.setPosition(0);
         spinL2.setPosition(0);
+    }
+
+    public void neutralFourBar() //NEW R is 1; OLD R is 0
+    {
+        spinR1.setPosition(.75);
+        spinR2.setPosition(.75);
+        spinL1.setPosition(.25);
+        spinL2.setPosition(.25);
     }
 
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS

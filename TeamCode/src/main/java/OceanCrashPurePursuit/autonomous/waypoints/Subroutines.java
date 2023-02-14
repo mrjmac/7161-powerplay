@@ -29,28 +29,29 @@ public class Subroutines {
         boolean runCycle(CombinedRobot robot); // Returns whether it's complete
     }
 
-    public static final OnceOffSubroutine OPEN_CLAW = (robot) -> { robot.grab(); };
+    public static final OnceOffSubroutine CLOSE_CLAW = (robot) -> { robot.grab(); };
 
-    public static final OnceOffSubroutine CLOSE_CLAW = (robot) -> { robot.release(); };
+    public static final OnceOffSubroutine OPEN_CLAW = (robot) -> { robot.release(); };
 
-    public static final OnceOffSubroutine GRAB_FOUR_BAR = (robot) -> { robot.extendFourBar();};
+    public static final OnceOffSubroutine DEPOSIT_FOUR_BAR = (robot) -> { robot.extendFourBar();};
 
-    public static final OnceOffSubroutine DEPOSIT_FOUR_BAR = (robot) -> { robot.trueExtendFourBar(); };
+    public static final OnceOffSubroutine GRAB_FOUR_BAR = (robot) -> { robot.trueExtendFourBar(); };
 
     public static final OnceOffSubroutine RAISE_LIFT = (robot) -> { robot.setSlideTarget(850); };
+
+    public static final OnceOffSubroutine POST_GRAB_LIFT = (robot) -> { robot.setSlideTarget(150); };
+
 
     public static final OnceOffSubroutine LOWER_LIFT = (robot) -> { robot.setSlideTarget(0); };
 
 
     public static final OnceOffSubroutine RETRACT_FOUR_BAR = (robot) -> { robot.retractFourBar();};
 
+    public static final OnceOffSubroutine NEUTRAL_FOUR_BAR = (robot) -> { robot.neutralFourBar();};
+
     public static final OnceOffSubroutine SWIVEL_OUT = (robot) -> { robot.swivelOut();};
 
     public static final OnceOffSubroutine SWIVEL_IN = (robot) -> { robot.swivelIn();};
-
-    public static final OnceOffSubroutine SWIVEL_START_LEFT = (robot) -> { robot.swivelStartLeft();};
-
-    public static final OnceOffSubroutine SWIVEL_START_RIGHT = (robot) -> { robot.swivelStartRight();};
 
 
 

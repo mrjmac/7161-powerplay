@@ -7,8 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import OceanCrashPurePursuit.autonomous.PurePursuitPath;
 import OceanCrashPurePursuit.autonomous.waypoints.Deposit;
+import OceanCrashPurePursuit.autonomous.waypoints.Grab;
 import OceanCrashPurePursuit.autonomous.waypoints.HeadingControlledWaypoint;
 import OceanCrashPurePursuit.autonomous.waypoints.PointTurnWaypoint;
+import OceanCrashPurePursuit.autonomous.waypoints.ReadyToDeposit;
+import OceanCrashPurePursuit.autonomous.waypoints.ReadyToGrab;
+import OceanCrashPurePursuit.autonomous.waypoints.Start;
 import OceanCrashPurePursuit.autonomous.waypoints.StopWaypoint;
 import OceanCrashPurePursuit.autonomous.waypoints.WaitSubroutine;
 import OceanCrashPurePursuit.autonomous.waypoints.Waypoint;
@@ -38,66 +42,22 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit {
         );
         scoreSkystones.addAll(Waypoint.collate(
                 //preload
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 22, DEFAULT_START_POSITION.y, 3, -Math.toRadians(45)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 24, DEFAULT_START_POSITION.y - 22, 3, -Math.toRadians(45)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 26, DEFAULT_START_POSITION.y - 22, 3, -Math.toRadians(45), 2, new WaitSubroutine(700)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 5, DEFAULT_START_POSITION.y, 3, -Math.toRadians(45), new Start()),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 22, DEFAULT_START_POSITION.y, 3, -Math.toRadians(45), new ReadyToDeposit()),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 23.5, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(45)),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 23.5, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(45), .5, new Deposit()),
 
                 //grab 1
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90), 2, new WaitSubroutine(500)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90), new ReadyToGrab()),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), new ReadyToGrab()),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), 1, new Grab(150)),
                 //deposit 1
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y, 3, -Math.toRadians(135)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), 2, new WaitSubroutine(700)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(135), new ReadyToDeposit()),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(135), 1, new Deposit())
 
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90), 2, new WaitSubroutine(500)),
-                //deposit 1
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y, 3, -Math.toRadians(135)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), 2, new WaitSubroutine(700)),
 
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90), 2, new WaitSubroutine(500)),
-                //deposit 1
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y, 3, -Math.toRadians(135)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), 2, new WaitSubroutine(700)),
-
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90), 2, new WaitSubroutine(500)),
-                //deposit 1
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y, 3, -Math.toRadians(135)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), 2, new WaitSubroutine(700)),
-
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 4, 3, Math.toRadians(90), 2, new WaitSubroutine(500)),
-                //deposit 1
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y, 3, -Math.toRadians(135)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), 2, new WaitSubroutine(700))
-                /*
-                //grab 2
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 56, DEFAULT_START_POSITION.y + 12, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 56, DEFAULT_START_POSITION.y + 12, 3, Math.toRadians(90), 2),
-                //deposit 2
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 56, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(20)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 56, DEFAULT_START_POSITION.y - 4, 3, -Math.toRadians(45)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 58, DEFAULT_START_POSITION.y - 4, 3, -Math.toRadians(45), 2),
-                //grab 3
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 60, DEFAULT_START_POSITION.y + 10, 3, Math.toRadians(90)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 60, DEFAULT_START_POSITION.y + 10, 3, Math.toRadians(90), 2),
-                //deposit 3
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 60, DEFAULT_START_POSITION.y + 6, 3, Math.toRadians(20)),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 60, DEFAULT_START_POSITION.y - 6, 3, -Math.toRadians(45)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 62, DEFAULT_START_POSITION.y - 6, 3, -Math.toRadians(45), 2)
-                 */
                 ));
 
 
@@ -109,6 +69,7 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit {
     public void init() {
         Pose start = DEFAULT_START_POSITION;
         this.robot = this.getRobot(start);
+        robot.grab();
 
     }
 
