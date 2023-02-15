@@ -107,11 +107,11 @@ public class TestAny extends LinearOpMode {
 
 //------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
 
-            lift.retractFourBar();
+            lift.grab();
             telemetry.addData("retracting:", "yea");
             telemetry.update();
             sleep(2500);
-            lift.trueExtendFourBar();
+            lift.release();
             telemetry.addData("extending:", "yea");
             telemetry.update();
             sleep(2500);
