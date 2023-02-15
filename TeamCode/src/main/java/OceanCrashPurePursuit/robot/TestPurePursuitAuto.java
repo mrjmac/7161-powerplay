@@ -50,13 +50,17 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit {
                 //grab 1
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90), new ReadyToGrab()),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), new ReadyToGrab()),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), 1, new Grab(150)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), new ReadyToGrab()),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), 1, new Grab(150)),
                 //deposit 1
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(135), new ReadyToDeposit()),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 54, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(135), 1, new Deposit())
+                new StopWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), .5, new Deposit()),
 
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90), new ReadyToGrab()),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), new ReadyToGrab()),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y + 8, 3, Math.toRadians(90), 1, new Grab(150))
 
                 ));
 

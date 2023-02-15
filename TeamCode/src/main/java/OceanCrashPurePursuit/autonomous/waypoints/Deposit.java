@@ -29,19 +29,22 @@ public class Deposit implements Subroutines.ArrivalInterruptSubroutine {
 
             //robot.actionCache.add(new DelayedSubroutine(0, Subroutines.DEPOSIT_FOUR_BAR, "FIRSTRUN"));
             robot.actionCache.add(new DelayedSubroutine(0, Subroutines.OPEN_CLAW, "OPENCLAW"));
-            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
-            robot.actionCache.add(new DelayedSubroutine(1500, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
+            robot.actionCache.add(new DelayedSubroutine(700, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
+            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
 
         }
         // If we don't have a deposit end action, we're done!
-        if (!robot.hasAction("LOWER_LIFT")) {
+        if (!robot.hasAction("LOWER_LIFT") && time.milliseconds() > 800) {
             return true;
         } else {
             // Might as well be finishing adjusting our heading while we're here
+            /*
             double currentHeading = robot.pose().heading;
             double angleToTarget = MathUtil.angleWrap(TARGET_HEADING - currentHeading);
             Pose poseTurnPower = new Pose(0, 0, angleToTarget / REDUCTION_DIST);
             robot.setPowers(new MecanumPowers(poseTurnPower));
+
+             */
             return false;
         }
     }

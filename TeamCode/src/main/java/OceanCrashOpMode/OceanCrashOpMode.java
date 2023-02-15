@@ -44,7 +44,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     private ElapsedTime jit;
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00166666667, kD = .0425, kStatic = -0.0005;
+    public static double kP = .00266666667, kD = 0.0325, kStatic = -0.0005;
     //private VoltageSensor voltage;
 
     private Orientation angles;
@@ -479,17 +479,22 @@ public abstract class OceanCrashOpMode extends OpMode {
                     d = 0;
                 }
             } else if (error > 250) {
-                p *= 1.2;
+                p *= .8;
+            } else if (error > 100) {
+                p *= 1;
+            } else if (error > 30 && getLiftPos() < currentTargetSlidesPos) {
+                d *= 1.5;
             } else if (error < 30 && error > 0 && liftTime > 1500) {
                 p *= .4;
             } else if (getLiftPos() > currentTargetSlidesPos) {
                 if (error > 30) {
                     p /= 1.2;
-                    d *= .099705882;
+                    //d *= .099705882;
                 } else {
-                    p *= 1.2;
-                    d = 0;
+                    p *= .5;
+                    //d = 0;
                 }
+                d *= .099705882;
             }
             double power = p + d;
             setLiftPower(-power);

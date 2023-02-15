@@ -29,9 +29,9 @@ public class Grab implements Subroutines.ArrivalInterruptSubroutine {
 
             robot.setSlideTarget(slideTarget);
 
-            robot.actionCache.add(new DelayedSubroutine(500, Subroutines.CLOSE_CLAW, "CLOSECLAW"));
-            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.POST_GRAB_LIFT, "RAISE_LIFT"));
-            robot.actionCache.add(new DelayedSubroutine(1200, Subroutines.NEUTRAL_FOUR_BAR, "NEUTRALFOURBAR"));
+            robot.actionCache.add(new DelayedSubroutine(250, Subroutines.CLOSE_CLAW, "CLOSECLAW"));
+            robot.actionCache.add(new DelayedSubroutine(600, Subroutines.POST_GRAB_LIFT, "RAISE_LIFT"));
+            robot.actionCache.add(new DelayedSubroutine(900, Subroutines.NEUTRAL_FOUR_BAR, "NEUTRALFOURBAR"));
 
 
 
