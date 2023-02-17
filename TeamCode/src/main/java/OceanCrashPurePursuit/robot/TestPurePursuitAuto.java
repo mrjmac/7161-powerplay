@@ -14,6 +14,7 @@ import OceanCrashPurePursuit.autonomous.waypoints.ReadyToDeposit;
 import OceanCrashPurePursuit.autonomous.waypoints.ReadyToGrab;
 import OceanCrashPurePursuit.autonomous.waypoints.Start;
 import OceanCrashPurePursuit.autonomous.waypoints.StopWaypoint;
+import OceanCrashPurePursuit.autonomous.waypoints.TrollDeposit;
 import OceanCrashPurePursuit.autonomous.waypoints.WaitSubroutine;
 import OceanCrashPurePursuit.autonomous.waypoints.Waypoint;
 import OceanCrashPurePursuit.common.SimulatablePurePursuit;
@@ -44,8 +45,8 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit {
                 //preload
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 5, DEFAULT_START_POSITION.y, 3, -Math.toRadians(45), new Start()),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 22, DEFAULT_START_POSITION.y, 3, -Math.toRadians(45), new ReadyToDeposit()),
-                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 23.5, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(45)),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 23.5, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(45), .5, new Deposit()),
+                new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 22.5, DEFAULT_START_POSITION.y - 22.5, 3, -Math.toRadians(45)),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 22.5, DEFAULT_START_POSITION.y - 22.5, 3, -Math.toRadians(45), .5, new Deposit()),
 
                 //grab 1
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
@@ -55,7 +56,9 @@ public class TestPurePursuitAuto extends SimulatablePurePursuit {
                 //deposit 1
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 23, 3, -Math.toRadians(135), new ReadyToDeposit()),
-                new StopWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), .5, new Deposit()),
+                new StopWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), .5, new TrollDeposit()),
+                //new StopWaypoint(DEFAULT_START_POSITION.x + 51, DEFAULT_START_POSITION.y - 20, 3, -Math.toRadians(135), .5, new WaitSubroutine(1000)),
+
 
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 24, 3, Math.toRadians(90)),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 52, DEFAULT_START_POSITION.y - 10, 3, Math.toRadians(90), new ReadyToGrab()),

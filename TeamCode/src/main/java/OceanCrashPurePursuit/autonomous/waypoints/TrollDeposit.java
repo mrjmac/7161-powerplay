@@ -7,13 +7,13 @@ import OceanCrashPurePursuit.common.math.Pose;
 import OceanCrashPurePursuit.robot.CombinedRobot;
 import OceanCrashPurePursuit.robot.util.MecanumPowers;
 
-public class Deposit implements Subroutines.ArrivalInterruptSubroutine {
+public class TrollDeposit implements Subroutines.ArrivalInterruptSubroutine {
 
-    public static double TARGET_HEADING = -Math.toRadians(45);
+    public static double TARGET_HEADING = -Math.toRadians(135);
     public static double REDUCTION_DIST = Math.PI/3;
     public static ElapsedTime time;
 
-    public Deposit() {
+    public TrollDeposit() {
         time = null;
     }
 
@@ -34,11 +34,10 @@ public class Deposit implements Subroutines.ArrivalInterruptSubroutine {
 
         }
         // If we don't have a deposit end action, we're done!
-        if (!robot.hasAction("LOWER_LIFT") && time.milliseconds() > 800) {
+        if (0 == 1) {
             return true;
         } else {
-            // Might as well be finishing adjusting our heading while we're here
-
+            // Might as well be finishing adjusting our heading while we're her
             double currentHeading = robot.pose().heading;
             double angleToTarget = MathUtil.angleWrap(TARGET_HEADING - currentHeading);
             Pose poseTurnPower = new Pose(0, 0, angleToTarget / REDUCTION_DIST);

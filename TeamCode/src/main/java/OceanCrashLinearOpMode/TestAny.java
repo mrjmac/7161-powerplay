@@ -100,26 +100,28 @@ public class TestAny extends LinearOpMode {
              */
 //------------------------------------REPLACE CLAW------------------------------------------x----------
 
-            /*lift.swivelOut();
+            lift.swivelOut();
             lift.release();
 
-             */
+             /*
 
 //------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
 
             lift.grab();
             telemetry.addData("retracting:", "yea");
             telemetry.update();
-            sleep(2500);
+            sleep(1000);
             lift.release();
             telemetry.addData("extending:", "yea");
             telemetry.update();
-            sleep(2500);
+            sleep(1000);
 
 
 
 //-----------------------------------TEST MOVEMENT-----------------------------------------------------
             //drive.update();
+            
+              */
         }
     }
 }
