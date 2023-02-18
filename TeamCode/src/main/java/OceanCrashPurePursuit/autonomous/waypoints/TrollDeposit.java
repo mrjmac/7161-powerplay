@@ -26,6 +26,7 @@ public class TrollDeposit implements Subroutines.ArrivalInterruptSubroutine {
             robot.actionCache.clear(); // Remove everything from action cache
             robot.setSlideTarget(850);
 
+            robot.actionCache.add(new DelayedSubroutine(0, Subroutines.DEPOSIT_FOUR_BAR, "DEPO"));
             robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.OPEN_CLAW, "OPENCLAW"));
             robot.actionCache.add(new DelayedSubroutine(1500, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
             robot.actionCache.add(new DelayedSubroutine(1500, Subroutines.LOWER_LIFT, "LOWER_LIFT"));

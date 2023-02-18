@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import OceanCrashPurePursuit.autonomous.controllers.MecanumPurePursuitController;
 import OceanCrashPurePursuit.autonomous.waypoints.HeadingControlledWaypoint;
 import OceanCrashPurePursuit.autonomous.waypoints.PointTurnWaypoint;

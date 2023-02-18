@@ -35,7 +35,7 @@ public class DriveConstants {
      */
     public static final boolean RUN_USING_ENCODER = true;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(5, 0, 3,
-            8.5
+            5
     );
     //10, 0, 5, 16.51335724111806
 
@@ -91,9 +91,9 @@ public class DriveConstants {
 
      */
     public static double MAX_VEL = 65.10167565528128;
-    public static double MAX_ACCEL = 60;
+    public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(175);
-    public static double MAX_ANG_ACCEL = Math.toRadians(220);
+    public static double MAX_ANG_ACCEL = Math.toRadians(140);
 
 
     public static double encoderTicksToInches(double ticks) {

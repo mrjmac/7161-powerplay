@@ -55,7 +55,7 @@ import static OceanCrashRoadrunner.drive.DriveConstants.kV;
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(4.6, 0, .5);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, .4);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, .1);
 
     public static double LATERAL_MULTIPLIER = (43.0 / 27.5);
 
