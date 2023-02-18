@@ -131,6 +131,11 @@ public class CombinedRobot {
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
+        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         powers = new MecanumPowers(0, 0, 0, 0);
         chassisMotors = Arrays.asList(FL, FR, BL, BR);
 

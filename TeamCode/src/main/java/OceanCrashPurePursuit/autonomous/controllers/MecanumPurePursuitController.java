@@ -16,8 +16,8 @@ public class MecanumPurePursuitController {
     public static Pose SLIP_DISTANCES = new Pose(5.0, 0, 0);
     public static double UNDERSHOOT_DIST = 4; // Aim to stop 4 in away from target, and use small motions to finish it
     public static double MIN_SLIP_SPEED = 7;
-    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(6, 6, .2 * Math.PI);
-    public static Pose ONE_AWAY_POWERS = new Pose(0.005, 0.05, .01 * Math.PI);
+    public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(5, 5, .5 * Math.PI);
+    public static Pose ONE_AWAY_POWERS = new Pose(0.05, 0.05, .01 * Math.PI);
     public static double CLOSE_EXPONENT = 1.0 / 6.0;
 
     private static Pose relDistanceToTarget(Pose robot, Point target) {
@@ -37,7 +37,7 @@ public class MecanumPurePursuitController {
         // speed and slippage to hit that point. Otherwise, we'll just YEET over there.
 
         System.out.println("Current velocity: " + robotVelocity.toString());
-        if (finalTarget == null || robotPose.distance(finalTarget) > 18)
+        if (finalTarget == null || robotPose.distance(finalTarget) > 6)
         {
             Pose relPPTarget = relDistanceToTarget(robotPose, target);
 

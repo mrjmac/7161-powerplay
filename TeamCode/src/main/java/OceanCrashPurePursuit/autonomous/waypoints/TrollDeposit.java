@@ -9,9 +9,9 @@ import OceanCrashPurePursuit.robot.util.MecanumPowers;
 
 public class TrollDeposit implements Subroutines.ArrivalInterruptSubroutine {
 
-    public static double TARGET_HEADING = -Math.toRadians(135);
+    public ElapsedTime time;
+    public static double TARGET_HEADING = Math.toRadians(225);
     public static double REDUCTION_DIST = Math.PI/3;
-    public static ElapsedTime time;
 
     public TrollDeposit() {
         time = null;
@@ -24,25 +24,23 @@ public class TrollDeposit implements Subroutines.ArrivalInterruptSubroutine {
 
             time = new ElapsedTime();
             robot.actionCache.clear(); // Remove everything from action cache
+            robot.setSlideTarget(850);
 
-            robot.setSlideTarget(875);
-
-            //robot.actionCache.add(new DelayedSubroutine(0, Subroutines.DEPOSIT_FOUR_BAR, "FIRSTRUN"));
-            robot.actionCache.add(new DelayedSubroutine(400, Subroutines.OPEN_CLAW, "OPENCLAW"));
-            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
-            robot.actionCache.add(new DelayedSubroutine(1200, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
+            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.OPEN_CLAW, "OPENCLAW"));
+            robot.actionCache.add(new DelayedSubroutine(1500, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
+            robot.actionCache.add(new DelayedSubroutine(1500, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
 
         }
-        // If we don't have a deposit end action, we're done!
-        if (0 == 1) {
+        if (!robot.hasAction("LOWER_LIFT") && time.milliseconds() > 1500)
+        {
             return true;
-        } else {
-            // Might as well be finishing adjusting our heading while we're her
+        }
+        else
+        {
             double currentHeading = robot.pose().heading;
-            double angleToTarget = MathUtil.angleWrap(TARGET_HEADING - currentHeading);
+            double angleToTarget = -MathUtil.angleWrap(TARGET_HEADING - currentHeading);
             Pose poseTurnPower = new Pose(0, 0, angleToTarget / REDUCTION_DIST);
             robot.setPowers(new MecanumPowers(poseTurnPower));
-
 
             return false;
         }

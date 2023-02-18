@@ -9,10 +9,8 @@ import OceanCrashPurePursuit.robot.util.MecanumPowers;
 
 public class Grab implements Subroutines.ArrivalInterruptSubroutine {
 
-    public static double TARGET_HEADING = Math.toRadians(90);
-    public static double REDUCTION_DIST = Math.PI/3;
     public double slideTarget;
-    public static ElapsedTime time;
+    public ElapsedTime time;
 
     public Grab(double slideTarget) {
         this.slideTarget = slideTarget;
@@ -25,6 +23,7 @@ public class Grab implements Subroutines.ArrivalInterruptSubroutine {
         if (time == null) {
 
             time = new ElapsedTime();
+            time.reset();
             robot.actionCache.clear(); // Remove everything from action cache
 
             robot.setSlideTarget(slideTarget);
@@ -40,14 +39,6 @@ public class Grab implements Subroutines.ArrivalInterruptSubroutine {
         if (!robot.hasAction("NEUTRALFOURBAR") && time.milliseconds() > 1500) {
             return true;
         } else {
-
-            // Might as well be finishing adjusting our heading while we're here
-            double currentHeading = robot.pose().heading;
-            double angleToTarget = MathUtil.angleWrap(TARGET_HEADING - currentHeading);
-            Pose poseTurnPower = new Pose(0, 0, angleToTarget / REDUCTION_DIST);
-            robot.setPowers(new MecanumPowers(poseTurnPower));
-
-
             return false;
         }
     }

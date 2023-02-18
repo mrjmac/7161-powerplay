@@ -28,13 +28,13 @@ public class Deposit implements Subroutines.ArrivalInterruptSubroutine {
             robot.setSlideTarget(875);
 
             //robot.actionCache.add(new DelayedSubroutine(0, Subroutines.DEPOSIT_FOUR_BAR, "FIRSTRUN"));
-            robot.actionCache.add(new DelayedSubroutine(400, Subroutines.OPEN_CLAW, "OPENCLAW"));
-            robot.actionCache.add(new DelayedSubroutine(1000, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
-            robot.actionCache.add(new DelayedSubroutine(1200, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
+            robot.actionCache.add(new DelayedSubroutine(0, Subroutines.OPEN_CLAW, "OPENCLAW"));
+            robot.actionCache.add(new DelayedSubroutine(300, Subroutines.NEUTRAL_FOUR_BAR, "CONE1DEPOSITEND"));
+            robot.actionCache.add(new DelayedSubroutine(500, Subroutines.LOWER_LIFT, "LOWER_LIFT"));
 
         }
         // If we don't have a deposit end action, we're done!
-        if (!robot.hasAction("LOWER_LIFT") && time.milliseconds() > 800) {
+        if (!robot.hasAction("LOWER_LIFT") && time.milliseconds() > 600) {
             return true;
         } else {
             // Might as well be finishing adjusting our heading while we're here
