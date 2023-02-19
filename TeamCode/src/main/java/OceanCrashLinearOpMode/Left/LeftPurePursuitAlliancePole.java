@@ -1,6 +1,7 @@
 package OceanCrashLinearOpMode.Left;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import OceanCrashPurePursuit.autonomous.PurePursuitPath;
 import OceanCrashPurePursuit.autonomous.waypoints.Deposit;
@@ -23,7 +24,7 @@ import OceanCrashPurePursuit.robot.util.MecanumUtil;
 import java.util.LinkedList;
 import java.util.List;
 
-@Autonomous(name = "LeftAlliancePole", group = "test")
+@Disabled
 public class LeftPurePursuitAlliancePole extends SimulatablePurePursuit {
 
     CombinedRobot robot;
