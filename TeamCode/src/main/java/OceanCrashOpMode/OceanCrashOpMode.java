@@ -18,9 +18,9 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 public abstract class OceanCrashOpMode extends OpMode {
 
     // Drivetrain
-    private DcMotor BL; // [E1]
+    private DcMotor BL; // [E0]
     private DcMotor BR; // [C0]
-    private DcMotor FL; // [E0]
+    private DcMotor FL; // [E1]
     private DcMotor FR; // [C1], lateral odom
 
     // Four Bar
@@ -44,7 +44,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     private ElapsedTime jit;
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00466666667, kD = 0.0925, kStatic = -0.0005;
+    public static double kP = .00666666667, kD = 0.07, kStatic = -0.0005;
     //private VoltageSensor voltage;
 
     private Orientation angles;
@@ -462,7 +462,7 @@ public abstract class OceanCrashOpMode extends OpMode {
         double error = currentTargetSlidesPos - getLiftPos();
 
         if (Math.abs(error) > .5) {
-            double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP);
+            double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP) * (13.0 / getVoltage());
 
             double dT = liftTime - pastTime;
             double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
@@ -472,7 +472,7 @@ public abstract class OceanCrashOpMode extends OpMode {
             if (Math.abs(error) < 2) {
                 //f = getSlidesPos() * kStatic;
                 if (getLiftPos() > 20) {
-                    p = 0.0005;
+                    p = 0.0008;
                     d = 0;
                 } else {
                     p = 0;

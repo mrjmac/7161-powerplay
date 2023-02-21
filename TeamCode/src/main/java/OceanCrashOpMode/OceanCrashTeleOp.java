@@ -80,11 +80,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         // INTAKE
         if (gamepad1.right_bumper && gamepad1.left_bumper)
-            setIntake(.5);
+            setIntake(1);
         else if (gamepad1.right_bumper)
             setIntake(-1);
         else if (gamepad1.left_bumper)
-            setIntake(-.5);
+            setIntake(.25);
         else
             setIntake(0);
 
