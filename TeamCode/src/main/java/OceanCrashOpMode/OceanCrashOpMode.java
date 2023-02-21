@@ -44,7 +44,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     private ElapsedTime jit;
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00266666667, kD = 0.0325, kStatic = -0.0005;
+    public static double kP = .00466666667, kD = 0.0925, kStatic = -0.0005;
     //private VoltageSensor voltage;
 
     private Orientation angles;
