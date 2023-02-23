@@ -160,10 +160,10 @@ public class Right extends LinearOpMode {
                 .build();
 
         park[2] = drive.trajectoryBuilder(deposits[3].end(), true)
-                .addTemporalMarker(.2, () -> lift.trueExtendFourBar())
+                .addTemporalMarker(.8, () -> lift.trueExtendFourBar())
                 .addTemporalMarker(0, () -> lift.grab())
-                .addTemporalMarker(.2, ()-> lift.swivelIn())
-                .addTemporalMarker(1.5, () -> lift.retractFourBar())
+                .addTemporalMarker(.8, ()-> lift.swivelIn())
+                .addTemporalMarker(2, () -> lift.retractFourBar())
                 .addTemporalMarker(.8, ()-> lift.setSlideTarget(0))
                 .splineToConstantHeading(new Vector2d(-18, -24), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToConstantHeading(new Vector2d(-18, -8), Math.toRadians(-245), SampleMecanumDrive.getVelocityConstraint(22.5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
