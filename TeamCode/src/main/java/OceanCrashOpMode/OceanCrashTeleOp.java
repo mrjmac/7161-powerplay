@@ -311,7 +311,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     else
                         setLiftPower(-0.0005);
                 }
-                if (gamepad2.a && grabTime.milliseconds() > 200) {
+                if ((gamepad2.a || gamepad1.a) && grabTime.milliseconds() > 200) {
                     //setLiftPower(-0.0005);
                     release(); //need to test timing, will prob have to modify delay using macroTime
                     dtMovement = false;
