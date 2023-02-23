@@ -276,7 +276,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                     extended.reset();
                 }
-                if (gamepad2.x && swivel.milliseconds() > 250)
+                if (gamepad2.x && swivel.milliseconds() > 250 && grabbed)
                 {
                     if (swivelTrue) {
                         swivelTrue = false;
@@ -292,6 +292,11 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     liftEdited = true;
                 } else if (!liftEdited) {
                     setSlideTarget(liftTargetPos);
+                    if (jHeight != 0) {
+                        extendFourBar();
+                    } else {
+                        trueExtendFourBar();
+                    }
                     updateLiftLength(liftTime.milliseconds());
                     /*if (getLiftPos() > 100)
                         setLiftPower(-.0005);
@@ -334,6 +339,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             case LOWER:
                 if (!dtMovement) {
                     grabTime.reset();
+                    if (jHeight == 0)
+                        dtMovement = true;
                 } else {
                     swivelIn();
                     //}
