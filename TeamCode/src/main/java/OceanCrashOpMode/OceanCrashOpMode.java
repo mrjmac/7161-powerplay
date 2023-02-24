@@ -469,10 +469,10 @@ public abstract class OceanCrashOpMode extends OpMode {
 
             double f = 0;
             //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
-            if (Math.abs(error) < 2) {
+            if (Math.abs(error) < 1.6) {
                 //f = getSlidesPos() * kStatic;
                 if (getLiftPos() > 20) {
-                    p = 0.0008;
+                    p = 0.0093;
                     d = 0;
                 } else {
                     p = 0;

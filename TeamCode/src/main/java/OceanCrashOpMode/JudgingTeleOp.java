@@ -37,6 +37,7 @@ public class JudgingTeleOp extends OceanCrashOpMode{
 
         switch (lift) {
             case IDLE:
+                setIntake(-.8);
                 // keep height at 75
                 if (!doNotReset)
                 {
@@ -72,6 +73,7 @@ public class JudgingTeleOp extends OceanCrashOpMode{
                 }
                 break;
             case GRAB:
+                setIntake(0);
                 if (fourbar.milliseconds() > 250)
                 {
                     extendFourBar();
