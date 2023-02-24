@@ -237,7 +237,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             case RAISE:
                 updateLiftLength(liftTime.milliseconds());
                 swivelIn();
-                if (getLiftPos() < liftTargetPos) {
+                if (Math.abs(getLiftPos() - liftTargetPos) > 2) {
                     //if (jHeight != 0)
                     //{
                         setSlideTarget(liftTargetPos);
