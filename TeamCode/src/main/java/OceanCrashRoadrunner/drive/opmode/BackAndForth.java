@@ -28,7 +28,7 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 @Autonomous(group = "drive")
 public class BackAndForth extends LinearOpMode {
 
-    public static double DISTANCE = 22;
+    public static double DISTANCE = 28;
 
     @Override
     public void runOpMode() throws InterruptedException {
