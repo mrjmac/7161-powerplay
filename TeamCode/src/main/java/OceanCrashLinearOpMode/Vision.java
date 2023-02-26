@@ -32,8 +32,8 @@ public class Vision extends LinearOpMode{
     private final int highXRight = 500;
     private final int lowXRight = 400;
 
-    private final int highX = 380;
-    private final int lowX = 330;
+    private final int highX = 350;
+    private final int lowX = 300;
 
     public Vision(LinearOpMode opMode){
         this.opMode = opMode;

@@ -184,6 +184,14 @@ public class Lift {
     }
 
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
+    public void extendFourBarStart() {
+        grabStart();
+        spinR1.setPosition(0.5);
+        spinR2.setPosition(0.5);
+        spinL1.setPosition(0.5);
+        spinL2.setPosition(0.5);
+    }
+
     public void extendFourBar()
     {
         grab();
@@ -220,10 +228,13 @@ public class Lift {
 
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
+
+    public void grabStart() {grab.setPosition(.255);} //proposed parameter for start
+
     public void grab()
     {
-        grab.setPosition(0.255);
-    }
+        grab.setPosition(0.315);
+    } //.305 for grabStack
 
     public void release()
     {
