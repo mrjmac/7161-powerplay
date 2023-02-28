@@ -31,6 +31,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceRunner;
+import OceanCrashRoadrunner.util.KalmanFilter;
 import OceanCrashRoadrunner.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -153,7 +154,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        //setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        setLocalizer(new KalmanFilterTwoWheel(new TwoWheelTrackingLocalizer(hardwareMap, this)));
+
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
