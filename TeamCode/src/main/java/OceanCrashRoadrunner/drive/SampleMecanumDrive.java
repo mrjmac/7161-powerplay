@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -28,10 +27,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import OceanCrashRoadrunner.shameless.util.kalman.KalmanTwoWheelLocalizer;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceRunner;
-import OceanCrashRoadrunner.util.KalmanFilter;
 import OceanCrashRoadrunner.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -155,7 +154,13 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
         //setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
-        setLocalizer(new KalmanFilterTwoWheel(new TwoWheelTrackingLocalizer(hardwareMap, this)));
+        setLocalizer(new KalmanTwoWheelLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this))
+                .setHeadingFilterCoeffs(.1, .1)
+                .setWheelPos1FilterCoeffs(8, 8)
+                .setWheelPos2FilterCoeffs(8, 8)
+                .setHeadingVelocityFilterCoeffs(8, 8)
+                .setWheelPos1VelocityFilterCoeffs(8, 8)
+                .setWheelPos2VelocityFilterCoeffs(8, 8));
 
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);

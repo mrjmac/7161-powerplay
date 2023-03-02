@@ -20,7 +20,6 @@ public class TestAny extends LinearOpMode {
     private SampleMecanumDrive drive;
     private Drivetrain drivetrain;
     private Lift lift;
-    private testLift testLift;
     private Vision vision;
     private Intake intake;
 
@@ -57,7 +56,6 @@ public class TestAny extends LinearOpMode {
         //lift = new Lift(this);
         //lift.grab();
         intake = new Intake(this);
-        testLift = new testLift(this);
 
         Pose2d startingPose = new Pose2d(-21.8, 30.8, 25);
 
@@ -89,26 +87,6 @@ public class TestAny extends LinearOpMode {
         liftTime.reset();
         while (!isStopRequested())
         {
-            if (liftTime.milliseconds() < 500)
-            {
-                testLift.setPosition(0);
-            }
-            if (liftTime.milliseconds() > 500 && liftTime.milliseconds() < 1500)
-            {
-                testLift.setPosition(225);
-            }
-            if (liftTime.milliseconds() > 1500 && liftTime.milliseconds() < 2500)
-            {
-                testLift.setPosition(450);
-            }
-            if (liftTime.milliseconds() > 2500 && liftTime.milliseconds() < 3500)
-            {
-                testLift.setPosition(800);
-            }
-            if (liftTime.milliseconds() > 3500)
-            {
-                testLift.setPosition(0);
-            }
 
 //------------------------------------DEBUG LIFT----------------------------------------------------
             /*if (liftTime.milliseconds() < 5000)

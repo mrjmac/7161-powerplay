@@ -1,12 +1,12 @@
+package OceanCrashRoadrunner.shameless.util.kalman
 
-package OceanCrashRoadrunner.drive
-
-import OceanCrashRoadrunner.util.KalmanFilter
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer
+import OceanCrashRoadrunner.shameless.units.AngleUnit.DEGREES
+import OceanCrashRoadrunner.shameless.util.kalman.KalmanFilter
+import OceanCrashRoadrunner.shameless.util.toRad
 
 class KalmanTwoWheelLocalizer(
-
         private val localizer: TwoTrackingWheelLocalizer,
 ) : TwoTrackingWheelLocalizer(localizer.getWheelPoses()) {
 
@@ -80,9 +80,6 @@ class KalmanTwoWheelLocalizer(
 
     // -- INTERNAL --
 
-    //fun Number.toRad(from: AngleUnit = GlobalUnits.angle): Double = from.toDeg(this) * PI / 180
-
-
     companion object {
         fun TwoTrackingWheelLocalizer.getWheelPoses(): List<Pose2d> {
             val parallelX = this::class.java.getField("PARALLEL_X").get(null) as Double
@@ -92,12 +89,8 @@ class KalmanTwoWheelLocalizer(
 
             return listOf(
                     Pose2d(parallelX, parallelY, 0.0),
-                    Pose2d(perpendicularX, perpendicularY, 90.0//90.toRad(from = DEGREES)),
-            ))
+                    Pose2d(perpendicularX, perpendicularY, 90.toRad(from = DEGREES)),
+            )
         }
-
-
     }
-
-
 }
