@@ -61,7 +61,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
     private int jHeight = 1;
     private int liftTargetPos = 0;
-    public static int low = 225, medium = 450, high = 800;
+    public static int low = 225, medium = 450, high = 770;
 
 
     public void loop() {
@@ -201,6 +201,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                     else
                     {
+                        setLiftPower(0);
                         //setLiftPower(0);
                         grab();
                         fourbar.reset();

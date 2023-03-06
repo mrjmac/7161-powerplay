@@ -45,7 +45,7 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     private ElapsedTime jit;
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00666666667, kD = 0.07, kStatic = -0.0005;
+    public static double kP = .00466666667, kD = 0.2, kStatic = -0.0005;
     //private VoltageSensor voltage;
 
     private Orientation angles;
@@ -462,10 +462,9 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void updateLiftLength(double liftTime) {
         double error = currentTargetSlidesPos - getLiftPos();
-
         if (Math.abs(error) > .5) {
             if (!grabLift) {
-                double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP) * (14.0 / getVoltage());
+                double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP) * ((13.2 / getVoltage()) * 1);
 
                 double dT = liftTime - pastTime;
                 double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
@@ -475,19 +474,25 @@ public abstract class OceanCrashOpMode extends OpMode {
                 if (Math.abs(error) < 1.6) {
                     //f = getSlidesPos() * kStatic;
                     if (getLiftPos() > 20) {
-                        p = 0.0093;
+                        p = 0.0093 / (13.2 / getVoltage());
                         d = 0;
                     } else {
                         p = 0;
                         d = 0;
                     }
                 } else if (error > 250) {
-                    p *= .8;
-                } else if (error > 100) {
                     p *= 1;
+                } else if (error > 100) {
+                    p *= .8;
                 } else if (error > 30 && getLiftPos() < currentTargetSlidesPos) {
                     d *= 1.5;
-                } else if (error < 30 && error > 0 && liftTime > 1500) {
+                /*} else if (error < 30 && error > 0 && liftTime < 1500) {
+                    p *= .4;
+                 */
+                } else if (error < 30 && error > 0 && getLiftPos() > 700) {
+                    p *= .65;
+                    d /= 1.4;
+                } else if (error < 30 && error > 0 && getLiftPos() < 700) {
                     p *= .4;
                 } else if (getLiftPos() > currentTargetSlidesPos) {
                     if (error > 30) {
@@ -500,6 +505,9 @@ public abstract class OceanCrashOpMode extends OpMode {
                     d *= .099705882;
                 }
                 double power = p + d;
+                if (liftTime < 3000) {
+                    power *= .4;
+                }
                 setLiftPower(-power);
             } else {
                 double p = Math.signum(error) * Math.sqrt((Math.abs(error)) * kP);
