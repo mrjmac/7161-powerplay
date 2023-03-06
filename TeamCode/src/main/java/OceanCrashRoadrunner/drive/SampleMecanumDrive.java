@@ -27,7 +27,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import OceanCrashRoadrunner.shameless.util.kalman.KalmanTwoWheelLocalizer;
+//import OceanCrashRoadrunner.shameless.util.KalmanTwoWheelLocalizer;
+import OceanCrashRoadrunner.shameless.util.kalman.meow;
+//import OceanCrashRoadrunner.shameless.util.KalmanTwoWheelLocalizer;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -153,7 +155,8 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        //setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        /*
         setLocalizer(new KalmanTwoWheelLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this))
                 .setHeadingFilterCoeffs(.1, .1)
                 .setWheelPos1FilterCoeffs(8, 8)
@@ -162,6 +165,8 @@ public class SampleMecanumDrive extends MecanumDrive {
                 .setWheelPos1VelocityFilterCoeffs(8, 8)
                 .setWheelPos2VelocityFilterCoeffs(8, 8));
 
+
+         */
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }

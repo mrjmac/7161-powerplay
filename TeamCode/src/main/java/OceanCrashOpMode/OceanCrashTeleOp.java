@@ -176,7 +176,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 // keep height at 35
                 if (!doNotReset)
                 {
-                    setSlideTarget(50);
+                    setSlideTarget(50, false);
                     /*if (getLiftPos() > 60)
                     {
                         setSlideTarget(60);
@@ -197,7 +197,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     doNotReset = true;
                     if (getLiftPos() > 2 && !manualGrab)
                     {
-                        setSlideTarget(0);
+                        setSlideTarget(0, true);
                     }
                     else
                     {
@@ -240,14 +240,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (Math.abs(getLiftPos() - liftTargetPos) > 2) {
                     //if (jHeight != 0)
                     //{
-                        setSlideTarget(liftTargetPos);
+                        setSlideTarget(liftTargetPos, false);
                     /*}
                     else
                     {
                         setLiftPosLittle(liftTargetPos);
                     }*/
-                } else {
-                    blue = false;
                     if (jHeight != 0)
                     {
                         extendFourBar();
@@ -257,6 +255,8 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         trueExtendFourBar();
                     }
                     extend = true;
+                } else {
+                    blue = false;
                     lift = LiftState.PLACE;
                 }
                 liftState = "RAISE";
@@ -291,7 +291,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     setLiftPower(gamepad2.left_stick_y * 0.20);
                     liftEdited = true;
                 } else if (!liftEdited) {
-                    setSlideTarget(liftTargetPos);
+                    setSlideTarget(liftTargetPos, false);
                     if (jHeight != 0) {
                         extendFourBar();
                     } else {
@@ -351,7 +351,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     }
                     if ((macroTime.milliseconds() > 750 && jHeight > 0) || (jHeight == 0 && macroTime.milliseconds() > 1000)) {
                         if (getLiftPos() > 25) {
-                            setSlideTarget(25);
+                            setSlideTarget(25, false);
                         } else {
                             //setLiftPower(0);
                             active = false;
@@ -367,7 +367,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
             case DEAD:
                 updateLiftLength(liftTime.milliseconds());
                 if (getLiftPos() > 50) {
-                    setSlideTarget(50);
+                    setSlideTarget(50, false);
                 } else {
                     //setLiftPower(0);
                     active = false;

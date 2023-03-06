@@ -1,10 +1,9 @@
-package OceanCrashRoadrunner.shameless.util.kalman
+package OceanCrashRoadrunner.shameless.util
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer
 import OceanCrashRoadrunner.shameless.units.AngleUnit.DEGREES
 import OceanCrashRoadrunner.shameless.util.kalman.KalmanFilter
-import OceanCrashRoadrunner.shameless.util.toRad
 
 class KalmanTwoWheelLocalizer(
         private val localizer: TwoTrackingWheelLocalizer,
