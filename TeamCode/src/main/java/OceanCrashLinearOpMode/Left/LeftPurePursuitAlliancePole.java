@@ -39,6 +39,7 @@ public class LeftPurePursuitAlliancePole extends SimulatablePurePursuit {
         );
         scoreSkystones.addAll(Waypoint.collate(
                 //preload
+                /*
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 5, DEFAULT_START_POSITION.y, 2, -Math.toRadians(45), new Start()),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 24, DEFAULT_START_POSITION.y, 2, -Math.toRadians(45), new ReadyToDeposit()),
                 new HeadingControlledWaypoint(DEFAULT_START_POSITION.x + 24, DEFAULT_START_POSITION.y - 25, 2, -Math.toRadians(45)),
