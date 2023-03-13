@@ -177,19 +177,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (!doNotReset)
                 {
                     setSlideTarget(50, false);
-                    /*if (getLiftPos() > 60)
-                    {
-                        setSlideTarget(60);
-                    }
-                    else if(getLiftPos() < 30)
-                    {
-                        setSlideTarget(50);
-                    }
-                    else
-                    {
-                        setLiftPower(-0.0005);
-                    }
-                     */
                 }
                 // driver 2 manual movement for lift, automatic grab
                 if ((grabRed() || blue || manualGrab) && reset.milliseconds() > 250)
@@ -239,14 +226,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 updateLiftLength(liftTime.milliseconds());
                 swivelIn();
                 if (Math.abs(getLiftPos() - liftTargetPos) > 2) {
-                    //if (jHeight != 0)
-                    //{
-                        setSlideTarget(liftTargetPos, false);
-                    /*}
-                    else
-                    {
-                        setLiftPosLittle(liftTargetPos);
-                    }*/
+                    setSlideTarget(liftTargetPos, false);
                     if (jHeight != 0)
                     {
                         extendFourBar();
@@ -299,14 +279,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         trueExtendFourBar();
                     }
                     updateLiftLength(liftTime.milliseconds());
-                    /*if (getLiftPos() > 100)
-                        setLiftPower(-.0005);
-                    else if (jHeight == 0)
-                        setLiftPower(0);
-                    else if (jHeight == 1)
-                        setLiftPower(-0.0005);
-                    else
-                        setLiftPower(-0.0005);*/
                 } else {
                     if (getLiftPos() > 100)
                         setLiftPower(-.0005);
