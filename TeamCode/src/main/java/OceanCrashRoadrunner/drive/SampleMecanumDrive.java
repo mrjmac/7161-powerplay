@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 //import OceanCrashRoadrunner.shameless.util.kalman.KalmanTwoWheelLocalizer;
 //import OceanCrashRoadrunner.shameless.util.kalman.KalmanTwoWheelLocalizer;
+import OceanCrashRoadrunner.shameless.util.kalman.KalmanTwoWheelLocalizer;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -155,17 +156,20 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
         setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+
         /*
         setLocalizer(new KalmanTwoWheelLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this))
-                .setHeadingFilterCoeffs(.1, .1)
-                .setWheelPos1FilterCoeffs(8, 8)
-                .setWheelPos2FilterCoeffs(8, 8)
-                .setHeadingVelocityFilterCoeffs(8, 8)
-                .setWheelPos1VelocityFilterCoeffs(8, 8)
-                .setWheelPos2VelocityFilterCoeffs(8, 8));
-
+                .setHeadingFilterCoeffs(.5, .5)
+                .setWheelPos1FilterCoeffs(20,9)
+                .setWheelPos2FilterCoeffs(20, 9)
+                .setHeadingVelocityFilterCoeffs(20, 9)
+                .setWheelPos1VelocityFilterCoeffs(20, 9)
+                .setWheelPos2VelocityFilterCoeffs(20, 9));
 
          */
+
+
+
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
