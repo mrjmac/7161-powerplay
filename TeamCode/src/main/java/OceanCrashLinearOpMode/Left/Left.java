@@ -93,7 +93,7 @@ public class Left extends LinearOpMode {
         deposits[0] = drive.trajectoryBuilder(grabs[0].end())
                 .addTemporalMarker(2, () -> lift.extendFourBar())
                 .addTemporalMarker(.25, () -> lift.setSlideTarget(850))
-                .lineToLinearHeading(new Pose2d(-26.4, 23, Math.toRadians(45)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-20, 7 , Math.toRadians(45)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         grabs[1] = drive.trajectoryBuilder(deposits[0].end())
