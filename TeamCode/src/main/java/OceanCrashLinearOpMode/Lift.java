@@ -230,7 +230,7 @@ public class Lift {
 
 
     public void grabStart() {grab.setPosition(.255);} //proposed parameter for start
-
+              //set it back to .255 after tests ^
     public void grab()
     {
         grab.setPosition(0.315);

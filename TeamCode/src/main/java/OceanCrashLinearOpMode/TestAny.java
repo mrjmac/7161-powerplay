@@ -53,7 +53,7 @@ public class TestAny extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
-        //lift = new Lift(this);
+        lift = new Lift(this);
         //lift.grab();
         intake = new Intake(this);
 
@@ -101,8 +101,8 @@ public class TestAny extends LinearOpMode {
              */
 //------------------------------------REPLACE CLAW------------------------------------------x----------
 
-            //lift.swivelOut();
-            //lift.release();
+          //lift.swivelOut();
+          //lift.release();
 
              /*
 
