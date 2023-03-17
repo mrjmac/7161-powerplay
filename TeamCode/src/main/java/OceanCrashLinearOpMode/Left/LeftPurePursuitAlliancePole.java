@@ -23,7 +23,7 @@ import OceanCrashPurePursuit.robot.util.MecanumUtil;
 
 import java.util.LinkedList;
 import java.util.List;
-
+@Disabled
 @Autonomous(name = "pp", group = "Left")
 public class LeftPurePursuitAlliancePole extends SimulatablePurePursuit {
 

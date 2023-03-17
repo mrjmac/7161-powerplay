@@ -8,20 +8,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.Vector;
-
 import OceanCrashLinearOpMode.Drivetrain;
 import OceanCrashLinearOpMode.Intake;
 import OceanCrashLinearOpMode.Lift;
 import OceanCrashLinearOpMode.Vision;
-import OceanCrashPurePursuit.common.math.Pose;
 import OceanCrashRoadrunner.drive.DriveConstants;
 import OceanCrashRoadrunner.drive.SampleMecanumDrive;
-import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(name = "Left", group = "Left")
-public class Left extends LinearOpMode {
+@Autonomous(name = "LeftHigh", group = "Left")
+public class LeftHigh extends LinearOpMode {
 
     /*
         TODO:
