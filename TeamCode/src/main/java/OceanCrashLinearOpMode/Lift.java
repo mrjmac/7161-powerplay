@@ -229,16 +229,16 @@ public class Lift {
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
 
-    public void grabStart() {grab.setPosition(.255);} //proposed parameter for start
+    public void grabStart() {grab.setPosition(.05);} //proposed parameter for start
               //set it back to .255 after tests ^
     public void grab()
     {
-        grab.setPosition(0.315);
+        //grab.setPosition(0.05);
     } //.305 for grabStack
 
     public void release()
     {
-        grab.setPosition(.52);  //tune this
+        //grab.setPosition(.275);  //tune this
     }
 
     public void swivelIn()
