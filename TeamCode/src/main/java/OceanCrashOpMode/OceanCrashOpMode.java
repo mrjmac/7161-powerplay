@@ -357,12 +357,12 @@ public abstract class OceanCrashOpMode extends OpMode {
 
     public void grab()
     {
-        grab.setPosition(0.05);
+        grab.setPosition(0.255);
     }
 
     public void release()
     {
-        grab.setPosition(.275);  //tune this
+        grab.setPosition(.52);  //tune this
     }
 
     public void swivelIn()
@@ -474,7 +474,7 @@ public abstract class OceanCrashOpMode extends OpMode {
                 if (Math.abs(error) < 1.6) {
                     //f = getSlidesPos() * kStatic;
                     if (getLiftPos() > 20) {
-                        p = 0.0093 / (13.2 / getVoltage());
+                        p = 0.0093 / (13.8 / getVoltage());
                         d = 0;
                     } else {
                         p = 0;

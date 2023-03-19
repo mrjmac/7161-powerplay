@@ -101,8 +101,8 @@ public class TestAny extends LinearOpMode {
              */
 //------------------------------------REPLACE CLAW------------------------------------------x----------
 
-          //lift.swivelOut();
-          //lift.release();
+          lift.swivelOut();
+          lift.release();
 
              /*
 
