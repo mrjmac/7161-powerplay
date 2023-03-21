@@ -29,7 +29,7 @@ public class Lift {
     public Servo spinL2; // []
     public Servo spinR1; // [E5] // this is wrong
     public Servo spinR2; // []
-    private Servo grab; // [C2] // this might be right
+    public Servo grab; // [C2] // this might be right
     private Servo swivel;
 
 
@@ -229,16 +229,16 @@ public class Lift {
     //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
 
-    public void grabStart() {grab.setPosition(.275);} //proposed parameter for start
+    public void grabStart() {grab.setPosition(.225);} //proposed parameter for start
               //set it back to .255 after tests ^
     public void grab()
     {
-        grab.setPosition(.305);
+        grab.setPosition(.275);
     } //.305 for grabStack
 
     public void release()
     {
-        grab.setPosition(.52);  //tune this
+        grab.setPosition(.55);  //tune this
     }
 
     public void swivelIn()

@@ -25,6 +25,8 @@ public class TestAny extends LinearOpMode {
 
     public static double stall = -.0004;
 
+    public static double test = .305;
+
     private final double turnP45 = .43;
     private final double turnD45 = .40;
 
@@ -102,8 +104,8 @@ public class TestAny extends LinearOpMode {
 //------------------------------------REPLACE CLAW------------------------------------------x----------
 
           lift.swivelOut();
-          lift.release();
-
+          lift.grab.setPosition(test);
+          //lift.grabStart();
              /*
 
 //------------------------------------REPLACE FOUR BAR SERVO----------------------------------------------------
