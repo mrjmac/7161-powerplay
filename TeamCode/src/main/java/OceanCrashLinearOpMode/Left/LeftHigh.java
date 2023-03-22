@@ -19,7 +19,7 @@ import OceanCrashRoadrunner.drive.SampleMecanumDrive;
 import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(name = "LeftHigh", group = "Left")
+@Autonomous(name = "Left", group = "Left")
 public class LeftHigh extends LinearOpMode {
 
     /*
