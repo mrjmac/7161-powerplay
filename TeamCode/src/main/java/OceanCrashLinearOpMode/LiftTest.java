@@ -32,32 +32,12 @@ public class LiftTest extends LinearOpMode {
     private Vision vision;
     private Intake intake;
 
-    public static double stall = -.0004;
-
-    private final double turnP45 = .43;
-    private final double turnD45 = .40;
-
-    private final double turnP135 = .24;
-    private final double turnD135 = .20;
-
-    private final double moveP48 = .442;
-    private final double moveP4 = 1;
-    private final double moveP20 = .432;
-
-
-    ElapsedTime deposit = new ElapsedTime();
-    ElapsedTime grab = new ElapsedTime();
-    ElapsedTime button = new ElapsedTime();
-
     TrajectorySequence traj1;
     TrajectorySequence park;
 
     private int pos;
     public static double targetPos = 2700;
     public static double up = 1;
-    public static double down = -.8;
-    public static double downPos = 100;
-    private double parkPos = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {

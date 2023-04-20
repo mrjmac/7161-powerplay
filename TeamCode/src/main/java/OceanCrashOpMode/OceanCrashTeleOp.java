@@ -39,9 +39,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
     private boolean toggle2 = false;
     private boolean firstLoop = true;
 
-    public static double wait = 200;
-    private boolean grabd1 = false;
-    private boolean mG = false;
     private boolean liftEdited = false;
     private boolean dtMovement = false;
 
@@ -51,7 +48,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         GRAB,
         RAISE,
         PLACE,
-        STACK,
         LOWER,
         DEAD,
     }
@@ -93,18 +89,12 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
         telemetry.addData("should i not be reseting :: ", doNotReset);
         telemetry.addData("bypass :: ", bypass);
         telemetry.addData("voltage :: ", getVoltage());
-        //telemetry.addData("Stick :: ", gamepad2.left_stick_y);
-        //telemetry.addData("Encoder :: ", getMotorEncoders());
-        //telemetry.addData("Red :: ", colorS.red());
-        //telemetry.addData("Green :: ", colorS.green());
-        //telemetry.addData("Blue :: ", colorS.blue());
         telemetry.addData("red? :: ", grabRed());
         telemetry.addData("blue? :: ", grabBlue());
         telemetry.addData("liftState :: ", liftState);
         telemetry.addData("jit :: ", jHeight);
         telemetry.addData("swivel :: ", swivelTrue);
         telemetry.addData("grab :: ", grabbed);
-        //telemetry.addData("extended time :: ", extended.milliseconds());
         telemetry.update();
 
 
@@ -159,7 +149,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                     manualGrab = true;
                 }
                 swivelIn();
-                //retractFourBar();
                 // manual grab for driver 1
                 if (gamepad1.a && grab.milliseconds() > 250 && !grabbed)
                 {
@@ -290,8 +279,7 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         setLiftPower(-0.0005);
                 }
                 if ((gamepad2.a || gamepad1.a) && grabTime.milliseconds() > 200) {
-                    //setLiftPower(-0.0005);
-                    release(); //need to test timing, will prob have to modify delay using macroTime
+                    release();
                     dtMovement = false;
                     grabTime.reset();
                     lift = LiftState.LOWER;
@@ -316,7 +304,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         dtMovement = true;
                 } else {
                     swivelIn();
-                    //}
                     if (grabTime.milliseconds() > 500) {
                         grab();
                         updateLiftLength(liftTime.milliseconds());
@@ -326,7 +313,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                         if (getLiftPos() > 25) {
                             setSlideTarget(25, false);
                         } else {
-                            //setLiftPower(0);
                             active = false;
                             grabbed = false;
                             extend = false;
@@ -342,7 +328,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
                 if (getLiftPos() > 50) {
                     setSlideTarget(50, false);
                 } else {
-                    //setLiftPower(0);
                     active = false;
                     lift = LiftState.IDLE;
                 }
@@ -364,90 +349,6 @@ public class OceanCrashTeleOp extends OceanCrashOpMode{
 
         if (Math.abs(getLiftL() - getLiftR()) > 125)
             lift = LiftState.DEAD;
-
-
-
-        // MANUAL LIFT CODE FOR TESTING
-        /*
-        if (Math.abs(gamepad2.left_stick_y) > .05) {
-            setLiftPower(gamepad2.left_stick_y);
-        } else {
-            setLiftPower(0);
-        }
-
-
-        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
-        {
-            grab.reset();
-            grabbed = true;
-            grab();
-        }
-
-
-
-        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
-        {
-            grab.reset();
-            grabbed = false;
-            release();
-        }
-        */
-        /*
-        if (gamepad2.a && grab.milliseconds() > 250 && !grabbed)
-        {
-            grab.reset();
-            grabbed = true;
-            grab();
-        }
-
-
-
-        if (gamepad2.a && grab.milliseconds() > 250 && grabbed)
-        {
-            grab.reset();
-            grabbed = false;
-            release();
-        }
-
-        if ((gamepad2.y && extended.milliseconds() > 250) || bypass) {
-            if (!bypass)
-            {
-                extended.reset();
-                bypass = true;
-            }
-            if (extend) {
-                swivelIn();
-                grab();
-                if (extended.milliseconds() > wait) {
-                    retractFourBar();
-                    bypass = false;
-                    extended.reset();
-                    extend = false;
-                }
-            } else {
-                extendFourBar();
-                if (extended.milliseconds() > wait + 550) {
-                    swivelOut();
-                    bypass = false;
-                    extended.reset();
-                    extend = true;
-                }
-            }
-        }
-
-        if (gamepad2.x && swivel.milliseconds() > 250)
-        {
-            if (swivelTrue) {
-                swivelTrue = false;
-                swivelIn();
-            } else {
-                swivelTrue = true;
-                swivelOut();
-            }
-            swivel.reset();
-        }
-         */
-
 
     }
 }

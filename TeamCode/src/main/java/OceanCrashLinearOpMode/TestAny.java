@@ -23,30 +23,15 @@ public class TestAny extends LinearOpMode {
     private Vision vision;
     private Intake intake;
 
-    public static double stall = -.0004;
+    private static double stall = -.0004;
 
-    public static double test = .305;
+    private static double test = .305;
 
-    private final double turnP45 = .43;
-    private final double turnD45 = .40;
-
-    private final double turnP135 = .24;
-    private final double turnD135 = .20;
-
-    private final double moveP48 = .442;
-    private final double moveP4 = 1;
-    private final double moveP20 = .432;
-
-
-    ElapsedTime deposit = new ElapsedTime();
-    ElapsedTime grab = new ElapsedTime();
-    ElapsedTime button = new ElapsedTime();
     ElapsedTime liftTime = new ElapsedTime();
 
-    Trajectory auto, auto2;
+    Trajectory auto;
 
     private int pos;
-    private double targetPos;
     private double parkPos = 34;
 
     @Override
@@ -56,7 +41,6 @@ public class TestAny extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
         lift = new Lift(this);
-        //lift.grab();
         intake = new Intake(this);
 
         Pose2d startingPose = new Pose2d(-21.8, 30.8, 25);

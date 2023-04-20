@@ -22,11 +22,6 @@ import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 @Autonomous(name = "Left", group = "Left")
 public class LeftHigh extends LinearOpMode {
 
-    /*
-        TODO:
-        TO GREATLY INCREASE CYCLE SPEED, BREAK DEPOSIT UP INTO SPLINES AND SET LIFT LOW ON GRAB, HIGH ONCE WE GET CLOSE
-     */
-
     private SampleMecanumDrive drive;
     private Drivetrain drivetrain;
     private Lift lift;
@@ -42,7 +37,6 @@ public class LeftHigh extends LinearOpMode {
 
     enum State {
         preload,
-        grabp,
         grab,
         deposit,
         park
@@ -52,7 +46,6 @@ public class LeftHigh extends LinearOpMode {
     private boolean goNext = false;
 
     private int pos, cycleNum = 0;
-    private double targetPos;
     private double parkPos = 38;
 
     ElapsedTime liftTime = new ElapsedTime();
@@ -78,7 +71,6 @@ public class LeftHigh extends LinearOpMode {
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(1.1, () -> lift.setSlideTarget(850))
                 .addTemporalMarker(2.1, ()-> lift.swivelStartLeft())
-                //.splineToSplineHeading(new Pose2d(-40, 35, Math.toRadians(0)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(60))
                 .splineToSplineHeading(new Pose2d(-23.2, 31.8, Math.toRadians(-25)), Math.toRadians(-15), SampleMecanumDrive.getVelocityConstraint(33, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .build();
 
@@ -145,8 +137,6 @@ public class LeftHigh extends LinearOpMode {
                 .addTemporalMarker(.15, ()-> lift.swivelIn())
                 .addTemporalMarker(1.5, () -> lift.retractFourBar())
                 .addTemporalMarker(.5, ()-> lift.setSlideTarget(0))
-                //.lineToLinearHeading(new Pose2d(-23.8, 30, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
-                //.lineToLinearHeading(new Pose2d(-30, 56, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToConstantHeading(new Vector2d(-15, 45), Math.toRadians(90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineTo(new Vector2d(-15, 58), Math.toRadians(-245), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToConstantHeading(new Vector2d(-30, 56), Math.toRadians(-135), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
@@ -167,8 +157,6 @@ public class LeftHigh extends LinearOpMode {
                 .addTemporalMarker(.8, ()-> lift.swivelIn())
                 .addTemporalMarker(2, () -> lift.retractFourBar())
                 .addTemporalMarker(.8, ()-> lift.setSlideTarget(0))
-                //.lineToLinearHeading(new Pose2d(-23.8, 30, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
-                //.lineToLinearHeading(new Pose2d(-30, 8, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToConstantHeading(new Vector2d(-18, 24), Math.toRadians(-90), SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToConstantHeading(new Vector2d(-18, 8), Math.toRadians(245), SampleMecanumDrive.getVelocityConstraint(22.5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .splineToSplineHeading(new Pose2d(-30, 8, Math.toRadians(0)), Math.toRadians(147.5))
@@ -223,11 +211,7 @@ public class LeftHigh extends LinearOpMode {
                         if (cycleNum < 3)
                             lift.neutralFourBar();
                         state.reset();
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         cycleNum++;
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         if (cycleNum < 3)
                         {
                             drive.followTrajectoryAsync(grabs[cycleNum]);

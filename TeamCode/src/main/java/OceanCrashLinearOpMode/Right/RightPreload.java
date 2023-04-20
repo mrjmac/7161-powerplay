@@ -23,11 +23,6 @@ import OceanCrashRoadrunner.trajectorysequence.TrajectorySequence;
 @Autonomous(name = "RightPreload", group = "Right")
 public class RightPreload extends LinearOpMode {
 
-    /*
-        TODO:
-        TO GREATLY INCREASE CYCLE SPEED, BREAK DEPOSIT UP INTO SPLINES AND SET LIFT LOW ON GRAB, HIGH ONCE WE GET CLOSE
-     */
-
     private SampleMecanumDrive drive;
     private Drivetrain drivetrain;
     private Lift lift;
@@ -43,7 +38,6 @@ public class RightPreload extends LinearOpMode {
 
     enum State {
         preload,
-        grabp,
         grab,
         deposit,
         park
@@ -53,7 +47,6 @@ public class RightPreload extends LinearOpMode {
     private boolean goNext = false;
 
     private int pos, cycleNum = 4;
-    private double targetPos;
     private double parkPos = 38;
 
     ElapsedTime liftTime = new ElapsedTime();
@@ -79,7 +72,6 @@ public class RightPreload extends LinearOpMode {
                 .addTemporalMarker(0, ()-> lift.extendFourBar())
                 .addTemporalMarker(1.1, () -> lift.setSlideTarget(850))
                 .addTemporalMarker(2.1, ()-> lift.swivelStartRight())
-                //.splineToSplineHeading(new Pose2d(-40, 35, Math.toRadians(0)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(60))
                 .splineToSplineHeading(new Pose2d(-24.9, -32.5, Math.toRadians(25)), Math.toRadians(15), SampleMecanumDrive.getVelocityConstraint(33, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL - 5))
                 .build();
 
@@ -137,7 +129,6 @@ public class RightPreload extends LinearOpMode {
                 .addTemporalMarker(2, () -> lift.extendFourBar())
                 .addTemporalMarker(.25, () -> lift.setSlideTarget(850))
                 .lineToLinearHeading(new Pose2d(-27.6, -30.6, Math.toRadians(25)), SampleMecanumDrive.getVelocityConstraint(50, Math.toRadians(60), DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(20))
-//                                 this thing sucks ^
                 .build();
 
         park[0] = drive.trajectoryBuilder(deposits[3].end(), true)
@@ -220,11 +211,7 @@ public class RightPreload extends LinearOpMode {
                         if (cycleNum < 4)
                             lift.neutralFourBar();
                         state.reset();
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         cycleNum++;
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
-                        // DO NOT MOVE THIS STATEMENT UNDER ANY CIRCUMSTANCE OTHERWISE IT WILL RUN TOO MANY TIMES
                         if (cycleNum < 4)
                         {
                             drive.followTrajectoryAsync(grabs[cycleNum]);

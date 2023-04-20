@@ -15,7 +15,7 @@ import java.io.BufferedInputStream;
 public class Lift {
 
     private final DcMotor liftL; // [E2]
-    public final DcMotor liftR; // [C2]
+    private final DcMotor liftR; // [C2]
 
     private final LinearOpMode opMode;
 
@@ -23,20 +23,18 @@ public class Lift {
 
     private double power = .7;
 
-    private boolean LBat = true;
-
-    public Servo spinL1; // [C0] // this might be right
-    public Servo spinL2; // []
-    public Servo spinR1; // [E5] // this is wrong
-    public Servo spinR2; // []
-    public Servo grab; // [C2] // this might be right
+    private Servo spinL1; // [C0]
+    private Servo spinL2; // []
+    private Servo spinR1; // [E5]
+    private Servo spinR2; // []
+    private Servo grab; // [C2]
     private Servo swivel;
 
 
     private final double STALL_POWER = -0.0005;
 
-    public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00466666667, kD = 0.0925, kStatic = -0.0005;
+    private double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
+    private static double kP = .00466666667, kD = 0.0925, kStatic = -0.0005;
     private ElapsedTime liftTime = new ElapsedTime();
 
 
@@ -59,7 +57,7 @@ public class Lift {
 
         spinL1 = this.opMode.hardwareMap.servo.get("spinL1"); // [C0]
         spinL2 = this.opMode.hardwareMap.servo.get("spinL2"); // []
-        spinR1 = this.opMode.hardwareMap.servo.get("spinR1"); // [E5] //these are wrong
+        spinR1 = this.opMode.hardwareMap.servo.get("spinR1"); // [E5]
         spinR2 = this.opMode.hardwareMap.servo.get("spinR2"); // [C0]
         grab = this.opMode.hardwareMap.servo.get("grab"); // [E4]
         swivel = this.opMode.hardwareMap.servo.get("swivel");
@@ -91,7 +89,6 @@ public class Lift {
         resetEncoder();
         grab();
         swivelIn();
-        //swivelOut();
     }
 
     public void setLiftPower(double power)
@@ -104,59 +101,12 @@ public class Lift {
         return Math.abs(liftL.getCurrentPosition() + liftR.getCurrentPosition()) / 2;
     }
 
-    public int getLiftL() {
-        return liftL.getCurrentPosition();
-    }
-
-    public int getLiftR() {
-        return liftR.getCurrentPosition();
-    }
-
     public void resetEncoder() {
         liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void setLiftPos(double liftTargetPos)
-    {
-        if (Math.abs(liftTargetPos - getLiftPos()) > 35 && this.opMode.opModeIsActive()) {
-            this.opMode.telemetry.addData("lift :: ", getLiftPos());
-            this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
-            this.opMode.telemetry.update();
-            if (liftTargetPos < getLiftPos())
-                setLiftPower(power);
-            else
-                setLiftPower(-power);
-
-
-        } else if (liftTargetPos == 0)
-            setLiftPower(0);
-        else
-            setLiftPower(STALL_POWER);
-
-    }
-
-
-    public void tuneLiftPos(double liftTargetPos, double up, double down)
-    {
-        if (Math.abs(liftTargetPos - getLiftPos()) > 100 && this.opMode.opModeIsActive()) {
-            this.opMode.telemetry.addData("lift :: ", getLiftPos());
-            this.opMode.telemetry.addData("error :: ", getLiftPos() - liftTargetPos);
-            this.opMode.telemetry.update();
-            if (liftTargetPos < getLiftPos())
-                setLiftPower(up);
-            else
-                setLiftPower(down);
-
-
-        } else if (liftTargetPos == 0)
-            setLiftPower(0);
-        else
-            setLiftPower(STALL_POWER);
-
     }
 
     public double getVoltage()
@@ -169,27 +119,6 @@ public class Lift {
             }
         }
         return result;
-    }
-
-    public void resetLift(double p, int targetPos)
-    {
-        while (getLiftPos() >= targetPos && this.opMode.opModeIsActive()){
-            setLiftPower(p);
-            if (getLiftPos() <= targetPos)
-            {
-                setLiftPower(0);
-                break;
-            }
-        }
-    }
-
-    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
-    public void extendFourBarStart() {
-        grabStart();
-        spinR1.setPosition(0.5);
-        spinR2.setPosition(0.5);
-        spinL1.setPosition(0.5);
-        spinL2.setPosition(0.5);
     }
 
     public void extendFourBar()
@@ -209,7 +138,7 @@ public class Lift {
         spinL2.setPosition(0.65);
     }
 
-    public void retractFourBar() //NEW R is 1; OLD R is 0
+    public void retractFourBar()
     {
         grab();
         spinR1.setPosition(1);
@@ -218,7 +147,7 @@ public class Lift {
         spinL2.setPosition(0);
     }
 
-    public void neutralFourBar() //NEW R is 1; OLD R is 0
+    public void neutralFourBar()
     {
         spinR1.setPosition(.75);
         spinR2.setPosition(.75);
@@ -226,19 +155,13 @@ public class Lift {
         spinL2.setPosition(.25);
     }
 
-    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
-
-
-    public void grabStart() {grab.setPosition(.225);} //proposed parameter for start
-              //set it back to .255 after tests ^
     public void grab()
     {
         grab.setPosition(.275);
-    } //.305 for grabStack
+    }
 
-    public void release()
-    {
-        grab.setPosition(.55);  //tune this
+    public void release() {
+        grab.setPosition(.55);
     }
 
     public void swivelIn()
@@ -251,11 +174,6 @@ public class Lift {
         swivel.setPosition(.67);
     }
 
-    public void swivelDeposit()
-    {
-        swivel.setPosition(.74);
-    }
-
     public void swivelStartLeft()
     {
         swivel.setPosition(.36);
@@ -266,22 +184,10 @@ public class Lift {
         swivel.setPosition(.93);
     }
 
-    public boolean isTouch()
-    {
-        return touch.isPressed();
-    }
-
-    public double liftTickstoInches(double ticks) {
-        return ticks / 145.1 * (1.5 * Math.PI);
-    }
-
     public void setSlideTarget(double target) {
         currentTargetSlidesPos = target;
     }
 
-    public double getSlidesPos() {
-        return getLiftPos();
-    }
 
     public void updateLiftLength(double liftTime) {
         double error = currentTargetSlidesPos - getLiftPos();
@@ -292,10 +198,7 @@ public class Lift {
             double dT = liftTime - pastTime;
             double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
 
-            double f = 0;
-            //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
             if (Math.abs(error) < 2) {
-                //f = getSlidesPos() * kStatic;
                 if (getLiftPos() > 20) {
                     p = 0.0005;
                     d = 0;
@@ -314,10 +217,8 @@ public class Lift {
             } else if (getLiftPos() > currentTargetSlidesPos) {
                 if (error > 30) {
                     p /= 1.2;
-                    //d *= .099705882;
                 } else {
                     p *= .5;
-                    //d = 0;
                 }
                 d *= .099705882;
             }

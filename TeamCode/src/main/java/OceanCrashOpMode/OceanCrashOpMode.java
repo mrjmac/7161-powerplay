@@ -24,29 +24,28 @@ public abstract class OceanCrashOpMode extends OpMode {
     private DcMotor FR; // [C1], lateral odom
 
     // Four Bar
-    public Servo spinL1; // [C0] // this might be right
-    public Servo spinL2; // [C5]
-    public Servo spinR1; // [E5] // this is wrong
-    public Servo spinR2; // [C4]
+    private Servo spinL1; // [C0]
+    private Servo spinL2; // [C5]
+    private Servo spinR1; // [E5]
+    private Servo spinR2; // [C4]
     private Servo grab; // [E4]
     private Servo swivel;
 
     // Intake
     private DcMotor intakeL; // [E2], left odom
     private DcMotor intakeR; // [C2], right odom
-    public ColorSensor colorS; //[]
+    private ColorSensor colorS; //[]
 
     // Lift
     private DcMotor liftL; // [E3]
     private DcMotor liftR; // [C3]
-    boolean grabLift = false;
+    private boolean grabLift = false;
 
     private TouchSensor touch;
 
     private ElapsedTime jit;
     public double currentTargetSlidesPos = 0, pastError = 0, pastTime = 0;
-    public static double kP = .00466666667, kD = 0.2, kStatic = -0.0005;
-    //private VoltageSensor voltage;
+    public static double kP = .00466666667, kD = 0.2;
 
     private Orientation angles;
     private BNO055IMU imu;
@@ -114,8 +113,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //voltage = hardwareMap.voltageSensor.get("Voltage");
-
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -148,11 +145,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         FR.setPower(0);
         BL.setPower(0);
         BR.setPower(0);
-    }
-
-    public void startLiftR()
-    {
-        liftR.setPower(-1);
     }
 
     public void drive(double x, double y, double turn, double trigger) {
@@ -272,27 +264,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         return angleDiff;
     }
 
-    public double getMotorEncoders()
-    {
-        int count = 4;
-        if ((FR.getCurrentPosition()) == 0) {
-            count--;
-        }
-        if ((FL.getCurrentPosition()) == 0) {
-            count--;
-        }
-        if ((BR.getCurrentPosition()) == 0) {
-            count--;
-        }
-        if ((BL.getCurrentPosition()) == 0) {
-            count--;
-        }
-        count = count == 0 ? 1 : count;
-
-        return (Math.abs(FR.getCurrentPosition()) +  Math.abs(FL.getCurrentPosition()) + Math.abs(BR.getCurrentPosition()) + Math.abs(BL.getCurrentPosition())) / (double)count;
-    }
-
-
     public void setIntake(double p)
     {
         intakeL.setPower(p);
@@ -311,7 +282,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         return result;
     }
 
-    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
     public void extendFourBar()
     {
         grab();
@@ -353,7 +323,6 @@ public abstract class OceanCrashOpMode extends OpMode {
         spinL1.setPosition(0.1);
         spinL2.setPosition(0.1);
     }
-    //TODO: SPINR and SPINL NEED TO SWAP STARTING EXTREMES; DRIVEN THEORETICALLY HAS 450deg ROM, FIX PROPORTIONS
 
     public void grab()
     {
@@ -469,10 +438,7 @@ public abstract class OceanCrashOpMode extends OpMode {
                 double dT = liftTime - pastTime;
                 double d = Math.signum(error - pastError) * Math.sqrt(Math.abs(error - pastError) / dT * kD);
 
-                double f = 0;
-                //might want to add if statements to fine tune very important movements/if in acceptable error, stallPower
                 if (Math.abs(error) < 1.6) {
-                    //f = getSlidesPos() * kStatic;
                     if (getLiftPos() > 20) {
                         p = 0.0093 / (13.8 / getVoltage());
                         d = 0;
@@ -486,9 +452,6 @@ public abstract class OceanCrashOpMode extends OpMode {
                     p *= .8;
                 } else if (error > 30 && getLiftPos() < currentTargetSlidesPos) {
                     d *= 1.5;
-                /*} else if (error < 30 && error > 0 && liftTime < 1500) {
-                    p *= .4;
-                 */
                 } else if (error < 30 && error > 0 && getLiftPos() > 700) {
                     p *= .65;
                     d /= 1.4;
@@ -497,10 +460,8 @@ public abstract class OceanCrashOpMode extends OpMode {
                 } else if (getLiftPos() > currentTargetSlidesPos) {
                     if (error > 30) {
                         p /= 1.2;
-                        //d *= .099705882;
                     } else {
                         p *= .5;
-                        //d = 0;
                     }
                     d *= .099705882;
                 }
